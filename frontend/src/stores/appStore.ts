@@ -24,4 +24,3 @@ export const useAppStore = create<AppState>((set) => ({
   dateRange: null,
   setDateRange: (range) => set({ dateRange: range }),
 }));
-2. TÜM API SERVİSLERİ

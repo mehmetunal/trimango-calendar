@@ -11,3 +11,4 @@ public interface IPropertyService
     Task<decimal> GetStartingPriceAsync(Guid propertyId, string currencyCode);
     Task<bool> IsSlugAvailable(Guid tenantId, string slug);
 }
+

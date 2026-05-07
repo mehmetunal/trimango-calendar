@@ -1,5 +1,3 @@
-
-// Core/Services/TenantService.cs
 public class TenantService : ITenantService
 {
     private readonly AppDbContext _context;

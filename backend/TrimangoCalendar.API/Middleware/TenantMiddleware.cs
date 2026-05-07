@@ -1,4 +1,3 @@
-// Web/Middleware/TenantMiddleware.cs
 public class TenantMiddleware
 {
     private readonly RequestDelegate _next;
@@ -43,3 +42,4 @@ public class TenantMiddleware
         await _next(context);
     }
 }
+

@@ -93,7 +93,6 @@ Kesinlikle haklısınız! Backend kadar frontend de çok önemli. Size React ile
 
 🎨 FRONTEND MİMARİSİ
 Proje Yapısı
-text
 hotel-platform-frontend/
 ├── public/
 │   ├── index.html

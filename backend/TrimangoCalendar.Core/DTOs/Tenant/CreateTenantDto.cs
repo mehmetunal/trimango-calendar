@@ -1,4 +1,3 @@
-// Core/DTOs/Tenant/CreateTenantDto.cs
 public class CreateTenantDto
 {
     [Required(ErrorMessage = "Firma adı zorunludur")]

@@ -466,7 +466,6 @@ Frontend:
 
 React 18
 
-TypeScript
 
 Tailwind CSS
 
@@ -520,7 +519,6 @@ vscode da
 Harika! Hemen size projeyi ayağa kaldırmak için tüm gerekli kodları ve komutları veriyorum.
 
 📁 PROJE YAPISI
-text
 TrimangoCalendar/
 ├── backend/
 │   ├── TrimangoCalendar.API/

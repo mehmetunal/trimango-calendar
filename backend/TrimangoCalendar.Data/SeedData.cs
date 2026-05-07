@@ -1,117 +1,96 @@
-public static async Task SeedCurrencies(AppDbContext context)
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TrimangoCalendar.Core.Entities;
+
+public static class SeedData
 {
-    if (!await context.Currencies.AnyAsync())
+    public static async Task Initialize(IServiceProvider serviceProvider)
     {
-        var currencies = new List<Currency>
-        {
-            new()
-            {
-                Code = "TRY",
-                Symbol = "₺",
-                Name = "Türk Lirası",
-                DecimalPlaces = 2,
-                CultureCode = "tr-TR",
-                IsBaseCurrency = true,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new()
-            {
-                Code = "USD",
-                Symbol = "$",
-                Name = "Amerikan Doları",
-                DecimalPlaces = 2,
-                CultureCode = "en-US",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new()
-            {
-                Code = "EUR",
-                Symbol = "€",
-                Name = "Euro",
-                DecimalPlaces = 2,
-                CultureCode = "de-DE",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            },
-            new()
-            {
-                Code = "GBP",
-                Symbol = "£",
-                Name = "İngiliz Sterlini",
-                DecimalPlaces = 2,
-                CultureCode = "en-GB",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            }
-        };
-        
-        context.Currencies.AddRange(currencies);
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        await SeedTenants(context);
+        await SeedDemoProperties(context);
+        await SeedCurrencies(context);
+        await SeedExchangeRates(context);
+
         await context.SaveChangesAsync();
     }
-    
-    // Örnek kurlar (manuel)
-    if (!await context.ExchangeRates.AnyAsync())
+
+    private static async Task SeedTenants(AppDbContext context)
     {
-        var today = DateTime.Today;
-        var rates = new List<ExchangeRate>
+        if (await context.Tenants.AnyAsync(t => t.Subdomain == "demo"))
         {
-            // USD -> TRY
-            new()
-            {
-                BaseCurrencyCode = "USD", TargetCurrencyCode = "TRY",
-                Rate = 30.50m, BuyRate = 30.45m, SellRate = 30.55m,
-                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
-            },
-            // TRY -> USD
-            new()
-            {
-                BaseCurrencyCode = "TRY", TargetCurrencyCode = "USD",
-                Rate = 1/30.50m, BuyRate = 1/30.55m, SellRate = 1/30.45m,
-                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
-            },
-            // EUR -> TRY
-            new()
-            {
-                BaseCurrencyCode = "EUR", TargetCurrencyCode = "TRY",
-                Rate = 33.20m, BuyRate = 33.15m, SellRate = 33.25m,
-                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
-            },
-            // TRY -> EUR
-            new()
-            {
-                BaseCurrencyCode = "TRY", TargetCurrencyCode = "EUR",
-                Rate = 1/33.20m, BuyRate = 1/33.25m, SellRate = 1/33.15m,
-                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
-            }
+            return;
+        }
+
+        var demo = new Tenant
+        {
+            Id = Guid.NewGuid(),
+            Name = "Demo Otel",
+            Subdomain = "demo",
+            Email = "info@demootel.com",
+            Phone = "02125555555",
+            Plan = "Free",
+            PlanStartDate = DateTime.UtcNow,
+            MaxProperties = 5,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
         };
-        
-        context.ExchangeRates.AddRange(rates);
-        await context.SaveChangesAsync();
+
+        context.Tenants.Add(demo);
+    }
+
+    private static async Task SeedDemoProperties(AppDbContext context)
+    {
+        var demoTenant = await context.Tenants.FirstOrDefaultAsync(t => t.Subdomain == "demo");
+        if (demoTenant == null || await context.Properties.AnyAsync(p => p.TenantId == demoTenant.Id))
+        {
+            return;
+        }
+
+        var property = new Property
+        {
+            Id = Guid.NewGuid(),
+            TenantId = demoTenant.Id,
+            Name = "Demo Property",
+            Slug = "demo-property",
+            City = "Antalya",
+            Country = "Türkiye",
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        context.Properties.Add(property);
+    }
+
+    private static async Task SeedCurrencies(AppDbContext context)
+    {
+        if (await context.Currencies.AnyAsync())
+        {
+            return;
+        }
+
+        context.Currencies.AddRange(
+            new Currency { Code = "TRY", Symbol = "₺", Name = "Türk Lirası", IsBaseCurrency = true, IsActive = true, CreatedAt = DateTime.UtcNow },
+            new Currency { Code = "USD", Symbol = "$", Name = "Amerikan Doları", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new Currency { Code = "EUR", Symbol = "€", Name = "Euro", IsActive = true, CreatedAt = DateTime.UtcNow }
+        );
+    }
+
+    private static async Task SeedExchangeRates(AppDbContext context)
+    {
+        if (await context.ExchangeRates.AnyAsync())
+        {
+            return;
+        }
+
+        var today = DateTime.UtcNow.Date;
+        context.ExchangeRates.AddRange(
+            new ExchangeRate { BaseCurrencyCode = "USD", TargetCurrencyCode = "TRY", Rate = 32.50m, Date = today, UpdatedAt = DateTime.UtcNow },
+            new ExchangeRate { BaseCurrencyCode = "EUR", TargetCurrencyCode = "TRY", Rate = 35.20m, Date = today, UpdatedAt = DateTime.UtcNow },
+            new ExchangeRate { BaseCurrencyCode = "TRY", TargetCurrencyCode = "USD", Rate = 0.0308m, Date = today, UpdatedAt = DateTime.UtcNow },
+            new ExchangeRate { BaseCurrencyCode = "TRY", TargetCurrencyCode = "EUR", Rate = 0.0284m, Date = today, UpdatedAt = DateTime.UtcNow }
+        );
     }
 }
-Fiyatlandırma modülü tamamlandı! Bu modül şunları içeriyor:
-
-✅ Çoklu para birimi desteği (TRY, USD, EUR, GBP)
-
-✅ TCMB döviz kuru entegrasyonu
-
-✅ Sezonluk fiyatlandırma
-
-✅ Hafta sonu/özel gün fiyatları
-
-✅ Promosyon kodu sistemi
-
-✅ Vergi hesaplama (KDV + Konaklama Vergisi)
-
-✅ Ekstra yatak ücreti
-
-✅ Money Value Object ile tip güvenli para yönetimi
-
-Şimdi sırada MODÜL 4: REZERVASYON SİSTEMİ var. Bu modül, müsaitlik kontrolü, rezervasyon oluşturma ve yönetme işlemlerini içerecek. Devam edelim mi?
-
-devam edelim
-Harika! Rezervasyon sistemi, projenin kalbi diyebiliriz. Bu modülü çok detaylı hazırlayacağım.
-
-📦 MODÜL 4: REZERVASYON SİSTEMİ

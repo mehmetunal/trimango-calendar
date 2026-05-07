@@ -1,4 +1,3 @@
-// Core/Interfaces/ITenantService.cs
 public interface ITenantService
 {
     Task<TenantDto> CreateAsync(CreateTenantDto dto);
@@ -11,3 +10,4 @@ public interface ITenantService
     Task<bool> IsSubdomainAvailable(string subdomain);
     Task<int> GetTenantCount();
 }
+

@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 public enum ReservationSource
 {
     [Description("Direkt")]
