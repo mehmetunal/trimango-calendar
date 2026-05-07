@@ -48,7 +48,7 @@ export default function ReservationCalendar() {
     backgroundColor: getStatusColor(res.status),
     borderColor: getStatusColor(res.status),
     extendedProps: res,
-  })) || [];
+  })) : [];
 
   return (
     <div className="space-y-4">
