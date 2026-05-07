@@ -1,449 +1,259 @@
-# 🏗 TrimangoCalendar - Mimari ve Akış Şemaları
+# TrimangoCalendar - Mimari ve Akış Diyagramları
 
-## 📋 İçindekiler
+## İçindekiler
 
 1. [Sistem Mimarisi Genel Bakış](#1-sistem-mimarisi-genel-bakış)
 2. [Kullanıcı Rolleri ve Yetkiler](#2-kullanıcı-rolleri-ve-yetkiler)
-3. [Temel İş Akışları](#3-temel-i̇ş-akışları)
+3. [Temel İş Akışları](#3-temel-iş-akışları)
 4. [Backend Katman Mimarisi](#4-backend-katman-mimarisi)
 5. [Frontend Bileşen Mimarisi](#5-frontend-bileşen-mimarisi)
-6. [Veritabanı İlişkileri](#6-veritabanı-i̇lişkileri)
-7. [API İletişim Akışı](#7-api-i̇letişim-akışı)
+6. [Veritabanı İlişkileri](#6-veritabanı-ilişkileri)
+7. [API İletişim Akışı](#7-api-iletişim-akışı)
 8. [Deployment Mimarisi](#8-deployment-mimarisi)
 
 ---
 
 ## 1. Sistem Mimarisi Genel Bakış
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ TRIMANGOCALENDAR SİSTEM MİMARİSİ │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ CLIENT LAYER │ │
-│ │ │ │
-│ │ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │ │
-│ │ │ Admin Panel │ │ Tenant Panel │ │ Agency Panel │ │ │
-│ │ │ (React TS) │ │ (React TS) │ │ (React TS) │ │ │
-│ │ │ │ │ │ │ │ │ │
-│ │ │ /admin/* │ │ /dashboard/│ │ /agency/ │ │ │
-│ │ └──────┬───────┘ └──────┬───────┘ └──────┬───────┘ │ │
-│ │ │ │ │ │ │
-│ │ └──────────────────┼──────────────────┘ │ │
-│ │ │ │ │
-│ │ ┌─────────────────────────────────────────────────────────────┐ │ │
-│ │ │ Booking Widget (Embed) │ │ │
-│ │ │ JavaScript + CSS │ │ │
-│ │ └─────────────────────────┬───────────────────────────────────┘ │ │
-│ │ │ │ │
-│ └────────────────────────────┼─────────────────────────────────────────┘ │
-│ │ │
-│ HTTPS / REST API / JWT │
-│ │ │
-│ ┌────────────────────────────┼─────────────────────────────────────────┐ │
-│ │ API GATEWAY LAYER │ │
-│ │ │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │ CORS │ │ JWT │ │ Tenant │ │ Rate │ │ Request │ │ │
-│ │ │ Policy │ │ Auth │ │Middleware│ │ Limiting │ │ Logging │ │ │
-│ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │
-│ │ │ │
-│ │ .NET 8 Web API | Swagger | API Versioning | Health Checks │ │
-│ └────────────────────────────┬──────────────────────────────────────────┘ │
-│ │ │
-│ ┌────────────────────────────┼──────────────────────────────────────────┐ │
-│ │ BUSINESS LOGIC LAYER │ │
-│ │ │ │
-│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ │
-│ │ │ Tenant │ │ Property │ │ Reservation │ │ Pricing │ │ │
-│ │ │ Service │ │ Service │ │ Service │ │ Service │ │ │
-│ │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘ │ │
-│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ │
-│ │ │ Agency │ │ Calendar │ │ Report │ │Notification │ │ │
-│ │ │ Service │ │ Service │ │ Service │ │ Service │ │ │
-│ │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘ │ │
-│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │ │
-│ │ │ Season │ │ Image │ │ Booking │ │ Currency │ │ │
-│ │ │ Rate Service│ │ Service │ │Engine Service│ │ Service │ │ │
-│ │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘ │ │
-│ │ │ │
-│ │ MediatR | FluentValidation | AutoMapper | MailKit │ │
-│ └────────────────────────────┬───────────────────────────────────────────┘ │
-│ │ │
-│ ┌────────────────────────────┼───────────────────────────────────────────┐ │
-│ │ DATA ACCESS LAYER │ │
-│ │ │ │
-│ │ ┌──────────────────────────────────────────────────────────────────┐ │ │
-│ │ │ Unit of Work │ │ │
-│ │ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐ │ │ │
-│ │ │ │ Tenant │ │ Property │ │Reservation│ │ Agency │ │ │ │
-│ │ │ │Repository│ │Repository│ │Repository │ │ Repository │ │ │ │
-│ │ │ └──────────┘ └──────────┘ └──────────┘ └──────────────────┘ │ │ │
-│ │ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────────┐ │ │ │
-│ │ │ │ Guest │ │ Pricing │ │ Calendar │ │ Notification │ │ │ │
-│ │ │ │Repository│ │Repository│ │Repository│ │ Repository │ │ │ │
-│ │ │ └──────────┘ └──────────┘ └──────────┘ └──────────────────┘ │ │ │
-│ │ └──────────────────────────────────────────────────────────────────┘ │ │
-│ │ │ │
-│ │ Entity Framework Core 8 | Dapper | SQL Server │ │
-│ └────────────────────────────┬───────────────────────────────────────────┘ │
-│ │ │
-│ ┌────────────────────────────┼───────────────────────────────────────────┐ │
-│ │ INFRASTRUCTURE LAYER │ │
-│ │ │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │ MSSQL │ │ Redis │ │ Hangfire │ │ Serilog │ │ TCMB │ │ │
-│ │ │ Database │ │ Cache │ │ Jobs │ │ Logging │ │ API │ │ │
-│ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │
-│ │ │ │
-│ └────────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+```mermaid
+flowchart TB
+  subgraph ClientLayer[Client Layer]
+    Admin[Admin Panel\nReact + TS]
+    Tenant[Tenant Panel\nReact + TS]
+    Agency[Agency Panel\nReact + TS]
+    Widget[Booking Widget\nEmbed JS + CSS]
+  end
+
+  subgraph ApiLayer[API Layer - .NET 8 Web API]
+    CORS[CORS Policy]
+    JWT[JWT Auth]
+    TenantMw[Tenant Middleware]
+    Rate[Rate Limiting]
+    Log[Request Logging]
+  end
+
+  subgraph BizLayer[Business Logic Layer]
+    S1[Tenant Service]
+    S2[Property Service]
+    S3[Reservation Service]
+    S4[Pricing Service]
+    S5[Agency Service]
+    S6[Calendar Service]
+    S7[Report Service]
+    S8[Notification Service]
+  end
+
+  subgraph DataLayer[Data Access Layer]
+    UoW[Unit of Work]
+    Repos[Repositories]
+    EF[EF Core + Dapper]
+  end
+
+  subgraph Infra[Infrastructure]
+    SQL[(SQL Server)]
+    Redis[(Redis)]
+    Hangfire[Hangfire Jobs]
+    Serilog[Serilog]
+    TCMB[TCMB API]
+  end
+
+  Admin --> ApiLayer
+  Tenant --> ApiLayer
+  Agency --> ApiLayer
+  Widget --> ApiLayer
+
+  ApiLayer --> BizLayer --> DataLayer --> Infra
+```
 
 ---
 
 ## 2. Kullanıcı Rolleri ve Yetkiler
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ KULLANICI ROL HİYERARŞİSİ │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌─────────────────┐ │
-│ │ SUPER ADMIN │ │
-│ │ (System Owner) │ │
-│ └────────┬────────┘ │
-│ │ │
-│ ┌───────────────────┼───────────────────┐ │
-│ │ │ │ │
-│ ▼ ▼ ▼ │
-│ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ │
-│ │ ADMIN │ │ TENANT OWNER │ │ AGENCY USER │ │
-│ │ (Platform Admin)│ │ (Mülk Sahibi) │ │ (Acente) │ │
-│ └────────┬────────┘ └────────┬────────┘ └────────┬────────┘ │
-│ │ │ │ │
-│ ┌────────┴────────┐ ┌──────┴──────┐ ┌───────┴───────┐ │
-│ │ • Tenant Yönetimi│ │• Mülk CRUD │ │• Takvim Gör. │ │
-│ │ • Acente Yönetimi│ │• Birim CRUD │ │• Rezervasyon │ │
-│ │ • Abonelik Plan. │ │• Rezervasyon│ │• Fiyat Gör. │ │
-│ │ • Sistem Ayarları│ │• Fiyatlandır│ │• Rapor Gör. │ │
-│ │ • Global Raporlar │ │• Acente Yetk│ │• Profil Düz. │ │
-│ │ • Tüm Yetkiler │ │• Rapor Gör. │ │ │ │
-│ └──────────────────┘ │• Widget Yön.│ └──────────────┘ │
-│ │• Bildirim Ayar│ │
-│ └──────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
 
+```mermaid
+flowchart TD
+  SA[Super Admin]
+  A[Admin]
+  TO[Tenant Owner]
+  AU[Agency User]
+
+  SA --> A
+  SA --> TO
+  SA --> AU
+```
 
 ### Yetki Matrisi
-┌────────────────────┬────────┬─────────┬─────────┐
-│ İşlem │ Admin │ Tenant │ Agency │
-├────────────────────┼────────┼─────────┼─────────┤
-│ Tenant Yönetimi │ ✅ │ ❌ │ ❌ │
-│ Mülk Ekleme │ ✅ │ ✅ │ ❌ │
-│ Mülk Görüntüleme │ ✅ │ ✅ │ ✅* │
-│ Birim Yönetimi │ ✅ │ ✅ │ ❌ │
-│ Fiyat Belirleme │ ✅ │ ✅ │ ✅* │
-│ Rezervasyon Yapma │ ✅ │ ✅ │ ✅* │
-│ Check-in/out │ ✅ │ ✅ │ ❌ │
-│ Acente Yetkilendir.│ ✅ │ ✅ │ ❌ │
-│ Rapor Görüntüleme │ ✅ │ ✅ │ ✅* │
-│ Sistem Ayarları │ ✅ │ ❌ │ ❌ │
-│ Abonelik Yönetimi │ ✅ │ ❌ │ ❌ │
-│ Widget Yönetimi │ ✅ │ ✅ │ ❌ │
-│ Profil Düzenleme │ ✅ │ ✅ │ ✅ │
-└────────────────────┴────────┴─────────┴─────────┘
 
-Yetkilendirme seviyesine bağlı
+| İşlem | Admin | Tenant | Agency |
+|---|---|---|---|
+| Tenant Yönetimi | ✅ | ❌ | ❌ |
+| Mülk Ekleme | ✅ | ✅ | ❌ |
+| Mülk Görüntüleme | ✅ | ✅ | ✅* |
+| Birim Yönetimi | ✅ | ✅ | ❌ |
+| Fiyat Belirleme | ✅ | ✅ | ✅* |
+| Rezervasyon Yapma | ✅ | ✅ | ✅* |
+| Check-in/out | ✅ | ✅ | ❌ |
+| Acente Yetkilendirme | ✅ | ✅ | ❌ |
+| Rapor Görüntüleme | ✅ | ✅ | ✅* |
+| Sistem Ayarları | ✅ | ❌ | ❌ |
+| Abonelik Yönetimi | ✅ | ❌ | ❌ |
+| Widget Yönetimi | ✅ | ✅ | ❌ |
+| Profil Düzenleme | ✅ | ✅ | ✅ |
 
+* `✅*` işaretli yetkiler, tenant tarafından verilen acente yetkilendirme seviyesine bağlıdır.
 
 ---
 
 ## 3. Temel İş Akışları
 
 ### 3.1 Tenant Kayıt Akışı
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ TENANT KAYIT AKIŞI │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ │
-│ │ Kayıt │ │ Email │ │ Subdomain│ │ Tenant │ │ Demo │ │
-│ │ Formu │───▶│Doğrulama│───▶│ Oluştur │───▶│Oluştur │───▶│ Data │ │
-│ │Doldurulur│ │ │ │ │ │(Free Plan)│ │Yükle │ │
-│ └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘ │
-│ │ │ │ │ │ │
-│ ▼ ▼ ▼ ▼ ▼ │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ 1. Kullanıcı bilgilerini girer (Ad, Soyad, Email, Telefon) │ │
-│ │ 2. Email doğrulama linki gönderilir │ │
-│ │ 3. Firma adından otomatik subdomain oluşturulur │ │
-│ │ 4. Tenant kaydı oluşturulur (Free plan, 5 mülk limiti) │ │
-│ │ 5. Demo mülk ve birimler otomatik yüklenir │ │
-│ │ 6. Kullanıcı dashboard'a yönlendirilir │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
 
+```mermaid
+flowchart LR
+  A[Kayıt Formu] --> B[Email Doğrulama]
+  B --> C[Subdomain Oluşturma]
+  C --> D[Tenant Oluşturma\nFree Plan]
+  D --> E[Demo Veri Yükleme]
+  E --> F[Dashboard'a Yönlendirme]
+```
 
 ### 3.2 Rezervasyon Oluşturma Akışı
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ REZERVASYON OLUŞTURMA AKIŞI │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │
-│ │ Tarih │ │ Müsaitlik│ │ Fiyat │ │ Misafir │ │Rezervasyon│ │
-│ │ Seçimi │──▶│ Kontrolü │──▶│ Hesapla │──▶│ Bilgileri│──▶│ Oluştur │ │
-│ └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │
-│ │ │ │ │ │ │
-│ ▼ ▼ ▼ ▼ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ ADIM 1: Tarih Seçimi │ │
-│ │ • Check-in ve check-out tarihleri seçilir │ │
-│ │ • Misafir sayısı belirtilir (yetişkin, çocuk) │ │
-│ │ │ │
-│ │ ADIM 2: Müsaitlik Kontrolü │ │
-│ │ • Seçilen tarihlerde çakışan rezervasyon var mı kontrol edilir │ │
-│ │ • Kapasite kontrolü yapılır │ │
-│ │ • Blokaj kontrolü yapılır │ │
-│ │ │ │
-│ │ ADIM 3: Fiyat Hesaplama │ │
-│ │ • Sezon fiyatı kontrolü │ │
-│ │ • Hafta sonu farkı hesaplanır │ │
-│ │ • Özel gün fiyatı kontrolü │ │
-│ │ • Döviz dönüşümü yapılır │ │
-│ │ • Vergi (%12) ve servis ücreti (%3) eklenir │ │
-│ │ • Promosyon indirimi varsa uygulanır │ │
-│ │ │ │
-│ │ ADIM 4: Misafir Bilgileri │ │
-│ │ • Misafir email/telefon ile aranır, yoksa yeni oluşturulur │ │
-│ │ • TC Kimlik / Pasaport bilgileri alınır │ │
-│ │ │ │
-│ │ ADIM 5: Rezervasyon Oluşturma │ │
-│ │ • Benzersiz rezervasyon numarası üretilir │ │
-│ │ • Rezervasyon kaydı oluşturulur (Status: Pending) │ │
-│ │ • Onay email'i gönderilir │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
 
+```mermaid
+flowchart LR
+  A[Tarih Seçimi] --> B[Müsaitlik Kontrolü]
+  B --> C[Fiyat Hesaplama]
+  C --> D[Misafir Bilgileri]
+  D --> E[Rezervasyon Oluşturma\nStatus: Pending]
+```
 
 ### 3.3 Check-in / Check-out Akışı
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ CHECK-IN / CHECK-OUT AKIŞI │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ CHECK-IN SÜRECİ │ │
-│ │ │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │Rezervasyon│ │ Tarih │ │ Durum │ │ Bildirim │ │ │
-│ │ │ Bulunur │──▶│ Kontrolü │──▶│Güncellenir│──▶│ Gönder │ │ │
-│ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │
-│ │ │ │ │ │ │ │
-│ │ ▼ ▼ ▼ ▼ │ │
-│ │ • Rez. No ile • Bugün veya • Status: • Misafire │ │
-│ │ rezervasyon ±1 gün Confirmed hoşgeldin │ │
-│ │ sorgulanır olmalı → CheckedIn mesajı │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ CHECK-OUT SÜRECİ │ │
-│ │ │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │Rezervasyon│ │ Ödeme │ │ Durum │ │Değerlendi│ │ │
-│ │ │ Bulunur │──▶│ Kontrolü │──▶│Güncellenir│──▶│rme İste │ │ │
-│ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │
-│ │ │ │ │ │ │ │
-│ │ ▼ ▼ ▼ ▼ │ │
-│ │ • Check-in • Kalan ödeme • Status: • 2 saat │ │
-│ │ yapılmış varsa uyarı CheckedIn sonra email │ │
-│ │ olmalı → CheckedOut gönderilir │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
 
+```mermaid
+flowchart TB
+  subgraph CheckIn
+    A1[Rezervasyon Bul]
+    A2[Tarih Kontrolü]
+    A3[Durum Güncelle\nCheckedIn]
+    A4[Hoşgeldin Bildirimi]
+    A1 --> A2 --> A3 --> A4
+  end
+
+  subgraph CheckOut
+    B1[Rezervasyon Bul]
+    B2[Ödeme Kontrolü]
+    B3[Durum Güncelle\nCheckedOut]
+    B4[Değerlendirme İsteği]
+    B1 --> B2 --> B3 --> B4
+  end
+```
 
 ### 3.4 Acente Yetkilendirme Akışı
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ ACENTE YETKİLENDİRME AKIŞI │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ MÜLK SAHİBİ TARAFI │ │
-│ │ │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │ Acente │ │ Mülk │ │ Yetki │ │ Kontenjan│ │ │
-│ │ │ Seçimi │──▶│ Seçimi │──▶│ Seviyesi │──▶│ (Opsiyon)│ │ │
-│ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │
-│ │ │ │ │ │ │ │
-│ │ ▼ ▼ ▼ ▼ │ │
-│ │ • Acente • Yetki • ViewOnly • Toplam │ │
-│ │ listesinden verilecek • PriceAnd kontenjan │ │
-│ │ seçim mülk Availability belirlenir │ │
-│ │ • CanReserve │ │
-│ │ • FullAccess │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ ACENTE TARAFI │ │
-│ │ │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │Yetkilendi │ │ Takvimi │ │Rezervasyon│ │ Komisyon │ │ │
-│ │ │rildi Bildi│──▶│Görüntüle │──▶│ Yap │──▶│ Kazan │ │ │
-│ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │
-│ │ │ │ │ │ │ │
-│ │ ▼ ▼ ▼ ▼ │ │
-│ │ • Email ile • Müsaitlik • Yetki • Rezervasyon │ │
-│ │ bilgilendirme durumunu dahilinde tutarı │ │
-│ │ görür rezervasyon üzerinden │ │
-│ │ oluşturur komisyon │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
 
+```mermaid
+flowchart LR
+  A[Acente Seçimi] --> B[Mülk Seçimi]
+  B --> C[Yetki Seviyesi]
+  C --> D[Opsiyonel Kontenjan]
+  D --> E[Acente Takvimi Görür]
+  E --> F[Yetkiye Göre Rezervasyon]
+```
 
 ### 3.5 Fiyat Hesaplama Akışı
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ FİYAT HESAPLAMA AKIŞI │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ GİRDİLER │ │
-│ │ • UnitId, CheckIn, CheckOut, Adults, Children, CurrencyCode │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ 1. BAZ FİYAT BELİRLEME │ │
-│ │ │ │
-│ │ ┌──────────────┐ ┌──────────────┐ │ │
-│ │ │ Sezon Kontrol│──Evet──▶│ Sezon Fiyatı │ │ │
-│ │ │ (Var mı?) │ │ Kullan │ │ │
-│ │ └──────┬───────┘ └──────────────┘ │ │
-│ │ │ Hayır │ │
-│ │ ▼ │ │
-│ │ ┌──────────────┐ │ │
-│ │ │ Birim Baz │ │ │
-│ │ │ Fiyatı │ │ │
-│ │ └──────────────┘ │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ 2. EK ÜCRETLER │ │
-│ │ │ │
-│ │ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │ │
-│ │ │ Hafta Sonu │ │ Özel Gün │ │ Ekstra Yatak│ │ │
-│ │ │ Farkı │ │ Fiyatı │ │ Ücreti │ │ │
-│ │ │ (Cmt/Paz) │ │(Bayram vb.) │ │ (varsa) │ │ │
-│ │ └──────────────┘ └──────────────┘ └──────────────┘ │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ 3. DÖVİZ DÖNÜŞÜMÜ │ │
-│ │ │ │
-│ │ Birim Para Birimi ≠ İstenen Para Birimi ise: │ │
-│ │ Fiyat × Döviz Kuru = Dönüştürülmüş Fiyat │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ 4. VERGİ & SERVİS ÜCRETİ │ │
-│ │ │ │
-│ │ Ara Toplam = Günlük Fiyatlar Toplamı │ │
-│ │ Vergi = Ara Toplam × 0.12 (%10 KDV + %2 Konaklama Vergisi) │ │
-│ │ Servis Ücreti = Ara Toplam × 0.03 │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ 5. PROMOSYON (VARSA) │ │
-│ │ │ │
-│ │ Promo kod geçerli ise indirim uygulanır │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ SONUÇ │ │
-│ │ │ │
-│ │ Genel Toplam = Ara Toplam + Vergi + Servis Ücreti - İndirim │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
 
+```mermaid
+flowchart TD
+  A[Girdi\nUnitId, CheckIn, CheckOut, Kişi, Para Birimi] --> B[Baz Fiyat]
+  B --> C[Ek Ücretler\nHafta Sonu, Özel Gün, Ekstra Yatak]
+  C --> D[Döviz Dönüşümü]
+  D --> E[Vergi ve Servis Ücreti]
+  E --> F[Promosyon]
+  F --> G[Genel Toplam]
+```
 
 ### 3.6 Booking Widget Akışı
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ BOOKING WIDGET AKIŞI │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ WEB SİTESİ (Müşteri) │ │
-│ │ │ │
-│ │ ┌──────────────────────────────────────────────────────────────┐ │ │
-│ │ │ <div id="hp-booking-widget" data-widget-key="ABC123"></div> │ │ │
-│ │ │ <script src="https://api.trimangocalendar.com/widget.js"></script>│ │ │
-│ │ └──────────────────────────────────────────────────────────────┘ │ │
-│ │ │ │ │
-│ │ ▼ │ │
-│ │ ┌──────────────────────────────────────────────────────────────┐ │ │
-│ │ │ WIDGET YÜKLENİR │ │ │
-│ │ │ │ │ │
-│ │ │ 1. Widget key ile config API'den ayarlar çekilir │ │ │
-│ │ │ 2. Tema, renk, font ayarları uygulanır │ │ │
-│ │ │ 3. Arama formu render edilir │ │ │
-│ │ └──────────────────────────────────────────────────────────────┘ │ │
-│ │ │ │ │
-│ │ ▼ │ │
-│ │ ┌──────────────────────────────────────────────────────────────┐ │ │
-│ │ │ ADIM 1: TARİH VE KİŞİ SEÇİMİ │ │ │
-│ │ │ │ │ │
-│ │ │ ┌────────────┐ ┌────────────┐ ┌────────────┐ │ │ │
-│ │ │ │ Giriş Tarihi│ │Çıkış Tarihi│ │ Kişi Sayısı│ │ │ │
-│ │ │ └────────────┘ └────────────┘ └────────────┘ │ │ │
-│ │ └──────────────────────────────────────────────────────────────┘ │ │
-│ │ │ │ │
-│ │ ▼ │ │
-│ │ ┌──────────────────────────────────────────────────────────────┐ │ │
-│ │ │ ADIM 2: MÜSAİT BİRİMLER LİSTELENİR │ │ │
-│ │ │ │ │ │
-│ │ │ • Müsaitlik kontrolü yapılır │ │ │
-│ │ │ • Fiyat hesaplanır │ │ │
-│ │ │ • Birim kartları gösterilir │ │ │
-│ │ └──────────────────────────────────────────────────────────────┘ │ │
-│ │ │ │ │
-│ │ ▼ │ │
-│ │ ┌──────────────────────────────────────────────────────────────┐ │ │
-│ │ │ ADIM 3: MİSAFİR BİLGİLERİ │ │ │
-│ │ │ │ │ │
-│ │ │ • Ad, Soyad, Email, Telefon │ │ │
-│ │ │ • Özel istekler (opsiyonel) │ │ │
-│ │ └──────────────────────────────────────────────────────────────┘ │ │
-│ │ │ │ │
-│ │ ▼ │ │
-│ │ ┌──────────────────────────────────────────────────────────────┐ │ │
-│ │ │ ADIM 4: REZERVASYON TAMAMLANIR │ │ │
-│ │ │ │ │ │
-│ │ │ • Rezervasyon oluşturulur │ │ │
-│ │ │ • Onay mesajı gösterilir │ │ │
-│ │ │ • Email ile bilgilendirme yapılır │ │ │
-│ │ └──────────────────────────────────────────────────────────────┘ │ │
-│ └──────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+```mermaid
+flowchart LR
+  A[Embed Script] --> B[Widget Config Çek]
+  B --> C[Tarih ve Kişi Seçimi]
+  C --> D[Müsait Birimler]
+  D --> E[Misafir Bilgileri]
+  E --> F[Rezervasyon Tamamla]
+```
 
 ---
 
 ## 4. Backend Katman Mimarisi
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ BACKEND KATMAN MİMARİSİ (Detay) │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────────────────────────────────────────────────────────────────┐ │
-│ │ PRESENTATION LAYER (.API) │ │
-│ │ │ │
-│ │ ┌────────────────────────────────────────────────────────────────┐ │ │
-│ │ │ HTTP REQUEST │ │ │
-│ │ └───────────────────────────┬────────────────────────────────────┘ │ │
-│ │ │ │ │
-│
 
+```mermaid
+flowchart TB
+  Req[HTTP Request] --> Ctl[Controllers]
+  Ctl --> Med[MediatR / Handlers]
+  Med --> Val[FluentValidation]
+  Med --> Svc[Application Services]
+  Svc --> Repo[Repositories / UoW]
+  Repo --> Db[(SQL Server)]
+```
+
+---
+
+## 5. Frontend Bileşen Mimarisi
+
+```mermaid
+flowchart TB
+  App[React App] --> Router[Route Layer]
+  Router --> Pages[Pages]
+  Pages --> Components[Shared Components]
+  Components --> ApiClient[API Client]
+  ApiClient --> Backend[Backend API]
+```
+
+---
+
+## 6. Veritabanı İlişkileri
+
+```mermaid
+erDiagram
+  TENANT ||--o{ PROPERTY : owns
+  PROPERTY ||--o{ UNIT : contains
+  UNIT ||--o{ RESERVATION : has
+  RESERVATION }o--|| GUEST : belongs_to
+  TENANT ||--o{ AGENCY_AUTHORIZATION : grants
+  AGENCY_AUTHORIZATION }o--|| AGENCY : for
+  PROPERTY ||--o{ BOOKING_WIDGET : has
+  BOOKING_WIDGET ||--o{ WIDGET_INTEGRATION : includes
+  TENANT ||--o{ NOTIFICATION : creates
+```
+
+---
+
+## 7. API İletişim Akışı
+
+```mermaid
+sequenceDiagram
+  participant UI as Frontend
+  participant API as Backend API
+  participant Auth as JWT/Auth
+  participant DB as Database
+
+  UI->>API: HTTP Request
+  API->>Auth: Token Validate
+  Auth-->>API: Claims
+  API->>DB: Query/Command
+  DB-->>API: Result
+  API-->>UI: JSON Response
+```
+
+---
+
+## 8. Deployment Mimarisi
+
+```mermaid
+flowchart LR
+  User[Kullanıcı Tarayıcısı] --> CDN[Static Hosting / CDN]
+  CDN --> FE[Frontend]
+  FE --> API[Trimango API]
+  API --> DB[(SQL Server)]
+  API --> REDIS[(Redis)]
+  API --> JOBS[Hangfire]
+```

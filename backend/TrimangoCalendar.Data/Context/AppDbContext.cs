@@ -1,6 +1,7 @@
 // backend/TrimangoCalendar.Data/Context/AppDbContext.cs
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TrimangoCalendar.Core;
 using TrimangoCalendar.Core.Entities;
 
 namespace TrimangoCalendar.Data.Context
@@ -365,7 +366,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.Property(e => e.CurrencyCode).HasMaxLength(3);
                 entity.Property(e => e.PaymentMethod).HasMaxLength(50);
                 entity.Property(e => e.TransactionId).HasMaxLength(200);
-                entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Pending");
+                entity.Property(e => e.Status).HasDefaultValue("Pending");
                 entity.Property(e => e.PaidAt).HasColumnType("datetime2");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
 
@@ -531,7 +532,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.Property(e => e.Amount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.CommissionRate).HasColumnType("decimal(5,2)");
                 entity.Property(e => e.CurrencyCode).HasMaxLength(3);
-                entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Pending");
+                entity.Property(e => e.Status).HasDefaultValue("Pending");
                 entity.Property(e => e.PaidAt).HasColumnType("datetime2");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
 
@@ -718,7 +719,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.Property(e => e.RecipientEmail).HasMaxLength(256);
                 entity.Property(e => e.RecipientPhone).HasMaxLength(20);
                 entity.Property(e => e.ReferenceType).HasMaxLength(50);
-                entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Pending");
+                entity.Property(e => e.Status).HasDefaultValue(NotificationStatus.Pending);
                 entity.Property(e => e.ErrorMessage).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.Property(e => e.SentAt).HasColumnType("datetime2");
@@ -823,7 +824,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.Property(e => e.FilePath).HasMaxLength(1000);
                 entity.Property(e => e.FileFormat).HasMaxLength(10);
                 entity.Property(e => e.Filters).HasColumnType("nvarchar(max)");
-                entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Pending");
+                entity.Property(e => e.Status).HasDefaultValue(ReportStatus.Pending);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
 

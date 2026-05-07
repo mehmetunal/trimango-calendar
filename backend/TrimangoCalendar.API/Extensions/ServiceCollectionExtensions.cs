@@ -79,7 +79,6 @@ public static class ServiceCollectionExtensions
                 sqlOptions.EnableRetryOnFailure(3, TimeSpan.FromSeconds(30), null);
                 sqlOptions.CommandTimeout(60);
             });
-            options.UseLazyLoadingProxies();
             options.EnableSensitiveDataLogging(environment.IsDevelopment());
             options.EnableDetailedErrors(environment.IsDevelopment());
         });
@@ -221,7 +220,7 @@ public static class ServiceCollectionExtensions
         services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend", policy =>
-                policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+                policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:5002")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
