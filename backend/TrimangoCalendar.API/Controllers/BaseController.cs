@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Contracts;
 using TrimangoCalendar.API.Swagger;
 
 namespace TrimangoCalendar.API.Controllers;
@@ -9,10 +10,10 @@ namespace TrimangoCalendar.API.Controllers;
 [Produces("application/json")]
 [ProducesResponseType(typeof(SwaggerSuccessResponse), StatusCodes.Status200OK)]
 [ProducesResponseType(typeof(SwaggerErrorResponse), StatusCodes.Status400BadRequest)]
-[ProducesResponseType(typeof(SwaggerErrorResponse), StatusCodes.Status401Unauthorized)]
-[ProducesResponseType(typeof(SwaggerErrorResponse), StatusCodes.Status403Forbidden)]
-[ProducesResponseType(typeof(SwaggerErrorResponse), StatusCodes.Status404NotFound)]
-[ProducesResponseType(typeof(SwaggerErrorResponse), StatusCodes.Status500InternalServerError)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
 public abstract class BaseController : ControllerBase
 {
     /// <summary>

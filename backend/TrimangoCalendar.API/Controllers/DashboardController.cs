@@ -9,13 +9,13 @@ public class DashboardController : BaseController
 {
     private readonly IReportService _reportService;
     private readonly INotificationService _notificationService;
-    
+
     public DashboardController(IReportService reportService, INotificationService notificationService)
     {
         _reportService = reportService;
         _notificationService = notificationService;
     }
-    
+
     [HttpGet]
     [ProducesResponseType(typeof(ApiResponseDto<DashboardDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -32,7 +32,7 @@ public class DashboardController : BaseController
         var dashboard = await _reportService.GetDashboardAsync(tenantId, startDate, endDate);
         return Ok(new { success = true, data = dashboard });
     }
-    
+
     [HttpGet("notifications")]
     [ProducesResponseType(typeof(ApiResponseDto<NotificationListResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -48,10 +48,10 @@ public class DashboardController : BaseController
         var tenantId = GetTenantId();
         var notifications = await _notificationService.GetNotificationsAsync(tenantId, page, pageSize);
         var unreadCount = await _notificationService.GetUnreadCountAsync(tenantId);
-        
+
         return Ok(new { success = true, data = notifications, unreadCount });
     }
-    
+
     [HttpPost("notifications/{id}/read")]
     [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -67,7 +67,7 @@ public class DashboardController : BaseController
         await _notificationService.MarkAsReadAsync(id);
         return Ok(new { success = true });
     }
-    
+
     [HttpPost("notifications/read-all")]
     [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -83,4 +83,5 @@ public class DashboardController : BaseController
         var tenantId = GetTenantId();
         await _notificationService.MarkAllAsReadAsync(tenantId);
         return Ok(new { success = true });
-    }}
+    }
+}

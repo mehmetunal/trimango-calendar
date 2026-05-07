@@ -19,7 +19,7 @@ public class Tenant
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    
+
     // Navigation properties
     public ICollection<ApplicationUser> Users { get; set; }
     public ICollection<Property> Properties { get; set; }

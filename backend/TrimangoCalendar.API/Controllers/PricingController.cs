@@ -1,15 +1,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Contracts;
 using TrimangoCalendar.Core;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
 public class PricingController : ControllerBase
 {
     private readonly IPricingService _pricingService;
     private readonly ICurrencyService _currencyService;
     private readonly ISeasonRateService _seasonRateService;
-    
+
     public PricingController(
         IPricingService pricingService,
         ICurrencyService currencyService,
@@ -19,7 +24,7 @@ public class PricingController : ControllerBase
         _currencyService = currencyService;
         _seasonRateService = seasonRateService;
     }
-    
+
     [HttpPost("calculate")]
     /// <summary>
     /// CalculatePrice methodunu çalıştırır.
@@ -36,7 +41,7 @@ public class PricingController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("currencies")]
     /// <summary>
     /// GetCurrencies methodunu çalıştırır.
@@ -46,25 +51,25 @@ public class PricingController : ControllerBase
         var currencies = await _currencyService.GetActiveCurrenciesAsync();
         return Ok(new { success = true, data = currencies });
     }
-    
+
     [HttpGet("exchange-rate")]
     public async Task<IActionResult> GetExchangeRate(
-        [FromQuery] string from = "TRY", 
+        [FromQuery] string from = "TRY",
         [FromQuery] string to = "USD")
     {
         try
         {
             var rate = await _currencyService.GetExchangeRateAsync(from, to);
-            return Ok(new 
-            { 
-                success = true, 
-                data = new 
-                { 
-                    baseCurrency = from, 
-                    targetCurrency = to, 
+            return Ok(new
+            {
+                success = true,
+                data = new
+                {
+                    baseCurrency = from,
+                    targetCurrency = to,
                     rate,
                     date = DateTime.Today.ToString("yyyy-MM-dd")
-                } 
+                }
             });
         }
         catch (Exception ex)
@@ -72,7 +77,7 @@ public class PricingController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("daily-prices/{unitId}")]
     public async Task<IActionResult> GetDailyPrices(
         Guid unitId,
@@ -90,7 +95,7 @@ public class PricingController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("seasons")]
     [Authorize]
     /// <summary>
@@ -108,7 +113,7 @@ public class PricingController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("seasons/{unitId}")]
     /// <summary>
     /// GetSeasonRates methodunu çalıştırır.

@@ -8,78 +8,78 @@ namespace TrimangoCalendar.Data.Context
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
-        { 
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
         }
 
         // ==========================================
         // TÜM DBSET TANIMLARI
         // ==========================================
-        
+
         // Tenant & User
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<TenantSettings> TenantSettings { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<TenantSubscription> TenantSubscriptions { get; set; }
-        
+
         // Property
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
         public DbSet<PropertyReview> PropertyReviews { get; set; }
-        
+
         // Unit
         public DbSet<Unit> Units { get; set; }
         public DbSet<UnitAmenity> UnitAmenities { get; set; }
         public DbSet<UnitImage> UnitImages { get; set; }
-        
+
         // Reservation
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationHistory> ReservationHistories { get; set; }
         public DbSet<ReservationPayment> ReservationPayments { get; set; }
-        
+
         // Guest
         public DbSet<Guest> Guests { get; set; }
         public DbSet<GuestDocument> GuestDocuments { get; set; }
         public DbSet<GuestNote> GuestNotes { get; set; }
-        
+
         // Agency
         public DbSet<Agency> Agencies { get; set; }
         public DbSet<AgencyUser> AgencyUsers { get; set; }
         public DbSet<AgencyAuthorization> AgencyAuthorizations { get; set; }
         public DbSet<AgencyCommission> AgencyCommissions { get; set; }
-        
+
         // Pricing
         public DbSet<SeasonRate> SeasonRates { get; set; }
         public DbSet<SpecialDayRate> SpecialDayRates { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<PromotionUsage> PromotionUsages { get; set; }
-        
+
         // Currency
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
         public DbSet<CurrencyFormat> CurrencyFormats { get; set; }
-        
+
         // Calendar
         public DbSet<CalendarBlock> CalendarBlocks { get; set; }
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<CalendarNote> CalendarNotes { get; set; }
-        
+
         // Notification
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
         public DbSet<NotificationPreference> NotificationPreferences { get; set; }
         public DbSet<NotificationLog> NotificationLogs { get; set; }
-        
+
         // Widget
         public DbSet<BookingWidget> BookingWidgets { get; set; }
         public DbSet<WidgetIntegration> WidgetIntegrations { get; set; }
         public DbSet<WidgetTheme> WidgetThemes { get; set; }
-        
+
         // Report
         public DbSet<Report> Reports { get; set; }
         public DbSet<ReportSchedule> ReportSchedules { get; set; }
         public DbSet<DashboardWidget> DashboardWidgets { get; set; }
-        
+
         // System
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
@@ -98,7 +98,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Subdomain).IsUnique();
                 entity.HasIndex(e => e.Email);
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Subdomain).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(256);
@@ -122,7 +122,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.TenantId).IsUnique();
-                
+
                 entity.Property(e => e.Timezone).HasMaxLength(50).HasDefaultValue("Europe/Istanbul");
                 entity.Property(e => e.DateFormat).HasMaxLength(20).HasDefaultValue("dd.MM.yyyy");
                 entity.Property(e => e.DefaultCurrency).HasMaxLength(3).HasDefaultValue("TRY");
@@ -140,7 +140,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<SubscriptionPlan>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
@@ -158,7 +158,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.TenantId, e.Status });
-                
+
                 entity.Property(e => e.Amount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.CurrencyCode).HasMaxLength(3).HasDefaultValue("TRY");
                 entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Active");
@@ -185,7 +185,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasIndex(e => e.City);
                 entity.HasIndex(e => e.Type);
                 entity.HasIndex(e => e.IsActive);
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(300);
                 entity.Property(e => e.Slug).IsRequired().HasMaxLength(300);
                 entity.Property(e => e.Description).HasColumnType("nvarchar(max)");
@@ -222,7 +222,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<PropertyImage>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.FileName).IsRequired().HasMaxLength(500);
                 entity.Property(e => e.FilePath).IsRequired().HasMaxLength(1000);
                 entity.Property(e => e.ThumbnailPath).HasMaxLength(1000);
@@ -244,7 +244,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.PropertyId, e.GuestId, e.ReservationId }).IsUnique();
-                
+
                 entity.Property(e => e.Comment).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.Response).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.Rating).HasDefaultValue(5);
@@ -264,7 +264,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.PropertyId, e.UnitNumber });
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.UnitNumber).HasMaxLength(50);
                 entity.Property(e => e.Description).HasColumnType("nvarchar(max)");
@@ -301,7 +301,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasIndex(e => new { e.TenantId, e.Status });
                 entity.HasIndex(e => e.GuestId);
                 entity.HasIndex(e => e.CreatedAt);
-                
+
                 entity.Property(e => e.ReservationNumber).IsRequired().HasMaxLength(20);
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.PaidAmount).HasColumnType("decimal(18,2)").HasDefaultValue(0);
@@ -344,7 +344,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<ReservationHistory>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.Note).HasMaxLength(500);
                 entity.Property(e => e.ChangedBy).HasMaxLength(100);
                 entity.Property(e => e.ChangedAt).HasDefaultValueSql("GETUTCDATE()");
@@ -361,7 +361,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<ReservationPayment>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.Amount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.CurrencyCode).HasMaxLength(3);
                 entity.Property(e => e.PaymentMethod).HasMaxLength(50);
@@ -386,7 +386,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasIndex(e => e.Phone);
                 entity.HasIndex(e => e.TcKimlikNo);
                 entity.HasIndex(e => e.PassportNumber);
-                
+
                 entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Email).HasMaxLength(256);
@@ -413,7 +413,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<GuestDocument>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.DocumentType).HasMaxLength(50);
                 entity.Property(e => e.DocumentNumber).HasMaxLength(100);
                 entity.Property(e => e.FilePath).HasMaxLength(1000);
@@ -431,7 +431,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<GuestNote>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.Note).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.CreatedBy).HasMaxLength(100);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
@@ -450,7 +450,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.HasIndex(e => e.TaxNumber);
-                
+
                 entity.Property(e => e.CompanyName).IsRequired().HasMaxLength(300);
                 entity.Property(e => e.TaxNumber).HasMaxLength(20);
                 entity.Property(e => e.TaxOffice).HasMaxLength(100);
@@ -478,7 +478,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.AgencyId, e.Email }).IsUnique();
-                
+
                 entity.Property(e => e.FirstName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.LastName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(256);
@@ -499,7 +499,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.AgencyId, e.PropertyId }).IsUnique();
-                
+
                 entity.Property(e => e.AllowedUnitIds).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.CustomCommissionRate).HasColumnType("decimal(5,2)");
                 entity.Property(e => e.MaxMarkupRate).HasColumnType("decimal(5,2)");
@@ -528,7 +528,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<AgencyCommission>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.Amount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.CommissionRate).HasColumnType("decimal(5,2)");
                 entity.Property(e => e.CurrencyCode).HasMaxLength(3);
@@ -554,7 +554,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.UnitId, e.StartDate, e.EndDate });
-                
+
                 entity.Property(e => e.Name).HasMaxLength(200);
                 entity.Property(e => e.WeekdayPrice).HasColumnType("decimal(18,2)").IsRequired();
                 entity.Property(e => e.WeekendPrice).HasColumnType("decimal(18,2)");
@@ -581,7 +581,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.UnitId, e.Date }).IsUnique();
-                
+
                 entity.Property(e => e.Price).HasColumnType("decimal(18,2)").IsRequired();
                 entity.Property(e => e.CurrencyCode).HasMaxLength(3).HasDefaultValue("TRY");
 
@@ -598,7 +598,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Code).IsUnique();
-                
+
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Description).HasColumnType("nvarchar(max)");
@@ -628,7 +628,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.PromotionId, e.ReservationId }).IsUnique();
-                
+
                 entity.Property(e => e.DiscountAmount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.UsedAt).HasDefaultValueSql("GETUTCDATE()");
 
@@ -644,7 +644,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<Currency>(entity =>
             {
                 entity.HasKey(e => e.Code);
-                
+
                 entity.Property(e => e.Code).HasMaxLength(3);
                 entity.Property(e => e.Symbol).HasMaxLength(5);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
@@ -662,7 +662,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.BaseCurrencyCode, e.TargetCurrencyCode, e.Date }).IsUnique();
-                
+
                 entity.Property(e => e.Rate).HasColumnType("decimal(18,6)");
                 entity.Property(e => e.BuyRate).HasColumnType("decimal(18,6)");
                 entity.Property(e => e.SellRate).HasColumnType("decimal(18,6)");
@@ -689,7 +689,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.UnitId, e.StartDate, e.EndDate });
-                
+
                 entity.Property(e => e.Type).HasMaxLength(50);
                 entity.Property(e => e.Reason).HasMaxLength(500);
                 entity.Property(e => e.Notes).HasColumnType("nvarchar(max)");
@@ -710,7 +710,7 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.TenantId, e.Status });
                 entity.HasIndex(e => new { e.TenantId, e.CreatedAt });
-                
+
                 entity.Property(e => e.Type).HasMaxLength(50);
                 entity.Property(e => e.Channel).HasMaxLength(20);
                 entity.Property(e => e.Title).HasMaxLength(500);
@@ -733,7 +733,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.TenantId, e.Code }).IsUnique();
-                
+
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Subject).HasMaxLength(500);
@@ -751,7 +751,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.TenantId, e.Type }).IsUnique();
-                
+
                 entity.Property(e => e.Type).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.EmailAddresses).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.PhoneNumbers).HasColumnType("nvarchar(max)");
@@ -773,7 +773,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.WidgetKey).IsUnique();
-                
+
                 entity.Property(e => e.WidgetKey).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Theme).HasMaxLength(50).HasDefaultValue("default");
                 entity.Property(e => e.PrimaryColor).HasMaxLength(7).HasDefaultValue("#2563EB");
@@ -802,7 +802,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.WidgetId, e.Domain }).IsUnique();
-                
+
                 entity.Property(e => e.Domain).IsRequired().HasMaxLength(500);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
@@ -819,7 +819,7 @@ namespace TrimangoCalendar.Data.Context
             modelBuilder.Entity<Report>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                
+
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.FilePath).HasMaxLength(1000);
                 entity.Property(e => e.FileFormat).HasMaxLength(10);
@@ -841,7 +841,7 @@ namespace TrimangoCalendar.Data.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => new { e.TenantId, e.CreatedAt });
-                
+
                 entity.Property(e => e.EntityName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.EntityId).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Action).IsRequired().HasMaxLength(50);

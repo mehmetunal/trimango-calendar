@@ -10,7 +10,7 @@ public class Currency
     public bool IsBaseCurrency { get; set; } // TRY varsayılan ana para birimi
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
-    
+
     // Navigation
     public ICollection<ExchangeRate> BaseRates { get; set; }
     public ICollection<ExchangeRate> TargetRates { get; set; }

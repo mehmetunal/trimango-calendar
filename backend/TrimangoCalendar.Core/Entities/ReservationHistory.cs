@@ -9,7 +9,7 @@ public class ReservationHistory
     public string Note { get; set; }
     public string ChangedBy { get; set; }
     public DateTime ChangedAt { get; set; }
-    
+
     public Reservation Reservation { get; set; }
 }
 

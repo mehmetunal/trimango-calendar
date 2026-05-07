@@ -6,7 +6,7 @@ public interface IReportService
     Task<ReportDto> GetReportAsync(Guid reportId);
     Task<List<ReportDto>> GetReportsAsync(Guid tenantId);
     Task<byte[]> DownloadReportAsync(Guid reportId);
-    
+
     // Dashboard verileri
     Task<DashboardDto> GetDashboardAsync(Guid tenantId, DateTime? startDate = null, DateTime? endDate = null);
     Task<OccupancyReportDto> GetOccupancyReportAsync(Guid tenantId, ReportRequestDto request);

@@ -10,14 +10,14 @@ public class SmsService : ISmsService
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
     private readonly ILogger<SmsService> _logger;
-    
+
     public SmsService(HttpClient httpClient, IConfiguration configuration, ILogger<SmsService> logger)
     {
         _httpClient = httpClient;
         _configuration = configuration;
         _logger = logger;
     }
-    
+
     /// <summary>
     /// SendSmsAsync methodunu çalıştırır.
     /// </summary>
@@ -28,7 +28,7 @@ public class SmsService : ISmsService
         var username = _configuration["Sms:Username"];
         var password = _configuration["Sms:Password"];
         var header = _configuration["Sms:Header"]; // Gönderici adı
-        
+
         var xmlBody = $@"
             <?xml version='1.0' encoding='UTF-8'?>
             <mainbody>
@@ -42,12 +42,12 @@ public class SmsService : ISmsService
                     <no>{phone}</no>
                 </body>
             </mainbody>";
-        
+
         try
         {
-            var response = await _httpClient.PostAsync(apiUrl, 
+            var response = await _httpClient.PostAsync(apiUrl,
                 new StringContent(xmlBody, Encoding.UTF8, "application/xml"));
-            
+
             var responseContent = await response.Content.ReadAsStringAsync();
             _logger.LogInformation("SMS gönderildi: {Phone} - Response: {Response}", phone, responseContent);
         }

@@ -10,13 +10,13 @@ public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<EmailService> _logger;
-    
+
     public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
     {
         _configuration = configuration;
         _logger = logger;
     }
-    
+
     /// <summary>
     /// SendEmailAsync methodunu çalıştırır.
     /// </summary>
@@ -30,19 +30,19 @@ public class EmailService : IEmailService
         var smtpPass = _configuration["Email:Password"];
         var fromEmail = _configuration["Email:FromEmail"];
         var fromName = _configuration["Email:FromName"];
-        
+
         if (string.IsNullOrEmpty(smtpServer) || string.IsNullOrEmpty(fromEmail))
         {
             _logger.LogError("SMTP configuration is incomplete");
             throw new InvalidOperationException("SMTP configuration is incomplete");
         }
-        
+
         using var client = new SmtpClient(smtpServer, smtpPort)
         {
             EnableSsl = true,
             Credentials = new NetworkCredential(smtpUser, smtpPass)
         };
-        
+
         var message = new MailMessage
         {
             From = new MailAddress(fromEmail, fromName ?? string.Empty),
@@ -50,9 +50,9 @@ public class EmailService : IEmailService
             Body = body,
             IsBodyHtml = true
         };
-        
+
         message.To.Add(to);
-        
+
         try
         {
             await client.SendMailAsync(message);
@@ -64,7 +64,7 @@ public class EmailService : IEmailService
             throw;
         }
     }
-    
+
     /// <summary>
     /// SendBulkEmailAsync methodunu çalıştırır.
     /// </summary>

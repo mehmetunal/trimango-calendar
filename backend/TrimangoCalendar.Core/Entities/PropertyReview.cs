@@ -16,7 +16,7 @@ public class PropertyReview
     public DateTime? ResponseDate { get; set; }
     public bool IsApproved { get; set; }
     public DateTime CreatedAt { get; set; }
-    
+
     public Property Property { get; set; }
     public Guest Guest { get; set; }
 }

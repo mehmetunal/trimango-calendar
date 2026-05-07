@@ -1,20 +1,25 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Contracts;
 
 [ApiController]
 [Route("widget/api")]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
 [AllowAnonymous] // Herkese açık
 public class WidgetController : ControllerBase
 {
     private readonly IBookingEngineService _bookingEngine;
     private readonly ICurrencyService _currencyService;
-    
+
     public WidgetController(IBookingEngineService bookingEngine, ICurrencyService currencyService)
     {
         _bookingEngine = bookingEngine;
         _currencyService = currencyService;
     }
-    
+
     [HttpGet("config/{widgetKey}")]
     /// <summary>
     /// GetWidgetConfig methodunu çalıştırır.
@@ -31,7 +36,7 @@ public class WidgetController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("search/{widgetKey}")]
     /// <summary>
     /// Search methodunu çalıştırır.
@@ -40,7 +45,7 @@ public class WidgetController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         try
         {
             var result = await _bookingEngine.CheckAvailabilityAsync(widgetKey, new AvailabilitySearchDto
@@ -51,7 +56,7 @@ public class WidgetController : ControllerBase
                 Children = search.Children,
                 CurrencyCode = search.CurrencyCode ?? "TRY"
             });
-            
+
             return Ok(new { success = true, data = result });
         }
         catch (BusinessException ex)
@@ -59,7 +64,7 @@ public class WidgetController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("property/{widgetKey}")]
     /// <summary>
     /// GetProperty methodunu çalıştırır.
@@ -76,7 +81,7 @@ public class WidgetController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("book/{widgetKey}")]
     /// <summary>
     /// CreateBooking methodunu çalıştırır.
@@ -85,14 +90,14 @@ public class WidgetController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         try
         {
             var reservation = await _bookingEngine.CreateBookingAsync(widgetKey, dto);
-            
-            return Ok(new 
-            { 
-                success = true, 
+
+            return Ok(new
+            {
+                success = true,
                 data = reservation,
                 message = "Rezervasyonunuz başarıyla oluşturuldu!",
                 reservationNumber = reservation.ReservationNumber
@@ -103,10 +108,10 @@ public class WidgetController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("booking/{widgetKey}")]
     public async Task<IActionResult> GetBooking(
-        string widgetKey, 
+        string widgetKey,
         [FromQuery] string reservationNumber,
         [FromQuery] string email)
     {
@@ -120,7 +125,7 @@ public class WidgetController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("cancel/{widgetKey}")]
     public async Task<IActionResult> CancelBooking(
         string widgetKey,
@@ -138,7 +143,7 @@ public class WidgetController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("currencies")]
     /// <summary>
     /// GetCurrencies methodunu çalıştırır.
@@ -148,7 +153,7 @@ public class WidgetController : ControllerBase
         var currencies = await _currencyService.GetActiveCurrenciesAsync();
         return Ok(new { success = true, data = currencies });
     }
-    
+
     [HttpGet("exchange-rate")]
     /// <summary>
     /// GetExchangeRate methodunu çalıştırır.

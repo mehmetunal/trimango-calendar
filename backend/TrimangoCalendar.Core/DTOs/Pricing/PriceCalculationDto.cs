@@ -4,20 +4,20 @@ public class PriceCalculationRequest
 {
     [Required]
     public Guid UnitId { get; set; }
-    
+
     [Required]
     public DateTime CheckIn { get; set; }
-    
+
     [Required]
     public DateTime CheckOut { get; set; }
-    
+
     [Required]
     [Range(1, 20)]
     public int Adults { get; set; } = 1;
-    
+
     [Range(0, 10)]
     public int Children { get; set; } = 0;
-    
+
     public string CurrencyCode { get; set; } = "TRY";
     public string PromoCode { get; set; }
 }
@@ -31,19 +31,19 @@ public class PriceCalculationResult
     public int TotalNights { get; set; }
     public int Adults { get; set; }
     public int Children { get; set; }
-    
+
     // Fiyat Kırılımı
     public PriceBreakdown Breakdown { get; set; }
-    
+
     // Toplam Fiyat
     public PriceDto TotalPrice { get; set; }
     public PriceDto AverageNightlyPrice { get; set; }
-    
+
     // Vergiler ve Harçlar
     public PriceDto TaxAmount { get; set; }
     public PriceDto ServiceFee { get; set; }
     public PriceDto GrandTotal { get; set; }
-    
+
     // İptal Politikası
     public CancellationPolicyDto CancellationPolicy { get; set; }
 }

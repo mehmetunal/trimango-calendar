@@ -7,12 +7,12 @@ using TrimangoCalendar.API.Contracts;
 public class BookingWidgetController : BaseController
 {
     private readonly IBookingEngineService _bookingEngine;
-    
+
     public BookingWidgetController(IBookingEngineService bookingEngine)
     {
         _bookingEngine = bookingEngine;
     }
-    
+
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponseDto<BookingWidgetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -29,7 +29,7 @@ public class BookingWidgetController : BaseController
         var widget = await _bookingEngine.CreateWidgetAsync(dto.PropertyId, dto);
         return Ok(new { success = true, data = widget });
     }
-    
+
     [HttpGet("{propertyId}")]
     [ProducesResponseType(typeof(ApiResponseDto<List<BookingWidgetDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -45,7 +45,7 @@ public class BookingWidgetController : BaseController
         var widgets = await _bookingEngine.GetPropertyWidgetsAsync(propertyId);
         return Ok(new { success = true, data = widgets });
     }
-    
+
     [HttpGet("embed/{widgetId}")]
     [ProducesResponseType(typeof(ApiResponseDto<WidgetEmbedResponseDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -60,10 +60,10 @@ public class BookingWidgetController : BaseController
     {
         var widget = await _bookingEngine.GetWidgetByIdAsync(widgetId);
         var embedCode = await _bookingEngine.GetWidgetEmbedCode(widget.WidgetKey);
-        
+
         return Ok(new { success = true, data = new { widget, embedCode } });
     }
-    
+
     [HttpPut("{widgetId}")]
     [ProducesResponseType(typeof(ApiResponseDto<BookingWidgetDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -79,7 +79,7 @@ public class BookingWidgetController : BaseController
         var widget = await _bookingEngine.UpdateWidgetAsync(widgetId, dto);
         return Ok(new { success = true, data = widget });
     }
-    
+
     [HttpDelete("{widgetId}")]
     [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -95,7 +95,7 @@ public class BookingWidgetController : BaseController
         await _bookingEngine.DeleteWidgetAsync(widgetId);
         return Ok(new { success = true, message = "Widget silindi" });
     }
-    
+
     [HttpGet("preview/{widgetKey}")]
     [ProducesResponseType(StatusCodes.Status302Found)]
     [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
@@ -109,4 +109,5 @@ public class BookingWidgetController : BaseController
     public IActionResult PreviewWidget(string widgetKey)
     {
         return Redirect($"/widget/{widgetKey}");
-    }}
+    }
+}

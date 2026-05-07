@@ -13,7 +13,7 @@ public class PropertyImage
     public int SortOrder { get; set; }
     public bool IsMain { get; set; }
     public DateTime UploadedAt { get; set; }
-    
+
     public Property Property { get; set; }
 }
 

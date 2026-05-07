@@ -8,12 +8,12 @@ using TrimangoCalendar.API.Controllers;
 public class ReportController : BaseController
 {
     private readonly IReportService _reportService;
-    
+
     public ReportController(IReportService reportService)
     {
         _reportService = reportService;
     }
-    
+
     [HttpPost("occupancy")]
     /// <summary>
     /// GetOccupancyReport methodunu çalıştırır.
@@ -24,7 +24,7 @@ public class ReportController : BaseController
         var report = await _reportService.GetOccupancyReportAsync(tenantId, request);
         return Ok(new { success = true, data = report });
     }
-    
+
     [HttpPost("revenue")]
     /// <summary>
     /// GetRevenueReport methodunu çalıştırır.
@@ -35,7 +35,7 @@ public class ReportController : BaseController
         var report = await _reportService.GetRevenueReportAsync(tenantId, request);
         return Ok(new { success = true, data = report });
     }
-    
+
     [HttpGet("agency-performance/{agencyId}")]
     /// <summary>
     /// GetAgencyPerformance methodunu çalıştırır.
@@ -46,7 +46,7 @@ public class ReportController : BaseController
         var performance = await _reportService.GetAgencyPerformanceAsync(tenantId, agencyId, start, end);
         return Ok(new { success = true, data = performance });
     }
-    
+
     [HttpPost("generate")]
     /// <summary>
     /// GenerateReport methodunu çalıştırır.
@@ -57,7 +57,7 @@ public class ReportController : BaseController
         var report = await _reportService.GenerateReportAsync(tenantId, request);
         return Ok(new { success = true, data = report });
     }
-    
+
     [HttpGet("download/{reportId}")]
     /// <summary>
     /// DownloadReport methodunu çalıştırır.
@@ -66,6 +66,7 @@ public class ReportController : BaseController
     {
         var fileBytes = await _reportService.DownloadReportAsync(reportId);
         var report = await _reportService.GetReportAsync(reportId);
-        
+
         return File(fileBytes, "application/octet-stream", $"{report.Name}_{DateTime.Now:yyyyMMdd}.xlsx");
-    }}
+    }
+}

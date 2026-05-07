@@ -11,7 +11,7 @@ public class RevenueReportDto
     public decimal TotalTax { get; set; }
     public decimal TotalServiceFee { get; set; }
     public decimal TotalDiscounts { get; set; }
-    
+
     public List<CurrencyRevenueDto> RevenueByCurrency { get; set; }
     public List<PropertyRevenueDto> RevenueByProperty { get; set; }
     public List<MonthlyRevenueDto> MonthlyRevenue { get; set; }

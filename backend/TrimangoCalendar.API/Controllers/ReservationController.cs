@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ReservationController : BaseController
 {
     private readonly IReservationService _reservationService;
-    
+
     public ReservationController(IReservationService reservationService)
     {
         _reservationService = reservationService;
     }
-    
+
     [HttpPost]
     /// <summary>
     /// Create methodunu çalıştırır.
@@ -20,13 +20,13 @@ public class ReservationController : BaseController
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
+
         try
         {
             var tenantId = GetTenantId();
             var reservation = await _reservationService.CreateAsync(tenantId, dto);
-            
-            return CreatedAtAction(nameof(GetById), new { id = reservation.Id }, 
+
+            return CreatedAtAction(nameof(GetById), new { id = reservation.Id },
                 new { success = true, data = reservation });
         }
         catch (BusinessException ex)
@@ -34,7 +34,7 @@ public class ReservationController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("{id}")]
     /// <summary>
     /// GetById methodunu çalıştırır.
@@ -51,7 +51,7 @@ public class ReservationController : BaseController
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("number/{reservationNumber}")]
     /// <summary>
     /// GetByNumber methodunu çalıştırır.
@@ -68,7 +68,7 @@ public class ReservationController : BaseController
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet]
     /// <summary>
     /// GetByTenant methodunu çalıştırır.
@@ -79,20 +79,20 @@ public class ReservationController : BaseController
         var result = await _reservationService.GetByTenantAsync(tenantId, filter);
         return Ok(new { success = true, data = result });
     }
-    
+
     [HttpGet("availability/{propertyId}")]
     public async Task<IActionResult> GetAvailability(
-        Guid propertyId, 
-        [FromQuery] DateTime startDate, 
+        Guid propertyId,
+        [FromQuery] DateTime startDate,
         [FromQuery] DateTime endDate)
     {
         if (startDate >= endDate)
             return BadRequest(new { success = false, message = "Başlangıç tarihi bitiş tarihinden önce olmalıdır" });
-        
+
         var availability = await _reservationService.GetAvailabilityAsync(propertyId, startDate, endDate);
         return Ok(new { success = true, data = availability });
     }
-    
+
     [HttpGet("check-availability/{unitId}")]
     public async Task<IActionResult> CheckAvailability(
         Guid unitId,
@@ -102,7 +102,7 @@ public class ReservationController : BaseController
         var isAvailable = await _reservationService.IsUnitAvailableAsync(unitId, checkIn, checkOut);
         return Ok(new { success = true, isAvailable });
     }
-    
+
     [HttpPost("{id}/check-in")]
     [Authorize]
     /// <summary>
@@ -124,7 +124,7 @@ public class ReservationController : BaseController
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("{id}/check-out")]
     [Authorize]
     /// <summary>
@@ -142,7 +142,7 @@ public class ReservationController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("{id}/cancel")]
     /// <summary>
     /// Cancel methodunu çalıştırır.
@@ -159,7 +159,7 @@ public class ReservationController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPut("status")]
     [Authorize]
     /// <summary>
@@ -177,7 +177,7 @@ public class ReservationController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("stats")]
     /// <summary>
     /// GetStats methodunu çalıştırır.
@@ -188,7 +188,7 @@ public class ReservationController : BaseController
         var stats = await _reservationService.GetStatsAsync(tenantId, startDate, endDate);
         return Ok(new { success = true, data = stats });
     }
-    
+
     [HttpGet("calendar")]
     public async Task<IActionResult> GetCalendar(
         [FromQuery] Guid? propertyId,
@@ -199,19 +199,19 @@ public class ReservationController : BaseController
         var tenantId = GetTenantId();
         var startDate = start ?? DateTime.Today.AddDays(-30);
         var endDate = end ?? DateTime.Today.AddDays(60);
-        
+
         var filter = new ReservationFilterDto
         {
             CheckInFrom = startDate,
             CheckOutTo = endDate,
             PageSize = 1000
         };
-        
+
         if (propertyId.HasValue)
             filter.PropertyId = propertyId;
-        
+
         var reservations = await _reservationService.GetByTenantAsync(tenantId, filter);
-        
+
         // FullCalendar formatına dönüştür
         var events = reservations.Items.Select(r => new
         {
@@ -228,10 +228,10 @@ public class ReservationController : BaseController
                 guestPhone = r.GuestPhone
             }
         });
-        
+
         return Ok(events);
     }
-    
+
     /// <summary>
     /// GetStatusColor methodunu çalıştırır.
     /// </summary>
@@ -247,4 +247,5 @@ public class ReservationController : BaseController
             "Pending" => "#FFC107",
             _ => "#9E9E9E"
         };
-    }}
+    }
+}

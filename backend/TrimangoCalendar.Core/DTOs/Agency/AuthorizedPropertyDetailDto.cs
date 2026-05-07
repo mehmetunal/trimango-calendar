@@ -11,7 +11,7 @@ public class AuthorizedPropertyDetailDto
     public string City { get; set; }
     public string CheckInTime { get; set; }
     public string CheckOutTime { get; set; }
-    
+
     // Yetkiler
     public string AuthorizationLevel { get; set; }
     public bool CanViewPrices { get; set; }
@@ -19,21 +19,21 @@ public class AuthorizedPropertyDetailDto
     public bool CanCreateReservation { get; set; }
     public bool CanModifyReservation { get; set; }
     public bool CanCancelReservation { get; set; }
-    
+
     // Fiyat
     public string PriceDisplay { get; set; }
     public decimal CommissionRate { get; set; }
     public decimal? DefaultMarkupRate { get; set; }
     public decimal? MaxMarkupRate { get; set; }
-    
+
     // Kontenjan
     public bool HasAllotment { get; set; }
     public int? TotalAllotment { get; set; }
     public int UsedAllotment { get; set; }
-    
+
     // Birimler
     public List<AuthorizedUnitDto> Units { get; set; }
-    
+
     // Tarih kısıtı
     public DateTime? ValidFrom { get; set; }
     public DateTime? ValidTo { get; set; }

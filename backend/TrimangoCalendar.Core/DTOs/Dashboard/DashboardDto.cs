@@ -8,21 +8,21 @@ public class DashboardDto
     public double CurrentOccupancy { get; set; }
     public int TotalUnits { get; set; }
     public int OccupiedUnits { get; set; }
-    
+
     // Genel istatistikler
     public int TotalProperties { get; set; }
     public int TotalReservations { get; set; }
     public int ActiveReservations { get; set; }
     public int PendingReservations { get; set; }
-    
+
     // Gelir
     public decimal MonthlyRevenue { get; set; }
     public string CurrencyCode { get; set; }
     public decimal AverageRevenuePerReservation { get; set; }
-    
+
     // Listeler
     public List<RecentReservationDto> RecentReservations { get; set; }
-    
+
     // Grafik verileri
     public List<ChartDataPoint> OccupancyChart { get; set; }
     public List<ChartDataPoint> RevenueChart { get; set; }

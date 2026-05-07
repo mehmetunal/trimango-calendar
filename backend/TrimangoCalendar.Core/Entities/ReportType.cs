@@ -4,25 +4,25 @@ public enum ReportType
 {
     [Description("Doluluk Raporu")]
     Occupancy = 1,
-    
+
     [Description("Gelir Raporu")]
     Revenue = 2,
-    
+
     [Description("Rezervasyon Raporu")]
     Reservation = 3,
-    
+
     [Description("Misafir Raporu")]
     Guest = 4,
-    
+
     [Description("Acente Performans")]
     AgencyPerformance = 5,
-    
+
     [Description("Fiyat Karşılaştırma")]
     PriceComparison = 6,
-    
+
     [Description("Vergi Raporu")]
     Tax = 7,
-    
+
     [Description("Özet Rapor")]
     Summary = 8
 }

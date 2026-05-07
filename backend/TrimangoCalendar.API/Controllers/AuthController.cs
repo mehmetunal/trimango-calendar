@@ -13,6 +13,10 @@ namespace TrimangoCalendar.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
 public class AuthController : ControllerBase
 {
     private const string TokenProvider = "TrimangoAuth";

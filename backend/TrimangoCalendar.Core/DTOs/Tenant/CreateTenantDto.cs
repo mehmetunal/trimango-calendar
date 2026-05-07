@@ -5,15 +5,15 @@ public class CreateTenantDto
     [Required(ErrorMessage = "Firma adı zorunludur")]
     [StringLength(200, MinimumLength = 2)]
     public string Name { get; set; }
-    
+
     [Required(ErrorMessage = "Email adresi zorunludur")]
     [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz")]
     public string Email { get; set; }
-    
+
     [Required(ErrorMessage = "Telefon zorunludur")]
     [Phone(ErrorMessage = "Geçerli bir telefon numarası giriniz")]
     public string Phone { get; set; }
-    
+
     public string TaxNumber { get; set; }
     public string TaxOffice { get; set; }
     public string Address { get; set; }
@@ -38,15 +38,15 @@ public class UpdateTenantDto
 {
     [Required]
     public string Name { get; set; }
-    
+
     [Required]
     [EmailAddress]
     public string Email { get; set; }
-    
+
     [Required]
     [Phone]
     public string Phone { get; set; }
-    
+
     public string TaxNumber { get; set; }
     public string TaxOffice { get; set; }
     public string Address { get; set; }
@@ -58,7 +58,7 @@ public class ChangePlanDto
 {
     [Required]
     public string NewPlan { get; set; } // "Free", "Pro", "Enterprise"
-    
+
     [Required]
     public Guid TenantId { get; set; }
 }

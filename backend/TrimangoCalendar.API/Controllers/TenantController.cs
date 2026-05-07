@@ -1,18 +1,23 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Contracts;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+[ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
 [Authorize(Roles = "Admin")] // Sadece admin tenant oluşturabilir
 public class TenantController : ControllerBase
 {
     private readonly ITenantService _tenantService;
-    
+
     public TenantController(ITenantService tenantService)
     {
         _tenantService = tenantService;
     }
-    
+
     [HttpGet]
     /// <summary>
     /// GetAll methodunu çalıştırır.
@@ -22,7 +27,7 @@ public class TenantController : ControllerBase
         var tenants = await _tenantService.GetAllAsync();
         return Ok(new { success = true, data = tenants });
     }
-    
+
     [HttpGet("{id}")]
     /// <summary>
     /// GetById methodunu çalıştırır.
@@ -39,7 +44,7 @@ public class TenantController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost]
     /// <summary>
     /// Create methodunu çalıştırır.
@@ -48,12 +53,12 @@ public class TenantController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-            
+
         var tenant = await _tenantService.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = tenant.Id }, 
+        return CreatedAtAction(nameof(GetById), new { id = tenant.Id },
             new { success = true, data = tenant });
     }
-    
+
     [HttpPut("{id}")]
     /// <summary>
     /// Update methodunu çalıştırır.
@@ -62,7 +67,7 @@ public class TenantController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-            
+
         try
         {
             var tenant = await _tenantService.UpdateAsync(id, dto);
@@ -73,7 +78,7 @@ public class TenantController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("change-plan")]
     /// <summary>
     /// ChangePlan methodunu çalıştırır.
@@ -90,7 +95,7 @@ public class TenantController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("check-subdomain")]
     /// <summary>
     /// CheckSubdomain methodunu çalıştırır.
@@ -100,7 +105,7 @@ public class TenantController : ControllerBase
         var isAvailable = await _tenantService.IsSubdomainAvailable(subdomain);
         return Ok(new { available = isAvailable });
     }
-    
+
     [HttpPatch("{id}/toggle")]
     /// <summary>
     /// ToggleActive methodunu çalıştırır.

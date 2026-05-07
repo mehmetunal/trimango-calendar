@@ -11,7 +11,7 @@ public class ExchangeRate
     public DateTime Date { get; set; }
     public string Source { get; set; } = "TCMB"; // "TCMB", "Manual", "Fixer.io"
     public DateTime UpdatedAt { get; set; }
-    
+
     // Navigation
     public Currency BaseCurrency { get; set; }
     public Currency TargetCurrency { get; set; }

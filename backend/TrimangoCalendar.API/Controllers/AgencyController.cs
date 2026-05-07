@@ -9,7 +9,7 @@ public class AgencyController : BaseController
     private readonly IAgencyService _agencyService;
     private readonly ICalendarService _calendarService;
     private readonly IReservationService _reservationService;
-    
+
     public AgencyController(
         IAgencyService agencyService,
         ICalendarService calendarService,
@@ -19,9 +19,9 @@ public class AgencyController : BaseController
         _calendarService = calendarService;
         _reservationService = reservationService;
     }
-    
+
     // ========== MÜLK SAHİBİ İŞLEMLERİ ==========
-    
+
     [HttpGet("authorizations/{propertyId}")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<List<AuthorizationDto>>), StatusCodes.Status200OK)]
@@ -37,7 +37,7 @@ public class AgencyController : BaseController
         var authorizations = await _agencyService.GetPropertyAuthorizationsAsync(propertyId);
         return Ok(new { success = true, data = authorizations });
     }
-    
+
     [HttpPost("grant")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<AuthorizationDto>), StatusCodes.Status200OK)]
@@ -62,7 +62,7 @@ public class AgencyController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPut("authorizations/{authId}")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<AuthorizationDto>), StatusCodes.Status200OK)]
@@ -86,7 +86,7 @@ public class AgencyController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpDelete("authorizations/{authId}")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
@@ -102,7 +102,7 @@ public class AgencyController : BaseController
         await _agencyService.RevokeAuthorizationAsync(authId);
         return Ok(new { success = true, message = "Yetkilendirme iptal edildi" });
     }
-    
+
     [HttpPost("blocks")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<CalendarBlockDto>), StatusCodes.Status200OK)]
@@ -127,7 +127,7 @@ public class AgencyController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpDelete("blocks/{blockId}")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
@@ -143,7 +143,7 @@ public class AgencyController : BaseController
         await _calendarService.UnblockDatesAsync(blockId);
         return Ok(new { success = true, message = "Blokaj kaldırıldı" });
     }
-    
+
     [HttpGet("calendar/{propertyId}")]
     [Authorize(Roles = "PropertyOwner")]
     [ProducesResponseType(typeof(ApiResponseDto<OwnerCalendarDto>), StatusCodes.Status200OK)]
@@ -160,9 +160,9 @@ public class AgencyController : BaseController
         var calendar = await _calendarService.GetOwnerCalendarAsync(propertyId, start, end);
         return Ok(new { success = true, data = calendar });
     }
-    
+
     // ========== ACENTE İŞLEMLERİ ==========
-    
+
     [HttpGet("my-properties")]
     [Authorize(Roles = "Agency")]
     [ProducesResponseType(typeof(ApiResponseDto<List<AuthorizedPropertyDto>>), StatusCodes.Status200OK)]
@@ -179,7 +179,7 @@ public class AgencyController : BaseController
         var properties = await _agencyService.GetAgencyPropertiesAsync(agencyId);
         return Ok(new { success = true, data = properties });
     }
-    
+
     [HttpGet("my-properties/{propertyId}")]
     [Authorize(Roles = "Agency")]
     [ProducesResponseType(typeof(ApiResponseDto<AuthorizedPropertyDetailDto>), StatusCodes.Status200OK)]
@@ -196,7 +196,7 @@ public class AgencyController : BaseController
         var detail = await _agencyService.GetAgencyPropertyDetailAsync(agencyId, propertyId);
         return Ok(new { success = true, data = detail });
     }
-    
+
     [HttpGet("my-calendar/{propertyId}")]
     [Authorize(Roles = "Agency")]
     [ProducesResponseType(typeof(ApiResponseDto<AgencyCalendarDto>), StatusCodes.Status200OK)]
@@ -214,7 +214,7 @@ public class AgencyController : BaseController
         var calendar = await _calendarService.GetAgencyCalendarAsync(agencyId, propertyId, start, end);
         return Ok(new { success = true, data = calendar });
     }
-    
+
     [HttpPost("my-reservations")]
     [Authorize(Roles = "Agency")]
     [ProducesResponseType(typeof(ApiResponseDto<ReservationDto>), StatusCodes.Status200OK)]
@@ -229,19 +229,19 @@ public class AgencyController : BaseController
     public async Task<IActionResult> CreateReservation([FromBody] CreateAgencyReservationDto dto)
     {
         var agencyId = GetCurrentAgencyId();
-        
+
         // Yetki kontrolü
         var canBook = await _calendarService.CanAgencyBookAsync(
             agencyId, dto.UnitId, dto.CheckIn, dto.CheckOut);
-        
+
         if (!canBook)
             return BadRequest(new { success = false, message = "Bu tarihler için rezervasyon yetkiniz yok" });
-        
+
         // Kontenjan kontrolü
         var hasAllotment = await _agencyService.CheckAllotmentAvailabilityAsync(dto.AuthorizationId);
         if (!hasAllotment)
             return BadRequest(new { success = false, message = "Kontenjanınız dolmuş" });
-        
+
         try
         {
             var reservation = await _reservationService.CreateAgencyReservationAsync(agencyId, dto);
@@ -252,7 +252,7 @@ public class AgencyController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("my-prices")]
     [Authorize(Roles = "Agency")]
     [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
@@ -269,16 +269,16 @@ public class AgencyController : BaseController
         // Acentenin fiyat belirleme yetkisi var mı?
         var agencyId = GetCurrentAgencyId();
         var hasPermission = await _agencyService.CanSetPriceAsync(agencyId, dto.UnitId);
-        
+
         if (!hasPermission)
             return Forbid();
-        
+
         dto.SetByAgencyId = agencyId;
         dto.Source = PriceSource.AgencyPrice;
-        
+
         await _calendarService.SetDailyPriceAsync(dto);
         return Ok(new { success = true, message = "Fiyat güncellendi" });
-    }    
+    }
     /// <summary>
     /// GetCurrentAgencyId methodunu çalıştırır.
     /// </summary>

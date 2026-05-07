@@ -5,7 +5,7 @@ public class PropertyController : BaseController
     private readonly IPropertyService _propertyService;
     private readonly IUnitService _unitService;
     private readonly IImageService _imageService;
-    
+
     public PropertyController(
         IPropertyService propertyService,
         IUnitService unitService,
@@ -15,7 +15,7 @@ public class PropertyController : BaseController
         _unitService = unitService;
         _imageService = imageService;
     }
-    
+
     [HttpGet]
     /// <summary>
     /// Search methodunu çalıştırır.
@@ -25,7 +25,7 @@ public class PropertyController : BaseController
         var result = await _propertyService.SearchAsync(search);
         return Ok(new { success = true, data = result });
     }
-    
+
     [HttpGet("{id}")]
     /// <summary>
     /// GetById methodunu çalıştırır.
@@ -35,10 +35,10 @@ public class PropertyController : BaseController
         try
         {
             var property = await _propertyService.GetByIdAsync(id);
-            
+
             // Para birimi dönüşümü (varsayılan TRY)
             var currency = Request.Query["currency"].FirstOrDefault() ?? "TRY";
-            
+
             return Ok(new { success = true, data = property, currency });
         }
         catch (NotFoundException ex)
@@ -46,7 +46,7 @@ public class PropertyController : BaseController
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("slug/{slug}")]
     /// <summary>
     /// GetBySlug methodunu çalıştırır.
@@ -54,13 +54,13 @@ public class PropertyController : BaseController
     public async Task<IActionResult> GetBySlug(string slug)
     {
         var property = await _propertyService.GetBySlugAsync(slug);
-        
+
         if (property == null)
             return NotFound(new { success = false, message = "Mülk bulunamadı" });
-            
+
         return Ok(new { success = true, data = property });
     }
-    
+
     [HttpPost]
     [Authorize]
     /// <summary>
@@ -70,13 +70,13 @@ public class PropertyController : BaseController
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-            
+
         var tenantId = GetTenantId();
-        
+
         try
         {
             var property = await _propertyService.CreateAsync(tenantId, dto);
-            return CreatedAtAction(nameof(GetById), new { id = property.Id }, 
+            return CreatedAtAction(nameof(GetById), new { id = property.Id },
                 new { success = true, data = property });
         }
         catch (BusinessException ex)
@@ -84,7 +84,7 @@ public class PropertyController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpPost("{propertyId}/images")]
     [Authorize]
     /// <summary>
@@ -95,7 +95,7 @@ public class PropertyController : BaseController
         var result = await _imageService.UploadPropertyImagesAsync(propertyId, files);
         return Ok(new { success = true, data = result });
     }
-    
+
     [HttpPost("{propertyId}/units")]
     [Authorize]
     /// <summary>
@@ -105,7 +105,7 @@ public class PropertyController : BaseController
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-            
+
         try
         {
             var unit = await _unitService.CreateAsync(propertyId, dto);
@@ -120,7 +120,7 @@ public class PropertyController : BaseController
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet("{propertyId}/units")]
     /// <summary>
     /// GetUnits methodunu çalıştırır.
@@ -128,9 +128,10 @@ public class PropertyController : BaseController
     public async Task<IActionResult> GetUnits(Guid propertyId)
     {
         var units = await _unitService.GetByPropertyAsync(propertyId);
-        
+
         // Fiyatları istenen para birimine çevir
         var currency = Request.Query["currency"].FirstOrDefault() ?? "TRY";
-        
+
         return Ok(new { success = true, data = units, currency });
-    }}
+    }
+}

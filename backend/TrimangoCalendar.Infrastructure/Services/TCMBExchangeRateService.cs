@@ -14,7 +14,7 @@ public class TCMBExchangeRateService : IExchangeRateService
     private readonly AppDbContext _context;
     private readonly HttpClient _httpClient;
     private readonly ILogger<TCMBExchangeRateService> _logger;
-    
+
     public TCMBExchangeRateService(
         AppDbContext context,
         HttpClient httpClient,
@@ -24,7 +24,7 @@ public class TCMBExchangeRateService : IExchangeRateService
         _httpClient = httpClient;
         _logger = logger;
     }
-    
+
     /// <summary>
     /// UpdateFromTCMBAsync methodunu çalıştırır.
     /// </summary>
@@ -35,32 +35,32 @@ public class TCMBExchangeRateService : IExchangeRateService
             // TCMB XML servisi
             var url = "https://www.tcmb.gov.tr/kurlar/today.xml";
             var response = await _httpClient.GetStringAsync(url);
-            
+
             var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(response);
-            
+
             var dateNode = xmlDoc.SelectSingleNode("//Tarih_Date");
             if (dateNode?.Attributes?["Date"] is null)
             {
                 _logger.LogError("TCMB XML'de date bilgisi bulunamadı");
                 return;
             }
-            
+
             var date = DateTime.ParseExact(
-                dateNode.Attributes["Date"]!.Value, 
-                "MM/dd/yyyy", 
+                dateNode.Attributes["Date"]!.Value,
+                "MM/dd/yyyy",
                 CultureInfo.InvariantCulture);
-            
+
             // Sadece bugünün kurları yoksa ekle
             var existingRates = await _context.ExchangeRates
                 .AnyAsync(r => r.Date == date && r.Source == "TCMB");
-                
+
             if (existingRates)
                 return;
-            
+
             var currencies = await _context.Currencies.ToListAsync();
             var rates = new List<ExchangeRate>();
-            
+
             // TCMB'den gelen kurları işle
             var currencyNodes = xmlDoc.SelectNodes("//Currency");
             foreach (XmlNode node in currencyNodes)
@@ -68,22 +68,22 @@ public class TCMBExchangeRateService : IExchangeRateService
                 var currencyCode = node.Attributes?["CurrencyCode"]?.Value;
                 if (string.IsNullOrEmpty(currencyCode))
                     continue;
-                
+
                 // Sadece sistemde tanımlı para birimlerini al
                 if (!currencies.Any(c => c.Code == currencyCode))
                     continue;
-                
+
                 var forexBuyingNode = node.SelectSingleNode("ForexBuying");
                 var forexSellingNode = node.SelectSingleNode("ForexSelling");
-                
+
                 if (forexBuyingNode?.InnerText is null || forexSellingNode?.InnerText is null)
                     continue;
-                
+
                 var forexBuying = decimal.Parse(
                     forexBuyingNode.InnerText.Replace(".", ","));
                 var forexSelling = decimal.Parse(
                     forexSellingNode.InnerText.Replace(".", ","));
-                
+
                 rates.Add(new ExchangeRate
                 {
                     BaseCurrencyCode = currencyCode,
@@ -95,7 +95,7 @@ public class TCMBExchangeRateService : IExchangeRateService
                     Source = "TCMB",
                     UpdatedAt = DateTime.UtcNow
                 });
-                
+
                 // Ters kur (TRY -> Currency)
                 rates.Add(new ExchangeRate
                 {
@@ -109,10 +109,10 @@ public class TCMBExchangeRateService : IExchangeRateService
                     UpdatedAt = DateTime.UtcNow
                 });
             }
-            
+
             await _context.ExchangeRates.AddRangeAsync(rates);
             await _context.SaveChangesAsync();
-            
+
             _logger.LogInformation($"TCMB kurları güncellendi: {date:dd.MM.yyyy} - {rates.Count} kur eklendi");
         }
         catch (Exception ex)
