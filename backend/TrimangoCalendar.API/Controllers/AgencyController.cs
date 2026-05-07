@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Contracts;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -23,6 +24,11 @@ public class AgencyController : BaseController
     
     [HttpGet("authorizations/{propertyId}")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<List<AuthorizationDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// GetPropertyAuthorizations methodunu çalıştırır.
     /// </summary>
@@ -34,6 +40,12 @@ public class AgencyController : BaseController
     
     [HttpPost("grant")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<AuthorizationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// GrantAuthorization methodunu çalıştırır.
     /// </summary>
@@ -53,6 +65,12 @@ public class AgencyController : BaseController
     
     [HttpPut("authorizations/{authId}")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<AuthorizationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// UpdateAuthorization methodunu çalıştırır.
     /// </summary>
@@ -71,6 +89,11 @@ public class AgencyController : BaseController
     
     [HttpDelete("authorizations/{authId}")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// RevokeAuthorization methodunu çalıştırır.
     /// </summary>
@@ -82,6 +105,12 @@ public class AgencyController : BaseController
     
     [HttpPost("blocks")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<CalendarBlockDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// BlockDates methodunu çalıştırır.
     /// </summary>
@@ -101,6 +130,11 @@ public class AgencyController : BaseController
     
     [HttpDelete("blocks/{blockId}")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// UnblockDates methodunu çalıştırır.
     /// </summary>
@@ -112,6 +146,12 @@ public class AgencyController : BaseController
     
     [HttpGet("calendar/{propertyId}")]
     [Authorize(Roles = "PropertyOwner")]
+    [ProducesResponseType(typeof(ApiResponseDto<OwnerCalendarDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetOwnerCalendar(
         Guid propertyId,
         [FromQuery] DateTime start,
@@ -125,6 +165,11 @@ public class AgencyController : BaseController
     
     [HttpGet("my-properties")]
     [Authorize(Roles = "Agency")]
+    [ProducesResponseType(typeof(ApiResponseDto<List<AuthorizedPropertyDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// GetMyProperties methodunu çalıştırır.
     /// </summary>
@@ -137,6 +182,11 @@ public class AgencyController : BaseController
     
     [HttpGet("my-properties/{propertyId}")]
     [Authorize(Roles = "Agency")]
+    [ProducesResponseType(typeof(ApiResponseDto<AuthorizedPropertyDetailDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// GetMyPropertyDetail methodunu çalıştırır.
     /// </summary>
@@ -149,6 +199,12 @@ public class AgencyController : BaseController
     
     [HttpGet("my-calendar/{propertyId}")]
     [Authorize(Roles = "Agency")]
+    [ProducesResponseType(typeof(ApiResponseDto<AgencyCalendarDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetMyCalendar(
         Guid propertyId,
         [FromQuery] DateTime start,
@@ -161,6 +217,12 @@ public class AgencyController : BaseController
     
     [HttpPost("my-reservations")]
     [Authorize(Roles = "Agency")]
+    [ProducesResponseType(typeof(ApiResponseDto<ReservationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// CreateReservation methodunu çalıştırır.
     /// </summary>
@@ -193,6 +255,12 @@ public class AgencyController : BaseController
     
     [HttpPost("my-prices")]
     [Authorize(Roles = "Agency")]
+    [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// SetDailyPrice methodunu çalıştırır.
     /// </summary>

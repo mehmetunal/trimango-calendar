@@ -613,12 +613,12 @@ namespace TrimangoCalendar.Data.Context
                 entity.HasOne(e => e.Property)
                     .WithMany()
                     .HasForeignKey(e => e.PropertyId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(e => e.Unit)
                     .WithMany()
                     .HasForeignKey(e => e.UnitId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             // ==========================================
@@ -856,10 +856,10 @@ namespace TrimangoCalendar.Data.Context
             // SYSTEM SETTINGS (Seed Data)
             // ==========================================
             modelBuilder.Entity<Currency>().HasData(
-                new Currency { Code = "TRY", Symbol = "₺", Name = "Türk Lirası", IsBaseCurrency = true, IsActive = true },
-                new Currency { Code = "USD", Symbol = "$", Name = "Amerikan Doları", IsActive = true },
-                new Currency { Code = "EUR", Symbol = "€", Name = "Euro", IsActive = true },
-                new Currency { Code = "GBP", Symbol = "£", Name = "İngiliz Sterlini", IsActive = true }
+                new Currency { Code = "TRY", Symbol = "₺", Name = "Türk Lirası", CultureCode = "tr-TR", IsBaseCurrency = true, IsActive = true },
+                new Currency { Code = "USD", Symbol = "$", Name = "Amerikan Doları", CultureCode = "en-US", IsActive = true },
+                new Currency { Code = "EUR", Symbol = "€", Name = "Euro", CultureCode = "de-DE", IsActive = true },
+                new Currency { Code = "GBP", Symbol = "£", Name = "İngiliz Sterlini", CultureCode = "en-GB", IsActive = true }
             );
 
             modelBuilder.Entity<SubscriptionPlan>().HasData(

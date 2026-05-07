@@ -26,7 +26,7 @@ namespace TrimangoCalendar.Data.Repositories.Reservation
                 .ToListAsync();
         }
 
-        public async Task<Core.Entities.Reservation> GetByReservationNumberAsync(string reservationNumber)
+        public async Task<Core.Entities.Reservation?> GetByReservationNumberAsync(string reservationNumber)
         {
             return await _dbSet
                 .Include(r => r.Unit)
@@ -35,7 +35,7 @@ namespace TrimangoCalendar.Data.Repositories.Reservation
                 .FirstOrDefaultAsync(r => r.ReservationNumber == reservationNumber);
         }
 
-        public async Task<Core.Entities.Reservation> GetFullDetailAsync(Guid reservationId)
+        public async Task<Core.Entities.Reservation?> GetFullDetailAsync(Guid reservationId)
         {
             return await _dbSet
                 .Include(r => r.Unit)

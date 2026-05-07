@@ -296,9 +296,36 @@ function mockResponse(
   return { success: true };
 }
 
+function mapApiPath(url: string): string {
+  if (!url) return url;
+  const mappings: Array<[RegExp, string]> = [
+    [/^\/agencies\b/i, '/Agency'],
+    [/^\/reservations\b/i, '/Reservation'],
+    [/^\/properties\b/i, '/Property'],
+    [/^\/pricing\b/i, '/Pricing'],
+    [/^\/dashboard\b/i, '/Dashboard'],
+    [/^\/tenants\b/i, '/Tenant'],
+    [/^\/reports\b/i, '/Report'],
+    [/^\/widgets\b/i, '/BookingWidget'],
+    [/^\/auth\b/i, '/Auth'],
+  ];
+
+  for (const [pattern, replacement] of mappings) {
+    if (pattern.test(url)) {
+      return url.replace(pattern, replacement);
+    }
+  }
+
+  return url;
+}
+
 // Request interceptor - Token ekle
 api.interceptors.request.use(
   (config) => {
+    if (config.url) {
+      config.url = mapApiPath(config.url);
+    }
+
     if (useMock) {
       config.adapter = async () => {
         const payload = getPayload(config);
@@ -336,7 +363,13 @@ api.interceptors.request.use(
 
 // Response interceptor - Hata yönetimi
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const payload = response.data;
+    if (payload && typeof payload === 'object' && 'success' in payload && 'data' in payload) {
+      response.data = (payload as { data: unknown }).data;
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       useAuthStore.getState().logout();

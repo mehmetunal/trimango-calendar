@@ -40,8 +40,14 @@ public class TCMBExchangeRateService : IExchangeRateService
             xmlDoc.LoadXml(response);
             
             var dateNode = xmlDoc.SelectSingleNode("//Tarih_Date");
+            if (dateNode?.Attributes?["Date"] is null)
+            {
+                _logger.LogError("TCMB XML'de date bilgisi bulunamadı");
+                return;
+            }
+            
             var date = DateTime.ParseExact(
-                dateNode.Attributes["Date"].Value, 
+                dateNode.Attributes["Date"]!.Value, 
                 "MM/dd/yyyy", 
                 CultureInfo.InvariantCulture);
             
@@ -59,16 +65,24 @@ public class TCMBExchangeRateService : IExchangeRateService
             var currencyNodes = xmlDoc.SelectNodes("//Currency");
             foreach (XmlNode node in currencyNodes)
             {
-                var currencyCode = node.Attributes["CurrencyCode"].Value;
+                var currencyCode = node.Attributes?["CurrencyCode"]?.Value;
+                if (string.IsNullOrEmpty(currencyCode))
+                    continue;
                 
                 // Sadece sistemde tanımlı para birimlerini al
                 if (!currencies.Any(c => c.Code == currencyCode))
                     continue;
                 
+                var forexBuyingNode = node.SelectSingleNode("ForexBuying");
+                var forexSellingNode = node.SelectSingleNode("ForexSelling");
+                
+                if (forexBuyingNode?.InnerText is null || forexSellingNode?.InnerText is null)
+                    continue;
+                
                 var forexBuying = decimal.Parse(
-                    node.SelectSingleNode("ForexBuying").InnerText.Replace(".", ","));
+                    forexBuyingNode.InnerText.Replace(".", ","));
                 var forexSelling = decimal.Parse(
-                    node.SelectSingleNode("ForexSelling").InnerText.Replace(".", ","));
+                    forexSellingNode.InnerText.Replace(".", ","));
                 
                 rates.Add(new ExchangeRate
                 {
@@ -111,7 +125,7 @@ public class TCMBExchangeRateService : IExchangeRateService
     /// <summary>
     /// GetRateAsync methodunu çalıştırır.
     /// </summary>
-    public async Task<ExchangeRateDto> GetRateAsync(string baseCurrency, string targetCurrency, DateTime date)
+    public async Task<ExchangeRateDto?> GetRateAsync(string baseCurrency, string targetCurrency, DateTime date)
     {
         var normalizedDate = date.Date;
         var rate = await _context.ExchangeRates

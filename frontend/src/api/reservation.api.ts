@@ -3,17 +3,57 @@ import api from './axios';
 import type { Reservation } from '../types/reservation';
 import type { PaginatedResult } from '../types/common';
 
+export interface ReservationQueryParams {
+  checkInFrom?: string;
+  checkInTo?: string;
+  checkOutFrom?: string;
+  checkOutTo?: string;
+  status?: string;
+  propertyId?: string;
+  unitId?: string;
+  guestId?: string;
+  searchTerm?: string;
+  source?: string;
+  currencyCode?: string;
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDescending?: boolean;
+}
+
+export interface CreateReservationDto {
+  unitId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  checkIn: string;
+  checkOut: string;
+  adults: number;
+  children?: number;
+  infants?: number;
+  currencyCode?: string;
+  promoCode?: string;
+  specialRequests?: string;
+  source?: string;
+  tcKimlikNo?: string;
+  passportNumber?: string;
+  nationality?: string;
+}
+
+export interface CreateAgencyReservationDto {
+  authorizationId: string;
+  unitId: string;
+  checkIn: string;
+  checkOut: string;
+  adults: number;
+  children?: number;
+  firstName: string;
+  lastName: string;
+}
+
 export const reservationApi = {
-  getAll: async (params?: {
-    page?: number;
-    pageSize?: number;
-    propertyId?: string;
-    unitId?: string;
-    status?: string;
-    checkInFrom?: string;
-    checkInTo?: string;
-    searchTerm?: string;
-  }): Promise<PaginatedResult<Reservation>> => {
+  getAll: async (params?: ReservationQueryParams): Promise<PaginatedResult<Reservation>> => {
     const response = await api.get('/reservations', { params });
     return response.data;
   },
@@ -28,18 +68,18 @@ export const reservationApi = {
     return response.data;
   },
 
-  create: async (data: any): Promise<Reservation> => {
+  create: async (data: CreateReservationDto): Promise<Reservation> => {
     const response = await api.post('/reservations', data);
     return response.data;
   },
 
-  getAgencyReservations: async (agencyId: string, params?: any): Promise<PaginatedResult<Reservation>> => {
+  getAgencyReservations: async (agencyId: string, params?: ReservationQueryParams): Promise<PaginatedResult<Reservation>> => {
     const response = await api.get('/reservations', { params: { ...params, agencyId } });
     return response.data;
   },
 
-  createAgencyReservation: async (agencyId: string, data: any): Promise<Reservation> => {
-    const response = await api.post('/reservations', { ...data, agencyId });
+  createAgencyReservation: async (_agencyId: string, data: CreateAgencyReservationDto): Promise<Reservation> => {
+    const response = await api.post('/Agency/my-reservations', data);
     return response.data;
   },
 
@@ -53,12 +93,14 @@ export const reservationApi = {
   },
 
   checkOut: async (id: string, isLate: boolean = false): Promise<Reservation> => {
-    const response = await api.post(`/reservations/${id}/check-out`, { isLate });
+    const response = await api.post(`/reservations/${id}/check-out`, null, {
+      params: { isLate },
+    });
     return response.data;
   },
 
   cancel: async (id: string, reason: string): Promise<void> => {
-    await api.post(`/reservations/${id}/cancel`, { reason });
+    await api.post(`/reservations/${id}/cancel`, reason);
   },
 
   getCalendar: async (start: Date, end: Date, propertyId?: string): Promise<any[]> => {

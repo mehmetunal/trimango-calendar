@@ -1,16 +1,65 @@
 // src/api/property.api.ts
 import api from './axios';
 import type { Property, Unit } from '../types/property';
-import type { PaginatedResult, ApiResponse } from '../types/common';
+import type { PaginatedResult, PropertyType } from '../types/common';
+
+export interface PropertyQueryParams {
+  search?: string;
+  city?: string;
+  country?: string;
+  type?: PropertyType | string;
+  checkIn?: string;
+  checkOut?: string;
+  adults?: number;
+  children?: number;
+  isActive?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  currencyCode?: string;
+  amenities?: string[];
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDescending?: boolean;
+}
+
+export interface CreatePropertyDto {
+  type?: PropertyType;
+  name?: string;
+  description?: string;
+  shortDescription?: string;
+  email?: string;
+  phone?: string;
+  website?: string;
+  address?: string;
+  district?: string;
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  checkInTime?: string;
+  checkOutTime?: string;
+  amenities?: string[];
+}
+
+export interface CreateUnitDto {
+  name: string;
+  unitNumber?: string;
+  floor?: number;
+  description?: string;
+  maxAdults?: number;
+  maxChildren?: number;
+  maxInfants?: number;
+  basePrice: number;
+  currencyCode?: string;
+  size?: number | null;
+  view?: string;
+  roomAmenities?: string[];
+}
 
 export const propertyApi = {
-  getAll: async (params?: {
-    page?: number;
-    pageSize?: number;
-    type?: string;
-    city?: string;
-    isActive?: boolean;
-  }): Promise<PaginatedResult<Property>> => {
+  getAll: async (params?: PropertyQueryParams): Promise<PaginatedResult<Property>> => {
     const response = await api.get('/properties', { params });
     return response.data;
   },
@@ -25,7 +74,7 @@ export const propertyApi = {
     return response.data;
   },
 
-  create: async (data: FormData | any): Promise<Property> => {
+  create: async (data: FormData | CreatePropertyDto): Promise<Property> => {
     const response = await api.post('/properties', data);
     return response.data;
   },
@@ -63,7 +112,7 @@ export const propertyApi = {
     return response.data;
   },
 
-  createUnit: async (propertyId: string, data: any): Promise<Unit> => {
+  createUnit: async (propertyId: string, data: CreateUnitDto): Promise<Unit> => {
     const response = await api.post(`/properties/${propertyId}/units`, data);
     return response.data;
   },

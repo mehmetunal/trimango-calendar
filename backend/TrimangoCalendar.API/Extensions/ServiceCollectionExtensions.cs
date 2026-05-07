@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Reflection;
 using FluentMigrator.Runner;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -30,6 +31,7 @@ using TrimangoCalendar.Data.Repositories.Reservation;
 using TrimangoCalendar.Data.Repositories.Tenant;
 using TrimangoCalendar.Data.Repositories.Unit;
 using TrimangoCalendar.Infrastructure.Services;
+using TrimangoCalendar.API.Swagger;
 
 namespace TrimangoCalendar.API.Extensions;
 
@@ -241,6 +243,17 @@ public static class ServiceCollectionExtensions
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "TrimangoCalendar API", Version = "v1" });
+            options.EnableAnnotations();
+            options.SupportNonNullableReferenceTypes();
+            options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
+            options.OperationFilter<SwaggerDefaultResponsesOperationFilter>();
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+            }
         });
 
         return services;

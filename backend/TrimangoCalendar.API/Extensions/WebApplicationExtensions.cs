@@ -12,6 +12,12 @@ public static class WebApplicationExtensions
     /// </summary>
     public static async Task InitializeDatabaseAsync(this WebApplication app)
     {
+        if (app.Environment.IsDevelopment())
+        {
+            // Development ortamında DB kurulumu/seed işlemi manuel olarak /api/admin/seed endpoint'inden tetiklenir.
+            return;
+        }
+
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
 

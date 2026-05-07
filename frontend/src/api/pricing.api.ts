@@ -1,14 +1,13 @@
 // src/api/pricing.api.ts
 import api from './axios';
-import type { ApiResponse } from '../types/common';
 
 export interface PriceCalculationRequest {
   unitId: string;
   checkIn: string;
   checkOut: string;
   adults: number;
-  children: number;
-  currencyCode: string;
+  children?: number;
+  currencyCode?: string;
   promoCode?: string;
   agencyId?: string;
 }
@@ -124,6 +123,9 @@ export interface CreateSeasonRateDto {
   currencyCode?: string;
   minStayDays?: number;
   maxStayDays?: number;
+  cancellationPolicy?: string;
+  freeCancellationDays?: number;
+  cancellationFee?: number | null;
 }
 
 export interface Currency {

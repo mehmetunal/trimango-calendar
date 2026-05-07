@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Contracts;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -13,6 +14,12 @@ public class BookingWidgetController : BaseController
     }
     
     [HttpPost]
+    [ProducesResponseType(typeof(ApiResponseDto<BookingWidgetDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// CreateWidget methodunu çalıştırır.
     /// </summary>
@@ -24,6 +31,12 @@ public class BookingWidgetController : BaseController
     }
     
     [HttpGet("{propertyId}")]
+    [ProducesResponseType(typeof(ApiResponseDto<List<BookingWidgetDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// GetWidgets methodunu çalıştırır.
     /// </summary>
@@ -34,6 +47,12 @@ public class BookingWidgetController : BaseController
     }
     
     [HttpGet("embed/{widgetId}")]
+    [ProducesResponseType(typeof(ApiResponseDto<WidgetEmbedResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// GetEmbedCode methodunu çalıştırır.
     /// </summary>
@@ -46,6 +65,12 @@ public class BookingWidgetController : BaseController
     }
     
     [HttpPut("{widgetId}")]
+    [ProducesResponseType(typeof(ApiResponseDto<BookingWidgetDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// UpdateWidget methodunu çalıştırır.
     /// </summary>
@@ -56,6 +81,12 @@ public class BookingWidgetController : BaseController
     }
     
     [HttpDelete("{widgetId}")]
+    [ProducesResponseType(typeof(ApiResponseDto<object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// DeleteWidget methodunu çalıştırır.
     /// </summary>
@@ -66,6 +97,12 @@ public class BookingWidgetController : BaseController
     }
     
     [HttpGet("preview/{widgetKey}")]
+    [ProducesResponseType(StatusCodes.Status302Found)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiErrorResponseDto), StatusCodes.Status500InternalServerError)]
     /// <summary>
     /// PreviewWidget methodunu çalıştırır.
     /// </summary>

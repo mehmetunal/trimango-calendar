@@ -11,13 +11,13 @@ namespace TrimangoCalendar.Data.Repositories.Tenant
     {
         public TenantRepository(AppDbContext context) : base(context) { }
 
-        public async Task<Core.Entities.Tenant> GetBySubdomainAsync(string subdomain)
+        public async Task<Core.Entities.Tenant?> GetBySubdomainAsync(string subdomain)
         {
             return await _dbSet
                 .FirstOrDefaultAsync(t => t.Subdomain == subdomain && t.IsActive);
         }
 
-        public async Task<Core.Entities.Tenant> GetByEmailAsync(string email)
+        public async Task<Core.Entities.Tenant?> GetByEmailAsync(string email)
         {
             return await _dbSet
                 .FirstOrDefaultAsync(t => t.Email == email && t.IsActive);
@@ -39,7 +39,7 @@ namespace TrimangoCalendar.Data.Repositories.Tenant
             return !await _dbSet.AnyAsync(t => t.Email == email);
         }
 
-        public async Task<Core.Entities.Tenant> GetWithPropertiesAsync(Guid tenantId)
+        public async Task<Core.Entities.Tenant?> GetWithPropertiesAsync(Guid tenantId)
         {
             return await _dbSet
                 .Include(t => t.Properties)

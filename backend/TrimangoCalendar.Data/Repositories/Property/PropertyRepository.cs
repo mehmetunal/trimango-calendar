@@ -21,20 +21,20 @@ namespace TrimangoCalendar.Data.Repositories.Property
                 .ToListAsync();
         }
 
-        public async Task<Core.Entities.Property> GetBySlugAsync(Guid tenantId, string slug)
+        public async Task<Core.Entities.Property?> GetBySlugAsync(Guid tenantId, string slug)
         {
             return await _dbSet
                 .FirstOrDefaultAsync(p => p.TenantId == tenantId && p.Slug == slug);
         }
 
-        public async Task<Core.Entities.Property> GetWithUnitsAsync(Guid propertyId)
+        public async Task<Core.Entities.Property?> GetWithUnitsAsync(Guid propertyId)
         {
             return await _dbSet
                 .Include(p => p.Units.Where(u => u.IsActive))
                 .FirstOrDefaultAsync(p => p.Id == propertyId);
         }
 
-        public async Task<Core.Entities.Property> GetFullDetailAsync(Guid propertyId)
+        public async Task<Core.Entities.Property?> GetFullDetailAsync(Guid propertyId)
         {
             return await _dbSet
                 .Include(p => p.Units)

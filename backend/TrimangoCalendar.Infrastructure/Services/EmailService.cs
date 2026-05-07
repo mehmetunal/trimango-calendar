@@ -24,11 +24,18 @@ public class EmailService : IEmailService
     {
         // SMTP ayarlarını config'den al
         var smtpServer = _configuration["Email:SmtpServer"];
-        var smtpPort = int.Parse(_configuration["Email:SmtpPort"]);
+        var smtpPortStr = _configuration["Email:SmtpPort"];
+        var smtpPort = int.TryParse(smtpPortStr, out var port) ? port : 587;
         var smtpUser = _configuration["Email:Username"];
         var smtpPass = _configuration["Email:Password"];
         var fromEmail = _configuration["Email:FromEmail"];
         var fromName = _configuration["Email:FromName"];
+        
+        if (string.IsNullOrEmpty(smtpServer) || string.IsNullOrEmpty(fromEmail))
+        {
+            _logger.LogError("SMTP configuration is incomplete");
+            throw new InvalidOperationException("SMTP configuration is incomplete");
+        }
         
         using var client = new SmtpClient(smtpServer, smtpPort)
         {
@@ -38,7 +45,7 @@ public class EmailService : IEmailService
         
         var message = new MailMessage
         {
-            From = new MailAddress(fromEmail, fromName),
+            From = new MailAddress(fromEmail, fromName ?? string.Empty),
             Subject = subject,
             Body = body,
             IsBodyHtml = true

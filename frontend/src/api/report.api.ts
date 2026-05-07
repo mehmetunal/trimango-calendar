@@ -3,11 +3,9 @@ import api from './axios';
 
 export interface ReportRequest {
   propertyId?: string;
+  agencyId?: string;
   startDate: string;
   endDate: string;
-  currencyCode?: string;
-  groupBy?: 'day' | 'week' | 'month' | 'year';
-  compareWithPrevious?: boolean;
   type?: string;
   format?: 'excel' | 'pdf';
 }

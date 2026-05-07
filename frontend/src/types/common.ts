@@ -23,6 +23,13 @@ export type PropertyType =
   | 'Ev' | 'Oda' | 'Pansiyon' | 'Resort' | 'ButikOtel' | 'DagEvi';
 
 export type ReservationStatus = 
-  | 'Pending' | 'Confirmed' | 'CheckedIn' | 'CheckedOut' | 'Cancelled' | 'NoShow';
+  | 'Pending'
+  | 'Confirmed'
+  | 'AwaitingPayment'
+  | 'CheckedIn'
+  | 'CheckedOut'
+  | 'Cancelled'
+  | 'NoShow'
+  | 'Completed';
 
 export type CurrencyCode = 'TRY' | 'USD' | 'EUR' | 'GBP';

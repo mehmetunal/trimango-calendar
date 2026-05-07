@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.Data.Context;
 
 namespace TrimangoCalendar.API.Controllers;
 
@@ -28,7 +29,13 @@ public class AdminController : BaseController
             return FailForbidden("Bu endpoint sadece Development ortamında kullanılabilir.");
         }
 
-        await TrimangoCalendar.Data.SeedData.InitializeAsync(_serviceProvider);
-        return Success(message: "Seed işlemi başarıyla tamamlandı.");
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
+        await TrimangoCalendar.Data.SeedData.InitializeAsync(scope.ServiceProvider);
+        return Success(message: "Veritabanı sıfırdan oluşturuldu ve seed işlemi başarıyla tamamlandı.");
     }
 }
