@@ -1,0 +1,96 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "TrimangoCalendar.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/TrimangoCalendar.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TrimangoCalendar.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TrimangoCalendar.Shared/1.0.0": {
+      "type": "project",
+      "path": "../TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj",
+      "msbuildProject": "../TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "TrimangoCalendar.Shared >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/Users/mehmet/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/Users/mehmet/Project/TrimangoCalendar/backend/TrimangoCalendar.Core/TrimangoCalendar.Core.csproj",
+      "projectName": "TrimangoCalendar.Core",
+      "projectPath": "/Users/mehmet/Project/TrimangoCalendar/backend/TrimangoCalendar.Core/TrimangoCalendar.Core.csproj",
+      "packagesPath": "/Users/mehmet/.nuget/packages/",
+      "outputPath": "/Users/mehmet/Project/TrimangoCalendar/backend/TrimangoCalendar.Core/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/mehmet/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/AtplQuestions/_packaging/AtplQuestions/nuget/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "/Users/mehmet/Project/TrimangoCalendar/backend/TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj": {
+              "projectPath": "/Users/mehmet/Project/TrimangoCalendar/backend/TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "10.0.100"
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.101/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
