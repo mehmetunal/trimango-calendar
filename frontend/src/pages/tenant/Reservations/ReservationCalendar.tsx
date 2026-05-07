@@ -40,7 +40,7 @@ export default function ReservationCalendar() {
     queryFn: () => reservationApi.getCalendar(dateRange.start, dateRange.end),
   });
 
-  const events = reservations?.map((res: any) => ({
+  const events = Array.isArray(reservations) ? reservations.map((res: any) => ({
     id: res.id,
     title: `${res.guestName} - ${res.unitName}`,
     start: res.checkIn,
