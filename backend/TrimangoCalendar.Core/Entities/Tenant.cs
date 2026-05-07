@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class Tenant
 {
     public Guid Id { get; set; }

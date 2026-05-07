@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using TrimangoCalendar.Core.Interfaces;
+
+namespace TrimangoCalendar.Infrastructure.Services;
+
 public class LocalFileStorageService : IFileStorageService
 {
     private readonly IWebHostEnvironment _env;
@@ -12,6 +18,9 @@ public class LocalFileStorageService : IFileStorageService
             Directory.CreateDirectory(_basePath);
     }
     
+    /// <summary>
+    /// UploadAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<string> UploadAsync(IFormFile file, string folder)
     {
         var folderPath = Path.Combine(_basePath, folder);
@@ -27,6 +36,9 @@ public class LocalFileStorageService : IFileStorageService
         return Path.Combine("uploads", folder, fileName).Replace("\\", "/");
     }
     
+    /// <summary>
+    /// DeleteAsync methodunu çalıştırır.
+    /// </summary>
     public Task<bool> DeleteAsync(string filePath)
     {
         var fullPath = Path.Combine(_env.WebRootPath, filePath);
@@ -38,6 +50,9 @@ public class LocalFileStorageService : IFileStorageService
         return Task.FromResult(false);
     }
     
+    /// <summary>
+    /// GetFileUrl methodunu çalıştırır.
+    /// </summary>
     public string GetFileUrl(string filePath)
     {
         return $"/{filePath.Replace("\\", "/")}";

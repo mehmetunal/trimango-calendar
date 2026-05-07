@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class ReportService : IReportService
 {
     private readonly AppDbContext _context;
@@ -11,6 +13,9 @@ public class ReportService : IReportService
         _cache = cache;
     }
     
+    /// <summary>
+    /// GetDashboardAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<DashboardDto> GetDashboardAsync(Guid tenantId, DateTime? startDate = null, DateTime? endDate = null)
     {
         var today = DateTime.Today;
@@ -97,6 +102,9 @@ public class ReportService : IReportService
         });
     }
     
+    /// <summary>
+    /// GetOccupancyReportAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<OccupancyReportDto> GetOccupancyReportAsync(Guid tenantId, ReportRequestDto request)
     {
         var startDate = request.StartDate;
@@ -146,6 +154,9 @@ public class ReportService : IReportService
         };
     }
     
+    /// <summary>
+    /// GetRevenueReportAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<RevenueReportDto> GetRevenueReportAsync(Guid tenantId, ReportRequestDto request)
     {
         var reservations = await _context.Reservations
@@ -222,6 +233,9 @@ public class ReportService : IReportService
         };
     }
     
+    /// <summary>
+    /// GetRecentReservations methodunu çalıştırır.
+    /// </summary>
     private async Task<List<RecentReservationDto>> GetRecentReservations(Guid tenantId, int count)
     {
         return await _context.Reservations

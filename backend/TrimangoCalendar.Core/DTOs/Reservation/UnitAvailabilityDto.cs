@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class UnitAvailabilityDto
 {
     public Guid UnitId { get; set; }

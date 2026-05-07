@@ -1,3 +1,11 @@
+using System.Net;
+using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using TrimangoCalendar.Core.Interfaces;
+
+namespace TrimangoCalendar.Infrastructure.Services;
+
 public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
@@ -9,6 +17,9 @@ public class EmailService : IEmailService
         _logger = logger;
     }
     
+    /// <summary>
+    /// SendEmailAsync methodunu çalıştırır.
+    /// </summary>
     public async Task SendEmailAsync(string to, string subject, string body)
     {
         // SMTP ayarlarını config'den al
@@ -47,10 +58,12 @@ public class EmailService : IEmailService
         }
     }
     
+    /// <summary>
+    /// SendBulkEmailAsync methodunu çalıştırır.
+    /// </summary>
     public async Task SendBulkEmailAsync(List<string> to, string subject, string body)
     {
         var tasks = to.Select(recipient => SendEmailAsync(recipient, subject, body));
         await Task.WhenAll(tasks);
     }
 }
-

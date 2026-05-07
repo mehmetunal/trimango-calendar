@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class PropertySearchDto
 {
     public string City { get; set; }

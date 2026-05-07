@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Logging;
+
+namespace TrimangoCalendar.Core.Services;
+
 public class NotificationService : INotificationService
 {
     private readonly AppDbContext _context;
@@ -126,6 +130,9 @@ public class NotificationService : INotificationService
         };
     }
     
+    /// <summary>
+    /// ProcessTemplateAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<string> ProcessTemplateAsync(string template, Dictionary<string, string> data)
     {
         if (string.IsNullOrEmpty(template)) return string.Empty;
@@ -139,12 +146,18 @@ public class NotificationService : INotificationService
         return result;
     }
     
+    /// <summary>
+    /// GetPreferencesAsync methodunu çalıştırır.
+    /// </summary>
     private async Task<NotificationPreference> GetPreferencesAsync(Guid tenantId, NotificationType type)
     {
         return await _context.NotificationPreferences
             .FirstOrDefaultAsync(p => p.TenantId == tenantId && p.Type == type);
     }
     
+    /// <summary>
+    /// GetDefaultTemplate methodunu çalıştırır.
+    /// </summary>
     private NotificationTemplate GetDefaultTemplate(NotificationType type)
     {
         return type switch

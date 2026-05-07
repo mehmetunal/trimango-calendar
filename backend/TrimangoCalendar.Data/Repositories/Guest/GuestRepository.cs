@@ -11,7 +11,7 @@ namespace TrimangoCalendar.Data.Repositories.Guest
 {
     public class GuestRepository : BaseRepository<Core.Entities.Guest>, IGuestRepository
     {
-        public GuestRepository(AppDbConext context) : base(context) { }
+        public GuestRepository(AppDbContext context) : base(context) { }
 
         public async Task<Core.Entities.Guest> GetByEmailAsync(Guid tenantId, string email)
         {
@@ -55,11 +55,17 @@ namespace TrimangoCalendar.Data.Repositories.Guest
                 .FirstOrDefaultAsync(g => g.Id == guestId);
         }
 
+        /// <summary>
+        /// GetTotalGuestsByTenantAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetTotalGuestsByTenantAsync(Guid tenantId)
         {
             return await _dbSet.CountAsync(g => g.TenantId == tenantId);
         }
 
+        /// <summary>
+        /// GetReturningGuestsCountAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetReturningGuestsCountAsync(Guid tenantId)
         {
             return await _dbSet

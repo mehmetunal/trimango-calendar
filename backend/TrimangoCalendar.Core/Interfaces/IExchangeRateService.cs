@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IExchangeRateService
 {
     Task<ExchangeRateDto> GetRateAsync(string baseCurrency, string targetCurrency, DateTime date);

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TrimangoCalendar.Core\TrimangoCalendar.Core.csproj" />
     <ProjectReference Include="..\TrimangoCalendar.Data\TrimangoCalendar.Data.csproj" />
+    <ProjectReference Include="..\TrimangoCalendar.Infrastructure\TrimangoCalendar.Infrastructure.csproj" />
     <ProjectReference Include="..\TrimangoCalendar.Shared\TrimangoCalendar.Shared.csproj" />
   </ItemGroup>
 
@@ -60,6 +61,7 @@
 
     <!-- Validation -->
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="5.2.0" />
 
     <!-- Mapping -->
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
@@ -76,6 +78,12 @@
 
     <!-- Response Compression -->
     <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.2.0" />
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="BackgroundJobs\**\*.cs" />
+    <Compile Remove="Middleware\TenantMiddleware.cs" />
   </ItemGroup>
 
 </Project>

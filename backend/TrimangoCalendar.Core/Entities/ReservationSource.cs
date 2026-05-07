@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 using System.ComponentModel;
 
 public enum ReservationSource

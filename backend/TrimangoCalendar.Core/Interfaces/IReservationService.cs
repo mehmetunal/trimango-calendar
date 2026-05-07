@@ -1,6 +1,9 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IReservationService
 {
     Task<ReservationDto> CreateAsync(Guid tenantId, CreateReservationDto dto);
+    Task<ReservationDto> CreateAgencyReservationAsync(Guid agencyId, CreateAgencyReservationDto dto);
     Task<ReservationDto> GetByIdAsync(Guid id);
     Task<ReservationDto> GetByNumberAsync(string reservationNumber);
     Task<PaginatedResult<ReservationDto>> GetByTenantAsync(Guid tenantId, ReservationFilterDto filter);
@@ -15,4 +18,3 @@ public interface IReservationService
     Task<List<UnitAvailabilityDto>> GetAvailabilityAsync(Guid propertyId, DateTime startDate, DateTime endDate);
     Task<ReservationStatsDto> GetStatsAsync(Guid tenantId, DateTime? startDate = null, DateTime? endDate = null);
 }
-

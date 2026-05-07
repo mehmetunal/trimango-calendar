@@ -11,7 +11,7 @@ namespace TrimangoCalendar.Data.Repositories.Unit
 {
     public class UnitRepository : BaseRepository<Core.Entities.Unit>, IUnitRepository
     {
-        public UnitRepository(AppDbConext context) : base(context) { }
+        public UnitRepository(AppDbContext context) : base(context) { }
 
         public async Task<IEnumerable<Core.Entities.Unit>> GetByPropertyIdAsync(Guid propertyId)
         {
@@ -35,6 +35,9 @@ namespace TrimangoCalendar.Data.Repositories.Unit
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// GetMinPriceAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<decimal> GetMinPriceAsync(Guid propertyId)
         {
             var minPrice = await _dbSet
@@ -43,6 +46,9 @@ namespace TrimangoCalendar.Data.Repositories.Unit
             return minPrice ?? 0;
         }
 
+        /// <summary>
+        /// GetMaxPriceAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<decimal> GetMaxPriceAsync(Guid propertyId)
         {
             var maxPrice = await _dbSet
@@ -51,6 +57,9 @@ namespace TrimangoCalendar.Data.Repositories.Unit
             return maxPrice ?? 0;
         }
 
+        /// <summary>
+        /// GetTotalCapacityAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetTotalCapacityAsync(Guid propertyId)
         {
             var units = await _dbSet
@@ -59,6 +68,9 @@ namespace TrimangoCalendar.Data.Repositories.Unit
             return units.Sum(u => u.MaxAdults + u.MaxChildren);
         }
 
+        /// <summary>
+        /// IsUnitNumberExistsAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<bool> IsUnitNumberExistsAsync(Guid propertyId, string unitNumber, Guid? excludeUnitId = null)
         {
             var query = _dbSet.Where(u => u.PropertyId == propertyId && u.UnitNumber == unitNumber);

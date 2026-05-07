@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class CurrencyService : ICurrencyService
 {
     private readonly AppDbContext _context;
@@ -14,6 +16,9 @@ public class CurrencyService : ICurrencyService
         _exchangeRateService = exchangeRateService;
     }
     
+    /// <summary>
+    /// GetActiveCurrenciesAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<List<CurrencyDto>> GetActiveCurrenciesAsync()
     {
         return await _cache.GetOrCreateAsync("active_currencies", async entry =>
@@ -28,6 +33,9 @@ public class CurrencyService : ICurrencyService
         });
     }
     
+    /// <summary>
+    /// GetExchangeRateAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<decimal> GetExchangeRateAsync(string fromCurrency, string toCurrency, DateTime? date = null)
     {
         var targetDate = date ?? DateTime.Today;
@@ -70,6 +78,9 @@ public class CurrencyService : ICurrencyService
         });
     }
     
+    /// <summary>
+    /// Convert methodunu çalıştırır.
+    /// </summary>
     public Money Convert(Money amount, string targetCurrencyCode, DateTime? date = null)
     {
         if (amount.Currency.Code == targetCurrencyCode)
@@ -83,6 +94,9 @@ public class CurrencyService : ICurrencyService
             rate);
     }
     
+    /// <summary>
+    /// UpdateExchangeRatesAsync methodunu çalıştırır.
+    /// </summary>
     public async Task UpdateExchangeRatesAsync()
     {
         await _exchangeRateService.UpdateFromTCMBAsync();

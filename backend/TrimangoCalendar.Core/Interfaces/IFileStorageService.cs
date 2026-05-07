@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IFileStorageService
 {
     Task<string> UploadAsync(IFormFile file, string folder);

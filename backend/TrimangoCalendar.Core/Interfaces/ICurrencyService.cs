@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface ICurrencyService
 {
     Task<List<CurrencyDto>> GetActiveCurrenciesAsync();

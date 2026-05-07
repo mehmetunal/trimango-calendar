@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class ExchangeRate
 {
     public long Id { get; set; }

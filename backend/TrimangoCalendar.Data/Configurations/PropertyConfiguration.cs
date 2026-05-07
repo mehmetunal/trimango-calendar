@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TrimangoCalendar.Core.Entities;
+
+namespace TrimangoCalendar.Data.Configurations;
+
 public class PropertyConfiguration : IEntityTypeConfiguration<Property>
 {
     public void Configure(EntityTypeBuilder<Property> builder)
@@ -30,13 +36,9 @@ public class PropertyConfiguration : IEntityTypeConfiguration<Property>
         builder.HasIndex(p => new { p.City, p.IsActive });
         builder.HasIndex(p => new { p.TenantId, p.Type });
         
-        // Global filter
-        builder.HasQueryFilter(p => !p.IsDeleted);
-        
         builder.HasOne(p => p.Tenant)
             .WithMany(t => t.Properties)
             .HasForeignKey(p => p.TenantId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
-

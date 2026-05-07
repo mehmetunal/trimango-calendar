@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class NotificationPreference
 {
     public Guid Id { get; set; }

@@ -1,3 +1,10 @@
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using TrimangoCalendar.Core.Interfaces;
+
+namespace TrimangoCalendar.Infrastructure.Services;
+
 public class SmsService : ISmsService
 {
     private readonly HttpClient _httpClient;
@@ -11,6 +18,9 @@ public class SmsService : ISmsService
         _logger = logger;
     }
     
+    /// <summary>
+    /// SendSmsAsync methodunu çalıştırır.
+    /// </summary>
     public async Task SendSmsAsync(string phone, string message)
     {
         // NetGSM entegrasyonu örneği

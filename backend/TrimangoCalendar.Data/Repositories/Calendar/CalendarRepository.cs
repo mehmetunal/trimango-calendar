@@ -11,8 +11,11 @@ namespace TrimangoCalendar.Data.Repositories.Calendar
 {
     public class CalendarRepository : BaseRepository<CalendarBlock>, ICalendarRepository
     {
-        public CalendarRepository(AppDbConext context) : base(context) { }
+        public CalendarRepository(AppDbContext context) : base(context) { }
 
+        /// <summary>
+        /// GetBlocksByUnitAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<CalendarBlock>> GetBlocksByUnitAsync(Guid unitId, DateTime startDate, DateTime endDate)
         {
             return await _dbSet
@@ -24,6 +27,9 @@ namespace TrimangoCalendar.Data.Repositories.Calendar
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// GetBlocksByPropertyAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<CalendarBlock>> GetBlocksByPropertyAsync(Guid propertyId, DateTime startDate, DateTime endDate)
         {
             return await _dbSet
@@ -36,6 +42,9 @@ namespace TrimangoCalendar.Data.Repositories.Calendar
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// HasOverlappingBlockAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<bool> HasOverlappingBlockAsync(Guid unitId, DateTime startDate, DateTime endDate, Guid? excludeBlockId = null)
         {
             var query = _dbSet.Where(b => b.UnitId == unitId
@@ -49,6 +58,9 @@ namespace TrimangoCalendar.Data.Repositories.Calendar
             return await query.AnyAsync();
         }
 
+        /// <summary>
+        /// GetActiveBlocksAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<CalendarBlock>> GetActiveBlocksAsync(Guid unitId)
         {
             return await _dbSet
@@ -57,6 +69,9 @@ namespace TrimangoCalendar.Data.Repositories.Calendar
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// UnblockDatesAsync methodunu çalıştırır.
+        /// </summary>
         public async Task UnblockDatesAsync(Guid blockId)
         {
             var block = await _dbSet.FindAsync(blockId);
@@ -67,6 +82,9 @@ namespace TrimangoCalendar.Data.Repositories.Calendar
             }
         }
 
+        /// <summary>
+        /// UnblockAllExpiredAsync methodunu çalıştırır.
+        /// </summary>
         public async Task UnblockAllExpiredAsync()
         {
             var expiredBlocks = await _dbSet

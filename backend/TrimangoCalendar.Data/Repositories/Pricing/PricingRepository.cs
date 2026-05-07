@@ -11,13 +11,16 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
 {
     public class PricingRepository : BaseRepository<SeasonRate>, IPricingRepository
     {
-        private readonly AppDbConext _context;
+        private readonly AppDbContext _context;
 
-        public PricingRepository(AppDbConext context) : base(context)
+        public PricingRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// GetByUnitIdAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<SeasonRate>> GetByUnitIdAsync(Guid unitId)
         {
             return await _dbSet
@@ -26,6 +29,9 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// GetActiveRateAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<SeasonRate> GetActiveRateAsync(Guid unitId, DateTime date)
         {
             return await _dbSet
@@ -35,6 +41,9 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
                     && s.EndDate >= date);
         }
 
+        /// <summary>
+        /// GetOverlappingRatesAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<SeasonRate>> GetOverlappingRatesAsync(Guid unitId, DateTime startDate, DateTime endDate)
         {
             return await _dbSet
@@ -45,6 +54,9 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// GetExchangeRateAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<decimal> GetExchangeRateAsync(string baseCurrency, string targetCurrency, DateTime date)
         {
             var rate = await _context.ExchangeRates
@@ -64,6 +76,9 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
             return nearestRate?.Rate ?? 1;
         }
 
+        /// <summary>
+        /// GetExchangeRatesForDateAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<ExchangeRate>> GetExchangeRatesForDateAsync(DateTime date)
         {
             return await _context.ExchangeRates
@@ -71,6 +86,9 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// GetActiveCurrenciesAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<IEnumerable<Currency>> GetActiveCurrenciesAsync()
         {
             return await _context.Currencies
@@ -79,6 +97,9 @@ namespace TrimangoCalendar.Data.Repositories.Pricing
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// UpdateExchangeRatesAsync methodunu çalıştırır.
+        /// </summary>
         public async Task UpdateExchangeRatesAsync(IEnumerable<ExchangeRate> rates)
         {
             await _context.ExchangeRates.AddRangeAsync(rates);

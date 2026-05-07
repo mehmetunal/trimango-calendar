@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ReservationController : ControllerBase
+public class ReservationController : BaseController
 {
     private readonly IReservationService _reservationService;
     
@@ -13,6 +13,9 @@ public class ReservationController : ControllerBase
     }
     
     [HttpPost]
+    /// <summary>
+    /// Create methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> Create([FromBody] CreateReservationDto dto)
     {
         if (!ModelState.IsValid)
@@ -33,6 +36,9 @@ public class ReservationController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    /// <summary>
+    /// GetById methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -47,6 +53,9 @@ public class ReservationController : ControllerBase
     }
     
     [HttpGet("number/{reservationNumber}")]
+    /// <summary>
+    /// GetByNumber methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetByNumber(string reservationNumber)
     {
         try
@@ -61,6 +70,9 @@ public class ReservationController : ControllerBase
     }
     
     [HttpGet]
+    /// <summary>
+    /// GetByTenant methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetByTenant([FromQuery] ReservationFilterDto filter)
     {
         var tenantId = GetTenantId();
@@ -93,6 +105,9 @@ public class ReservationController : ControllerBase
     
     [HttpPost("{id}/check-in")]
     [Authorize]
+    /// <summary>
+    /// CheckIn methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CheckIn(Guid id)
     {
         try
@@ -112,6 +127,9 @@ public class ReservationController : ControllerBase
     
     [HttpPost("{id}/check-out")]
     [Authorize]
+    /// <summary>
+    /// CheckOut methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CheckOut(Guid id, [FromQuery] bool isLate = false)
     {
         try
@@ -126,6 +144,9 @@ public class ReservationController : ControllerBase
     }
     
     [HttpPost("{id}/cancel")]
+    /// <summary>
+    /// Cancel methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> Cancel(Guid id, [FromBody] string reason)
     {
         try
@@ -141,6 +162,9 @@ public class ReservationController : ControllerBase
     
     [HttpPut("status")]
     [Authorize]
+    /// <summary>
+    /// UpdateStatus methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> UpdateStatus([FromBody] UpdateReservationStatusDto dto)
     {
         try
@@ -155,6 +179,9 @@ public class ReservationController : ControllerBase
     }
     
     [HttpGet("stats")]
+    /// <summary>
+    /// GetStats methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetStats([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
         var tenantId = GetTenantId();
@@ -205,6 +232,9 @@ public class ReservationController : ControllerBase
         return Ok(events);
     }
     
+    /// <summary>
+    /// GetStatusColor methodunu çalıştırır.
+    /// </summary>
     private string GetStatusColor(string status)
     {
         return status switch
@@ -217,14 +247,4 @@ public class ReservationController : ControllerBase
             "Pending" => "#FFC107",
             _ => "#9E9E9E"
         };
-    }
-    
-    private Guid GetTenantId()
-    {
-        if (HttpContext.Items["TenantId"] is Guid tenantId)
-            return tenantId;
-            
-        // Admin panel için default tenant
-        return Guid.Empty;
-    }
-}
+    }}

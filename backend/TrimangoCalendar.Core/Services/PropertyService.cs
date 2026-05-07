@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class PropertyService : IPropertyService
 {
     private readonly AppDbContext _context;
@@ -17,6 +19,9 @@ public class PropertyService : IPropertyService
         _fileStorage = fileStorage;
     }
     
+    /// <summary>
+    /// CreateAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<PropertyDto> CreateAsync(Guid tenantId, CreatePropertyDto dto)
     {
         // Tenant mülk limitini kontrol et
@@ -64,6 +69,9 @@ public class PropertyService : IPropertyService
         return _mapper.Map<PropertyDto>(property);
     }
     
+    /// <summary>
+    /// GetByIdAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<PropertyDto> GetByIdAsync(Guid id)
     {
         var property = await _context.Properties
@@ -83,6 +91,9 @@ public class PropertyService : IPropertyService
         return dto;
     }
     
+    /// <summary>
+    /// GetBySlugAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<PropertyDto> GetBySlugAsync(string slug)
     {
         string cacheKey = $"property_slug_{slug}";
@@ -108,6 +119,9 @@ public class PropertyService : IPropertyService
         });
     }
     
+    /// <summary>
+    /// SearchAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<PaginatedResult<PropertyDto>> SearchAsync(PropertySearchDto search)
     {
         var query = _context.Properties
@@ -188,6 +202,9 @@ public class PropertyService : IPropertyService
         };
     }
     
+    /// <summary>
+    /// GenerateSlug methodunu çalıştırır.
+    /// </summary>
     private async Task<string> GenerateSlug(Guid tenantId, string name)
     {
         var slug = name.ToLower()
@@ -211,37 +228,58 @@ public class PropertyService : IPropertyService
         return slug;
     }
     
+    /// <summary>
+    /// ClearPropertyCache methodunu çalıştırır.
+    /// </summary>
     private async Task ClearPropertyCache(Guid tenantId)
     {
         _cache.Remove($"properties_tenant_{tenantId}");
         // Diğer ilgili cache'leri temizle
     }
 
+    /// <summary>
+    /// UpdateAsync methodunu çalıştırır.
+    /// </summary>
     public Task<PropertyDto> UpdateAsync(Guid id, UpdatePropertyDto dto)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// GetByTenantAsync methodunu çalıştırır.
+    /// </summary>
     public Task<List<PropertyDto>> GetByTenantAsync(Guid tenantId)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// ToggleActiveAsync methodunu çalıştırır.
+    /// </summary>
     public Task<bool> ToggleActiveAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// DeleteAsync methodunu çalıştırır.
+    /// </summary>
     public Task<bool> DeleteAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// GetStartingPriceAsync methodunu çalıştırır.
+    /// </summary>
     public Task<decimal> GetStartingPriceAsync(Guid propertyId, string currencyCode)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// IsSlugAvailable methodunu çalıştırır.
+    /// </summary>
     public Task<bool> IsSlugAvailable(Guid tenantId, string slug)
     {
         throw new NotImplementedException();

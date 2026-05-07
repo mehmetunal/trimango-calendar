@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class Agency
 {
     public Guid Id { get; set; }

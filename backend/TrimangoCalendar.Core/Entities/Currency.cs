@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class Currency
 {
     public string Code { get; set; } // "TRY", "USD", "EUR", "GBP"

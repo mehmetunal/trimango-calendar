@@ -1,6 +1,6 @@
 [ApiController]
 [Route("api/[controller]")]
-public class PropertyController : ControllerBase
+public class PropertyController : BaseController
 {
     private readonly IPropertyService _propertyService;
     private readonly IUnitService _unitService;
@@ -17,6 +17,9 @@ public class PropertyController : ControllerBase
     }
     
     [HttpGet]
+    /// <summary>
+    /// Search methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> Search([FromQuery] PropertySearchDto search)
     {
         var result = await _propertyService.SearchAsync(search);
@@ -24,6 +27,9 @@ public class PropertyController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    /// <summary>
+    /// GetById methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -42,6 +48,9 @@ public class PropertyController : ControllerBase
     }
     
     [HttpGet("slug/{slug}")]
+    /// <summary>
+    /// GetBySlug methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetBySlug(string slug)
     {
         var property = await _propertyService.GetBySlugAsync(slug);
@@ -54,6 +63,9 @@ public class PropertyController : ControllerBase
     
     [HttpPost]
     [Authorize]
+    /// <summary>
+    /// Create methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> Create([FromBody] CreatePropertyDto dto)
     {
         if (!ModelState.IsValid)
@@ -75,6 +87,9 @@ public class PropertyController : ControllerBase
     
     [HttpPost("{propertyId}/images")]
     [Authorize]
+    /// <summary>
+    /// UploadImages methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> UploadImages(Guid propertyId, List<IFormFile> files)
     {
         var result = await _imageService.UploadPropertyImagesAsync(propertyId, files);
@@ -83,6 +98,9 @@ public class PropertyController : ControllerBase
     
     [HttpPost("{propertyId}/units")]
     [Authorize]
+    /// <summary>
+    /// CreateUnit methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CreateUnit(Guid propertyId, [FromBody] CreateUnitDto dto)
     {
         if (!ModelState.IsValid)
@@ -104,6 +122,9 @@ public class PropertyController : ControllerBase
     }
     
     [HttpGet("{propertyId}/units")]
+    /// <summary>
+    /// GetUnits methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetUnits(Guid propertyId)
     {
         var units = await _unitService.GetByPropertyAsync(propertyId);
@@ -112,10 +133,4 @@ public class PropertyController : ControllerBase
         var currency = Request.Query["currency"].FirstOrDefault() ?? "TRY";
         
         return Ok(new { success = true, data = units, currency });
-    }
-    
-    private Guid GetTenantId()
-    {
-        return (Guid)HttpContext.Items["TenantId"];
-    }
-}
+    }}

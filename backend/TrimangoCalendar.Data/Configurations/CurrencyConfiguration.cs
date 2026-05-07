@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TrimangoCalendar.Core.Entities;
+
+namespace TrimangoCalendar.Data.Configurations;
+
 public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 {
     public void Configure(EntityTypeBuilder<Currency> builder)
@@ -18,4 +24,3 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
             .HasMaxLength(10);
     }
 }
-

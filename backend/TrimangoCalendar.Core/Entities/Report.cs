@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class Report
 {
     public Guid Id { get; set; }

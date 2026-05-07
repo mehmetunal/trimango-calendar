@@ -11,7 +11,7 @@ namespace TrimangoCalendar.Data.Repositories.Agency
 {
     public class AgencyRepository : BaseRepository<Core.Entities.Agency>, IAgencyRepository
     {
-        public AgencyRepository(AppDbConext context) : base(context) { }
+        public AgencyRepository(AppDbContext context) : base(context) { }
 
         public async Task<IEnumerable<Core.Entities.Agency>> GetAllActiveAsync()
         {
@@ -64,12 +64,18 @@ namespace TrimangoCalendar.Data.Repositories.Agency
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// HasAuthorizationAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<bool> HasAuthorizationAsync(Guid agencyId, Guid propertyId)
         {
             return await _context.AgencyAuthorizations
                 .AnyAsync(a => a.AgencyId == agencyId && a.PropertyId == propertyId && a.IsActive);
         }
 
+        /// <summary>
+        /// UpdateAllotmentUsageAsync methodunu çalıştırır.
+        /// </summary>
         public async Task UpdateAllotmentUsageAsync(Guid authorizationId, int usedAllotment)
         {
             var auth = await _context.AgencyAuthorizations.FindAsync(authorizationId);

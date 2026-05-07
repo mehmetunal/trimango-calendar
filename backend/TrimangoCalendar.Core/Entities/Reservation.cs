@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class Reservation
 {
     public Guid Id { get; set; }
@@ -60,8 +62,7 @@ public class Reservation
     public Tenant Tenant { get; set; }
     public Unit Unit { get; set; }
     public Guest Guest { get; set; }
-    public ICollection<Payment> Payments { get; set; }
+    public ICollection<ReservationPayment> Payments { get; set; }
     public ICollection<ReservationHistory> History { get; set; }
     public PropertyReview Review { get; set; }
 }
-

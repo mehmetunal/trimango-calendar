@@ -1,0 +1,15 @@
+global using System;
+global using System.Collections.Generic;
+global using System.ComponentModel;
+global using System.ComponentModel.DataAnnotations;
+global using System.Globalization;
+global using System.Linq;
+global using System.Text.Json;
+global using System.Threading.Tasks;
+global using AutoMapper;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Caching.Memory;
+global using TrimangoCalendar.Core.Validators;
+global using TrimangoCalendar.Core.DTOs;
+global using TrimangoCalendar.Core.Entities;
+global using TrimangoCalendar.Core.Interfaces;

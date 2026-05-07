@@ -1,10 +1,11 @@
 // backend/TrimangoCalendar.Data/Context/AppDbContext.cs
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TrimangoCalendar.Core.Entities;
 
 namespace TrimangoCalendar.Data.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         { 
@@ -315,8 +316,8 @@ namespace TrimangoCalendar.Data.Context
                 entity.Property(e => e.PromoCode).HasMaxLength(50);
                 entity.Property(e => e.ExternalReference).HasMaxLength(100);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100);
-                entity.Property(e => e.Status).HasDefaultValue(1);
-                entity.Property(e => e.Source).HasDefaultValue(1);
+                entity.Property(e => e.Status).HasDefaultValue(ReservationStatus.Pending);
+                entity.Property(e => e.Source).HasDefaultValue(ReservationSource.Direct);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime2");
 
@@ -503,13 +504,11 @@ namespace TrimangoCalendar.Data.Context
                 entity.Property(e => e.MaxMarkupRate).HasColumnType("decimal(5,2)");
                 entity.Property(e => e.DefaultMarkupRate).HasColumnType("decimal(5,2)");
                 entity.Property(e => e.Notes).HasColumnType("nvarchar(max)");
-                entity.Property(e => e.I
-
-sActive).HasDefaultValue(true);
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
                 entity.Property(e => e.GrantedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.Property(e => e.RevokedAt).HasColumnType("datetime2");
                 entity.Property(e => e.GrantedBy).HasMaxLength(100);
-                entity.Property(e => e.PriceDisplay).HasDefaultValue(1);
+                entity.Property(e => e.PriceDisplay).HasDefaultValue(PriceDisplayType.Net);
 
                 entity.HasOne(e => e.Agency)
                     .WithMany(a => a.Authorizations)
@@ -785,7 +784,7 @@ sActive).HasDefaultValue(true);
                 entity.Property(e => e.SharingImage).HasMaxLength(500);
                 entity.Property(e => e.DefaultLanguage).HasMaxLength(5).HasDefaultValue("tr");
                 entity.Property(e => e.AvailableLanguages).HasMaxLength(500).HasDefaultValue("[\"tr\",\"en\"]");
-                entity.Property(e => e.Position).HasDefaultValue(1);
+                entity.Property(e => e.Position).HasDefaultValue(WidgetPosition.Left);
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class BookingWidgetController : ControllerBase
+public class BookingWidgetController : BaseController
 {
     private readonly IBookingEngineService _bookingEngine;
     
@@ -13,6 +13,9 @@ public class BookingWidgetController : ControllerBase
     }
     
     [HttpPost]
+    /// <summary>
+    /// CreateWidget methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CreateWidget([FromBody] CreateWidgetDto dto)
     {
         var tenantId = GetTenantId();
@@ -21,6 +24,9 @@ public class BookingWidgetController : ControllerBase
     }
     
     [HttpGet("{propertyId}")]
+    /// <summary>
+    /// GetWidgets methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetWidgets(Guid propertyId)
     {
         var widgets = await _bookingEngine.GetPropertyWidgetsAsync(propertyId);
@@ -28,6 +34,9 @@ public class BookingWidgetController : ControllerBase
     }
     
     [HttpGet("embed/{widgetId}")]
+    /// <summary>
+    /// GetEmbedCode methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetEmbedCode(Guid widgetId)
     {
         var widget = await _bookingEngine.GetWidgetByIdAsync(widgetId);
@@ -37,6 +46,9 @@ public class BookingWidgetController : ControllerBase
     }
     
     [HttpPut("{widgetId}")]
+    /// <summary>
+    /// UpdateWidget methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> UpdateWidget(Guid widgetId, [FromBody] UpdateWidgetDto dto)
     {
         var widget = await _bookingEngine.UpdateWidgetAsync(widgetId, dto);
@@ -44,6 +56,9 @@ public class BookingWidgetController : ControllerBase
     }
     
     [HttpDelete("{widgetId}")]
+    /// <summary>
+    /// DeleteWidget methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> DeleteWidget(Guid widgetId)
     {
         await _bookingEngine.DeleteWidgetAsync(widgetId);
@@ -51,13 +66,10 @@ public class BookingWidgetController : ControllerBase
     }
     
     [HttpGet("preview/{widgetKey}")]
+    /// <summary>
+    /// PreviewWidget methodunu çalıştırır.
+    /// </summary>
     public IActionResult PreviewWidget(string widgetKey)
     {
         return Redirect($"/widget/{widgetKey}");
-    }
-    
-    private Guid GetTenantId()
-    {
-        return (Guid)HttpContext.Items["TenantId"];
-    }
-}
+    }}

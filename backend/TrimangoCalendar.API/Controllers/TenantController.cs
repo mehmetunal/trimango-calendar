@@ -1,4 +1,3 @@
-// Web/Controllers/Api/TenantController.cs
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +14,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpGet]
+    /// <summary>
+    /// GetAll methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetAll()
     {
         var tenants = await _tenantService.GetAllAsync();
@@ -22,6 +24,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    /// <summary>
+    /// GetById methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -36,6 +41,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpPost]
+    /// <summary>
+    /// Create methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> Create([FromBody] CreateTenantDto dto)
     {
         if (!ModelState.IsValid)
@@ -47,6 +55,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    /// <summary>
+    /// Update methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTenantDto dto)
     {
         if (!ModelState.IsValid)
@@ -64,6 +75,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpPost("change-plan")]
+    /// <summary>
+    /// ChangePlan methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> ChangePlan([FromBody] ChangePlanDto dto)
     {
         try
@@ -78,6 +92,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpPost("check-subdomain")]
+    /// <summary>
+    /// CheckSubdomain methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CheckSubdomain([FromBody] string subdomain)
     {
         var isAvailable = await _tenantService.IsSubdomainAvailable(subdomain);
@@ -85,6 +102,9 @@ public class TenantController : ControllerBase
     }
     
     [HttpPatch("{id}/toggle")]
+    /// <summary>
+    /// ToggleActive methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> ToggleActive(Guid id)
     {
         var result = await _tenantService.ToggleActiveAsync(id);

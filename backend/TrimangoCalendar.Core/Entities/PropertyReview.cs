@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class PropertyReview
 {
     public Guid Id { get; set; }

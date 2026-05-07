@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class OccupancyReportDto
 {
     public Guid? PropertyId { get; set; }

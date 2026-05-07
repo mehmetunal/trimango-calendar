@@ -9,7 +9,7 @@ namespace TrimangoCalendar.Data.Repositories.Tenant
 {
     public class TenantRepository : BaseRepository<Core.Entities.Tenant>, ITenantRepository
     {
-        public TenantRepository(AppDbConext context) : base(context) { }
+        public TenantRepository(AppDbContext context) : base(context) { }
 
         public async Task<Core.Entities.Tenant> GetBySubdomainAsync(string subdomain)
         {
@@ -23,11 +23,17 @@ namespace TrimangoCalendar.Data.Repositories.Tenant
                 .FirstOrDefaultAsync(t => t.Email == email && t.IsActive);
         }
 
+        /// <summary>
+        /// IsSubdomainAvailableAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<bool> IsSubdomainAvailableAsync(string subdomain)
         {
             return !await _dbSet.AnyAsync(t => t.Subdomain == subdomain);
         }
 
+        /// <summary>
+        /// IsEmailAvailableAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<bool> IsEmailAvailableAsync(string email)
         {
             return !await _dbSet.AnyAsync(t => t.Email == email);

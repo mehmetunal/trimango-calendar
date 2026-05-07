@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IReportService
 {
     Task<ReportDto> GenerateReportAsync(Guid tenantId, ReportRequestDto request);

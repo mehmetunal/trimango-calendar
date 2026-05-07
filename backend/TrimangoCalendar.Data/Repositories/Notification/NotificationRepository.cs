@@ -10,7 +10,7 @@ namespace TrimangoCalendar.Data.Repositories.Notification
 {
     public class NotificationRepository : BaseRepository<Core.Entities.Notification>, INotificationRepository
     {
-        public NotificationRepository(AppDbConext context) : base(context) { }
+        public NotificationRepository(AppDbContext context) : base(context) { }
 
         public async Task<IEnumerable<Core.Entities.Notification>> GetByTenantAsync(Guid tenantId, int page = 1, int pageSize = 20)
         {
@@ -22,12 +22,18 @@ namespace TrimangoCalendar.Data.Repositories.Notification
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// GetUnreadCountAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetUnreadCountAsync(Guid tenantId)
         {
             return await _dbSet
                 .CountAsync(n => n.TenantId == tenantId && n.ReadAt == null);
         }
 
+        /// <summary>
+        /// MarkAsReadAsync methodunu çalıştırır.
+        /// </summary>
         public async Task MarkAsReadAsync(Guid notificationId)
         {
             var notification = await _dbSet.FindAsync(notificationId);
@@ -38,6 +44,9 @@ namespace TrimangoCalendar.Data.Repositories.Notification
             }
         }
 
+        /// <summary>
+        /// MarkAllAsReadAsync methodunu çalıştırır.
+        /// </summary>
         public async Task MarkAllAsReadAsync(Guid tenantId)
         {
             var unread = await _dbSet
@@ -53,19 +62,26 @@ namespace TrimangoCalendar.Data.Repositories.Notification
         public async Task<IEnumerable<Core.Entities.Notification>> GetPendingNotificationsAsync()
         {
             return await _dbSet
-                .Where(n => n.Status == "Pending")
+                .Where(n => n.Status == Core.Entities.NotificationStatus.Pending)
                 .OrderBy(n => n.CreatedAt)
                 .Take(50)
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// UpdateStatusAsync methodunu çalıştırır.
+        /// </summary>
         public async Task UpdateStatusAsync(Guid notificationId, string status, string errorMessage = null)
         {
             var notification = await _dbSet.FindAsync(notificationId);
             if (notification != null)
             {
-                notification.Status = status;
-                if (status == "Sent")
+                if (Enum.TryParse<Core.Entities.NotificationStatus>(status, true, out var parsed))
+                {
+                    notification.Status = parsed;
+                }
+
+                if (notification.Status == Core.Entities.NotificationStatus.Sent)
                     notification.SentAt = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
             }

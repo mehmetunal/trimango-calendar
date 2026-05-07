@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface INotificationService
 {
     Task SendAsync(Guid tenantId, NotificationType type, Dictionary<string, string> data, 

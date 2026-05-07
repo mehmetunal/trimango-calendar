@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class CalendarBlock
 {
     public Guid Id { get; set; }

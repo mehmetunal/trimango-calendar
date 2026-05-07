@@ -1,3 +1,14 @@
+using System.Globalization;
+using System.Xml;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using TrimangoCalendar.Core.DTOs;
+using TrimangoCalendar.Core.Entities;
+using TrimangoCalendar.Core.Interfaces;
+using TrimangoCalendar.Data.Context;
+
+namespace TrimangoCalendar.Infrastructure.Services;
+
 public class TCMBExchangeRateService : IExchangeRateService
 {
     private readonly AppDbContext _context;
@@ -14,6 +25,9 @@ public class TCMBExchangeRateService : IExchangeRateService
         _logger = logger;
     }
     
+    /// <summary>
+    /// UpdateFromTCMBAsync methodunu çalıştırır.
+    /// </summary>
     public async Task UpdateFromTCMBAsync()
     {
         try
@@ -92,5 +106,100 @@ public class TCMBExchangeRateService : IExchangeRateService
             _logger.LogError(ex, "TCMB kur güncelleme hatası");
             throw;
         }
+    }
+
+    /// <summary>
+    /// GetRateAsync methodunu çalıştırır.
+    /// </summary>
+    public async Task<ExchangeRateDto> GetRateAsync(string baseCurrency, string targetCurrency, DateTime date)
+    {
+        var normalizedDate = date.Date;
+        var rate = await _context.ExchangeRates
+            .AsNoTracking()
+            .Where(r =>
+                r.BaseCurrencyCode == baseCurrency &&
+                r.TargetCurrencyCode == targetCurrency &&
+                r.Date.Date == normalizedDate)
+            .OrderByDescending(r => r.UpdatedAt)
+            .FirstOrDefaultAsync();
+
+        if (rate is null)
+        {
+            return null;
+        }
+
+        return new ExchangeRateDto
+        {
+            BaseCurrency = rate.BaseCurrencyCode,
+            TargetCurrency = rate.TargetCurrencyCode,
+            Rate = rate.Rate,
+            Date = rate.Date
+        };
+    }
+
+    /// <summary>
+    /// GetRatesForDateAsync methodunu çalıştırır.
+    /// </summary>
+    public async Task<List<ExchangeRateDto>> GetRatesForDateAsync(DateTime date)
+    {
+        var normalizedDate = date.Date;
+        return await _context.ExchangeRates
+            .AsNoTracking()
+            .Where(r => r.Date.Date == normalizedDate)
+            .OrderBy(r => r.BaseCurrencyCode)
+            .ThenBy(r => r.TargetCurrencyCode)
+            .Select(r => new ExchangeRateDto
+            {
+                BaseCurrency = r.BaseCurrencyCode,
+                TargetCurrency = r.TargetCurrencyCode,
+                Rate = r.Rate,
+                Date = r.Date
+            })
+            .ToListAsync();
+    }
+
+    /// <summary>
+    /// UpdateFromApiAsync methodunu çalıştırır.
+    /// </summary>
+    public async Task UpdateFromApiAsync()
+    {
+        await UpdateFromTCMBAsync();
+    }
+
+    /// <summary>
+    /// SetManualRateAsync methodunu çalıştırır.
+    /// </summary>
+    public async Task SetManualRateAsync(string baseCurrency, string targetCurrency, decimal rate, DateTime date)
+    {
+        var normalizedDate = date.Date;
+        var existing = await _context.ExchangeRates.FirstOrDefaultAsync(r =>
+            r.BaseCurrencyCode == baseCurrency &&
+            r.TargetCurrencyCode == targetCurrency &&
+            r.Date.Date == normalizedDate &&
+            r.Source == "Manual");
+
+        if (existing is null)
+        {
+            _context.ExchangeRates.Add(new ExchangeRate
+            {
+                BaseCurrencyCode = baseCurrency,
+                TargetCurrencyCode = targetCurrency,
+                Rate = rate,
+                BuyRate = rate,
+                SellRate = rate,
+                Date = normalizedDate,
+                Source = "Manual",
+                UpdatedAt = DateTime.UtcNow
+            });
+        }
+        else
+        {
+            existing.Rate = rate;
+            existing.BuyRate = rate;
+            existing.SellRate = rate;
+            existing.UpdatedAt = DateTime.UtcNow;
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

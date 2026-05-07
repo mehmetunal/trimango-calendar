@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class ReportController : ControllerBase
+public class ReportController : BaseController
 {
     private readonly IReportService _reportService;
     
@@ -14,6 +15,9 @@ public class ReportController : ControllerBase
     }
     
     [HttpPost("occupancy")]
+    /// <summary>
+    /// GetOccupancyReport methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetOccupancyReport([FromBody] ReportRequestDto request)
     {
         var tenantId = GetTenantId();
@@ -22,6 +26,9 @@ public class ReportController : ControllerBase
     }
     
     [HttpPost("revenue")]
+    /// <summary>
+    /// GetRevenueReport methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetRevenueReport([FromBody] ReportRequestDto request)
     {
         var tenantId = GetTenantId();
@@ -30,6 +37,9 @@ public class ReportController : ControllerBase
     }
     
     [HttpGet("agency-performance/{agencyId}")]
+    /// <summary>
+    /// GetAgencyPerformance methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetAgencyPerformance(Guid agencyId, [FromQuery] DateTime start, [FromQuery] DateTime end)
     {
         var tenantId = GetTenantId();
@@ -38,6 +48,9 @@ public class ReportController : ControllerBase
     }
     
     [HttpPost("generate")]
+    /// <summary>
+    /// GenerateReport methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GenerateReport([FromBody] ReportRequestDto request)
     {
         var tenantId = GetTenantId();
@@ -46,16 +59,13 @@ public class ReportController : ControllerBase
     }
     
     [HttpGet("download/{reportId}")]
+    /// <summary>
+    /// DownloadReport methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> DownloadReport(Guid reportId)
     {
         var fileBytes = await _reportService.DownloadReportAsync(reportId);
         var report = await _reportService.GetReportAsync(reportId);
         
         return File(fileBytes, "application/octet-stream", $"{report.Name}_{DateTime.Now:yyyyMMdd}.xlsx");
-    }
-    
-    private Guid GetTenantId()
-    {
-        return (Guid)HttpContext.Items["TenantId"];
-    }
-}
+    }}

@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core;
+
 using System.ComponentModel;
 
 public enum WidgetPosition

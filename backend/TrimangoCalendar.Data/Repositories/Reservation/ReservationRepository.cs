@@ -11,7 +11,7 @@ namespace TrimangoCalendar.Data.Repositories.Reservation
 {
     public class ReservationRepository : BaseRepository<Core.Entities.Reservation>, IReservationRepository
     {
-        public ReservationRepository(AppDbConext context) : base(context) { }
+        public ReservationRepository(AppDbContext context) : base(context) { }
 
         public async Task<IEnumerable<Core.Entities.Reservation>> GetByTenantIdAsync(Guid tenantId, int page = 1, int pageSize = 20)
         {
@@ -80,6 +80,9 @@ namespace TrimangoCalendar.Data.Repositories.Reservation
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// IsUnitAvailableAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<bool> IsUnitAvailableAsync(Guid unitId, DateTime checkIn, DateTime checkOut, Guid? excludeReservationId = null)
         {
             var query = _dbSet.Where(r => r.UnitId == unitId
@@ -94,11 +97,17 @@ namespace TrimangoCalendar.Data.Repositories.Reservation
             return !await query.AnyAsync();
         }
 
+        /// <summary>
+        /// GetTotalCountByTenantAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetTotalCountByTenantAsync(Guid tenantId)
         {
             return await _dbSet.CountAsync(r => r.TenantId == tenantId);
         }
 
+        /// <summary>
+        /// GetTotalRevenueAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<decimal> GetTotalRevenueAsync(Guid tenantId, DateTime? startDate = null, DateTime? endDate = null)
         {
             var query = _dbSet.Where(r => r.TenantId == tenantId
@@ -112,6 +121,9 @@ namespace TrimangoCalendar.Data.Repositories.Reservation
             return await query.SumAsync(r => r.TotalAmount);
         }
 
+        /// <summary>
+        /// GetReservationCountByStatusAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetReservationCountByStatusAsync(Guid tenantId, ReservationStatus status)
         {
             return await _dbSet.CountAsync(r => r.TenantId == tenantId && r.Status == status);

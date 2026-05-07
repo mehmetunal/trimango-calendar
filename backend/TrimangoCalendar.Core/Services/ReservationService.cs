@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class ReservationService : IReservationService
 {
     private readonly AppDbContext _context;
@@ -20,6 +22,9 @@ public class ReservationService : IReservationService
         _cache = cache;
     }
     
+    /// <summary>
+    /// CreateAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<ReservationDto> CreateAsync(Guid tenantId, CreateReservationDto dto)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
@@ -122,6 +127,9 @@ public class ReservationService : IReservationService
         }
     }
     
+    /// <summary>
+    /// IsUnitAvailableAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> IsUnitAvailableAsync(Guid unitId, DateTime checkIn, DateTime checkOut, Guid? excludeReservationId = null)
     {
         // Cache'de var mı kontrol et
@@ -147,6 +155,9 @@ public class ReservationService : IReservationService
         return cached;
     }
     
+    /// <summary>
+    /// IsUnitAvailableWithLockAsync methodunu çalıştırır.
+    /// </summary>
     private async Task<bool> IsUnitAvailableWithLockAsync(Guid unitId, DateTime checkIn, DateTime checkOut)
     {
         // Pessimistic lock ile müsaitlik kontrolü (race condition'ı önler)
@@ -163,6 +174,9 @@ public class ReservationService : IReservationService
         return !conflicting;
     }
     
+    /// <summary>
+    /// FindOrCreateGuestAsync methodunu çalıştırır.
+    /// </summary>
     private async Task<Guest> FindOrCreateGuestAsync(Guid tenantId, CreateReservationDto dto)
     {
         // Önce mevcut misafiri bul
@@ -200,6 +214,9 @@ public class ReservationService : IReservationService
         return guest;
     }
     
+    /// <summary>
+    /// CheckInAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<ReservationDto> CheckInAsync(Guid reservationId)
     {
         var reservation = await _context.Reservations
@@ -233,6 +250,9 @@ public class ReservationService : IReservationService
         return _mapper.Map<ReservationDto>(reservation);
     }
     
+    /// <summary>
+    /// CheckOutAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<ReservationDto> CheckOutAsync(Guid reservationId, bool isLate = false)
     {
         var reservation = await _context.Reservations
@@ -272,6 +292,9 @@ public class ReservationService : IReservationService
         return _mapper.Map<ReservationDto>(reservation);
     }
     
+    /// <summary>
+    /// CancelAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> CancelAsync(Guid reservationId, string reason)
     {
         var reservation = await _context.Reservations.FindAsync(reservationId);
@@ -319,6 +342,9 @@ public class ReservationService : IReservationService
         return true;
     }
     
+    /// <summary>
+    /// GenerateReservationNumber methodunu çalıştırır.
+    /// </summary>
     private async Task<string> GenerateReservationNumber(Guid tenantId)
     {
         var today = DateTime.Today;
@@ -332,6 +358,9 @@ public class ReservationService : IReservationService
         return $"{prefix}-{(count + 1):D3}";
     }
     
+    /// <summary>
+    /// AddHistoryEntry methodunu çalıştırır.
+    /// </summary>
     private void AddHistoryEntry(Reservation reservation, ReservationStatus? oldStatus, ReservationStatus newStatus, string note)
     {
         reservation.History ??= new List<ReservationHistory>();
@@ -348,6 +377,9 @@ public class ReservationService : IReservationService
         });
     }
     
+    /// <summary>
+    /// GetAvailabilityAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<List<UnitAvailabilityDto>> GetAvailabilityAsync(Guid propertyId, DateTime startDate, DateTime endDate)
     {
         var units = await _context.Units
@@ -404,6 +436,9 @@ public class ReservationService : IReservationService
         return result;
     }
     
+    /// <summary>
+    /// ClearAvailabilityCache methodunu çalıştırır.
+    /// </summary>
     private void ClearAvailabilityCache(Guid unitId, DateTime checkIn, DateTime checkOut)
     {
         for (var date = checkIn; date <= checkOut; date = date.AddDays(1))

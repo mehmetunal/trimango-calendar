@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TrimangoCalendar.Core.Entities;
+
+namespace TrimangoCalendar.Data.Configurations;
+
 public class AgencyAuthorizationConfiguration : IEntityTypeConfiguration<AgencyAuthorization>
 {
     public void Configure(EntityTypeBuilder<AgencyAuthorization> builder)

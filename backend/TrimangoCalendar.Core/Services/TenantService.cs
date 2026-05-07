@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 // Core/Services/TenantService.cs
 public class TenantService : ITenantService
 {
@@ -12,6 +14,9 @@ public class TenantService : ITenantService
         _cache = cache;
     }
     
+    /// <summary>
+    /// CreateAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<TenantDto> CreateAsync(CreateTenantDto dto)
     {
         // Subdomain oluştur
@@ -51,6 +56,9 @@ public class TenantService : ITenantService
         return _mapper.Map<TenantDto>(tenant);
     }
     
+    /// <summary>
+    /// GetByIdAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<TenantDto> GetByIdAsync(Guid id)
     {
         var tenant = await _context.Tenants
@@ -66,6 +74,9 @@ public class TenantService : ITenantService
         return dto;
     }
     
+    /// <summary>
+    /// GetBySubdomainAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<TenantDto> GetBySubdomainAsync(string subdomain)
     {
         string cacheKey = $"tenant_{subdomain}";
@@ -81,6 +92,9 @@ public class TenantService : ITenantService
         });
     }
     
+    /// <summary>
+    /// GetAllAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<List<TenantDto>> GetAllAsync()
     {
         return await _cache.GetOrCreateAsync("all_tenants", async entry =>
@@ -96,6 +110,9 @@ public class TenantService : ITenantService
         });
     }
     
+    /// <summary>
+    /// ChangePlanAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> ChangePlanAsync(ChangePlanDto dto)
     {
         var tenant = await _context.Tenants.FindAsync(dto.TenantId);
@@ -118,11 +135,17 @@ public class TenantService : ITenantService
         return true;
     }
     
+    /// <summary>
+    /// IsSubdomainAvailable methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> IsSubdomainAvailable(string subdomain)
     {
         return !await _context.Tenants.AnyAsync(t => t.Subdomain == subdomain);
     }
     
+    /// <summary>
+    /// GenerateSubdomain methodunu çalıştırır.
+    /// </summary>
     private string GenerateSubdomain(string name)
     {
         // Türkçe karakterleri değiştir
@@ -154,16 +177,25 @@ public class TenantService : ITenantService
         };
     }
 
+    /// <summary>
+    /// UpdateAsync methodunu çalıştırır.
+    /// </summary>
     public Task<TenantDto> UpdateAsync(Guid id, UpdateTenantDto dto)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// ToggleActiveAsync methodunu çalıştırır.
+    /// </summary>
     public Task<bool> ToggleActiveAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// GetTenantCount methodunu çalıştırır.
+    /// </summary>
     public Task<int> GetTenantCount()
     {
         throw new NotImplementedException();

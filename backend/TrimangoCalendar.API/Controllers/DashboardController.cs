@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class DashboardController : ControllerBase
+public class DashboardController : BaseController
 {
     private readonly IReportService _reportService;
     private readonly INotificationService _notificationService;
@@ -16,6 +16,9 @@ public class DashboardController : ControllerBase
     }
     
     [HttpGet]
+    /// <summary>
+    /// GetDashboard methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetDashboard([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
         var tenantId = GetTenantId();
@@ -24,6 +27,9 @@ public class DashboardController : ControllerBase
     }
     
     [HttpGet("notifications")]
+    /// <summary>
+    /// GetNotifications methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetNotifications([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         var tenantId = GetTenantId();
@@ -34,6 +40,9 @@ public class DashboardController : ControllerBase
     }
     
     [HttpPost("notifications/{id}/read")]
+    /// <summary>
+    /// MarkAsRead methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> MarkAsRead(Guid id)
     {
         await _notificationService.MarkAsReadAsync(id);
@@ -41,11 +50,12 @@ public class DashboardController : ControllerBase
     }
     
     [HttpPost("notifications/read-all")]
+    /// <summary>
+    /// MarkAllAsRead methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> MarkAllAsRead()
     {
         var tenantId = GetTenantId();
         await _notificationService.MarkAllAsReadAsync(tenantId);
         return Ok(new { success = true });
-    }
-}
-
+    }}

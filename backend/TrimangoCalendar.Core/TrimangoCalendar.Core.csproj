@@ -13,13 +13,35 @@
     <ProjectReference Include="..\TrimangoCalendar.Shared\TrimangoCalendar.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\AgencyService.cs" />
+    <Compile Remove="Services\BookingEngineService.cs" />
+    <Compile Remove="Services\CalendarService.cs" />
+    <Compile Remove="Services\CurrencyService.cs" />
+    <Compile Remove="Services\ImageService.cs" />
+    <Compile Remove="Services\NotificationService.cs" />
+    <Compile Remove="Services\PricingService.cs" />
+    <Compile Remove="Services\PropertyService.cs" />
+    <Compile Remove="Services\ReportService.cs" />
+    <Compile Remove="Services\ReservationService.cs" />
+    <Compile Remove="Services\SeasonRateService.cs" />
+    <Compile Remove="Services\TenantService.cs" />
+    <Compile Remove="Services\UnitService.cs" />
+    <Compile Remove="Validators\CreateReservationValidator.cs" />
+  </ItemGroup>
+
+
   <!-- ========================================== -->
   <!-- NUGET PAKETLERİ -->
   <!-- ========================================== -->
   <ItemGroup>
     <!-- MediatR (CQRS Pattern) -->
-    <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="12.2.0" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
 
     <!-- Fluent Validation -->
     <PackageReference Include="FluentValidation" Version="11.8.1" />
@@ -36,6 +58,9 @@
     <!-- Email -->
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="MimeKit" Version="4.3.0" />
+
+    <!-- TrimangoCalendar.Core.csproj dosyasına ekleyin -->
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.1" />
   </ItemGroup>
 
 </Project>

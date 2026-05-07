@@ -11,7 +11,7 @@ namespace TrimangoCalendar.Data.Repositories.Property
 {
     public class PropertyRepository : BaseRepository<Core.Entities.Property>, IPropertyRepository
     {
-        public PropertyRepository(AppDbConext context) : base(context) { }
+        public PropertyRepository(AppDbContext context) : base(context) { }
 
         public async Task<IEnumerable<Core.Entities.Property>> GetByTenantIdAsync(Guid tenantId)
         {
@@ -58,6 +58,9 @@ namespace TrimangoCalendar.Data.Repositories.Property
             return await query.OrderByDescending(p => p.CreatedAt).ToListAsync();
         }
 
+        /// <summary>
+        /// GetPropertyCountByTenantAsync methodunu çalıştırır.
+        /// </summary>
         public async Task<int> GetPropertyCountByTenantAsync(Guid tenantId)
         {
             return await _dbSet.CountAsync(p => p.TenantId == tenantId && p.IsActive);

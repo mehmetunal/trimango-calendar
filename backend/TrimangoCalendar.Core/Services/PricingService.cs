@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class PricingService : IPricingService
 {
     private readonly AppDbContext _context;
@@ -14,6 +16,9 @@ public class PricingService : IPricingService
         _cache = cache;
     }
     
+    /// <summary>
+    /// CalculatePriceAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<PriceCalculationResult> CalculatePriceAsync(PriceCalculationRequest request)
     {
         // Validasyon
@@ -208,6 +213,9 @@ public class PricingService : IPricingService
         return dailyPrices;
     }
     
+    /// <summary>
+    /// CalculateExtraBedCharge methodunu çalıştırır.
+    /// </summary>
     private Money? CalculateExtraBedCharge(Unit unit, int adults, int children, string currencyCode)
     {
         var totalGuests = adults + children;
@@ -224,6 +232,9 @@ public class PricingService : IPricingService
         return new Money(charge, _context.Currencies.Find(currencyCode));
     }
     
+    /// <summary>
+    /// IsSpecialDay methodunu çalıştırır.
+    /// </summary>
     private bool IsSpecialDay(DateTime date)
     {
         // Türkiye'deki resmi tatiller
@@ -274,6 +285,9 @@ public class PricingService : IPricingService
         return new Money(Math.Min(discountAmount, totalPrice), await GetCurrency(currencyCode));
     }
     
+    /// <summary>
+    /// GetCurrency methodunu çalıştırır.
+    /// </summary>
     private async Task<Currency> GetCurrency(string code)
     {
         return await _context.Currencies.FindAsync(code) 

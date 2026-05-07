@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TrimangoCalendar.Core.Entities;
+
+namespace TrimangoCalendar.Data.Configurations;
+
 public class AgencyConfiguration : IEntityTypeConfiguration<Agency>
 {
     public void Configure(EntityTypeBuilder<Agency> builder)
@@ -16,4 +22,3 @@ public class AgencyConfiguration : IEntityTypeConfiguration<Agency>
             .HasDefaultValue(10);
     }
 }
-

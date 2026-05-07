@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class RevenueReportDto
 {
     public DateTime StartDate { get; set; }

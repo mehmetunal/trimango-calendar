@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class BookingEngineService : IBookingEngineService
 {
     private readonly AppDbContext _context;
@@ -23,6 +25,9 @@ public class BookingEngineService : IBookingEngineService
         _cache = cache;
     }
     
+    /// <summary>
+    /// CheckAvailabilityAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<AvailabilityResultDto> CheckAvailabilityAsync(string widgetKey, AvailabilitySearchDto search)
     {
         var widget = await GetActiveWidgetAsync(widgetKey);
@@ -119,6 +124,9 @@ public class BookingEngineService : IBookingEngineService
         };
     }
     
+    /// <summary>
+    /// CreateBookingAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<ReservationDto> CreateBookingAsync(string widgetKey, CreateBookingDto dto)
     {
         var widget = await GetActiveWidgetAsync(widgetKey);
@@ -177,6 +185,9 @@ public class BookingEngineService : IBookingEngineService
         return reservation;
     }
     
+    /// <summary>
+    /// GetBookingAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<ReservationDto> GetBookingAsync(string widgetKey, string reservationNumber, string email)
     {
         var widget = await GetActiveWidgetAsync(widgetKey);
@@ -198,6 +209,9 @@ public class BookingEngineService : IBookingEngineService
         return _mapper.Map<ReservationDto>(reservation);
     }
     
+    /// <summary>
+    /// CancelBookingAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> CancelBookingAsync(string widgetKey, string reservationNumber, string email, string reason)
     {
         var reservationDto = await GetBookingAsync(widgetKey, reservationNumber, email);
@@ -213,6 +227,9 @@ public class BookingEngineService : IBookingEngineService
         return true;
     }
     
+    /// <summary>
+    /// GetWidgetEmbedCode methodunu çalıştırır.
+    /// </summary>
     public async Task<string> GetWidgetEmbedCode(string widgetKey)
     {
         var widget = await GetActiveWidgetAsync(widgetKey);
@@ -236,6 +253,9 @@ hpw('init', '{{widgetKey}}');
 <!-- End HotelPlatform Booking Widget -->";
     }
     
+    /// <summary>
+    /// GetActiveWidgetAsync methodunu çalıştırır.
+    /// </summary>
     private async Task<BookingWidget> GetActiveWidgetAsync(string widgetKey)
     {
         return await _cache.GetOrCreateAsync($"widget_{widgetKey}", async entry =>

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AgencyController : ControllerBase
+public class AgencyController : BaseController
 {
     private readonly IAgencyService _agencyService;
     private readonly ICalendarService _calendarService;
@@ -23,6 +23,9 @@ public class AgencyController : ControllerBase
     
     [HttpGet("authorizations/{propertyId}")]
     [Authorize(Roles = "PropertyOwner")]
+    /// <summary>
+    /// GetPropertyAuthorizations methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetPropertyAuthorizations(Guid propertyId)
     {
         var authorizations = await _agencyService.GetPropertyAuthorizationsAsync(propertyId);
@@ -31,11 +34,14 @@ public class AgencyController : ControllerBase
     
     [HttpPost("grant")]
     [Authorize(Roles = "PropertyOwner")]
+    /// <summary>
+    /// GrantAuthorization methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GrantAuthorization([FromBody] GrantAuthorizationDto dto)
     {
         try
         {
-            var tenantId = GetCurrentTenantId();
+            var tenantId = GetTenantId();
             var authorization = await _agencyService.GrantAuthorizationAsync(tenantId, dto);
             return Ok(new { success = true, data = authorization, message = "Yetkilendirme başarıyla verildi" });
         }
@@ -47,6 +53,9 @@ public class AgencyController : ControllerBase
     
     [HttpPut("authorizations/{authId}")]
     [Authorize(Roles = "PropertyOwner")]
+    /// <summary>
+    /// UpdateAuthorization methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> UpdateAuthorization(Guid authId, [FromBody] UpdateAuthorizationDto dto)
     {
         try
@@ -62,6 +71,9 @@ public class AgencyController : ControllerBase
     
     [HttpDelete("authorizations/{authId}")]
     [Authorize(Roles = "PropertyOwner")]
+    /// <summary>
+    /// RevokeAuthorization methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> RevokeAuthorization(Guid authId)
     {
         await _agencyService.RevokeAuthorizationAsync(authId);
@@ -70,11 +82,14 @@ public class AgencyController : ControllerBase
     
     [HttpPost("blocks")]
     [Authorize(Roles = "PropertyOwner")]
+    /// <summary>
+    /// BlockDates methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> BlockDates([FromBody] BlockDatesDto dto)
     {
         try
         {
-            dto.CreatedByTenantId = GetCurrentTenantId();
+            dto.CreatedByTenantId = GetTenantId();
             var block = await _calendarService.BlockDatesAsync(dto);
             return Ok(new { success = true, data = block, message = "Tarihler bloke edildi" });
         }
@@ -86,6 +101,9 @@ public class AgencyController : ControllerBase
     
     [HttpDelete("blocks/{blockId}")]
     [Authorize(Roles = "PropertyOwner")]
+    /// <summary>
+    /// UnblockDates methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> UnblockDates(Guid blockId)
     {
         await _calendarService.UnblockDatesAsync(blockId);
@@ -107,6 +125,9 @@ public class AgencyController : ControllerBase
     
     [HttpGet("my-properties")]
     [Authorize(Roles = "Agency")]
+    /// <summary>
+    /// GetMyProperties methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetMyProperties()
     {
         var agencyId = GetCurrentAgencyId();
@@ -116,6 +137,9 @@ public class AgencyController : ControllerBase
     
     [HttpGet("my-properties/{propertyId}")]
     [Authorize(Roles = "Agency")]
+    /// <summary>
+    /// GetMyPropertyDetail methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetMyPropertyDetail(Guid propertyId)
     {
         var agencyId = GetCurrentAgencyId();
@@ -137,6 +161,9 @@ public class AgencyController : ControllerBase
     
     [HttpPost("my-reservations")]
     [Authorize(Roles = "Agency")]
+    /// <summary>
+    /// CreateReservation methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CreateReservation([FromBody] CreateAgencyReservationDto dto)
     {
         var agencyId = GetCurrentAgencyId();
@@ -166,6 +193,9 @@ public class AgencyController : ControllerBase
     
     [HttpPost("my-prices")]
     [Authorize(Roles = "Agency")]
+    /// <summary>
+    /// SetDailyPrice methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> SetDailyPrice([FromBody] SetDailyPriceDto dto)
     {
         // Acentenin fiyat belirleme yetkisi var mı?
@@ -180,13 +210,10 @@ public class AgencyController : ControllerBase
         
         await _calendarService.SetDailyPriceAsync(dto);
         return Ok(new { success = true, message = "Fiyat güncellendi" });
-    }
-    
-    private Guid GetCurrentTenantId()
-    {
-        return (Guid)HttpContext.Items["TenantId"];
-    }
-    
+    }    
+    /// <summary>
+    /// GetCurrentAgencyId methodunu çalıştırır.
+    /// </summary>
     private Guid GetCurrentAgencyId()
     {
         // Agency User'dan AgencyId'yi al

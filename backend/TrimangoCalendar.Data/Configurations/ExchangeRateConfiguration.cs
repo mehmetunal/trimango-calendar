@@ -1,3 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TrimangoCalendar.Core.Entities;
+
+namespace TrimangoCalendar.Data.Configurations;
+
 public class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate>
 {
     public void Configure(EntityTypeBuilder<ExchangeRate> builder)
@@ -27,4 +33,3 @@ public class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate>
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
-

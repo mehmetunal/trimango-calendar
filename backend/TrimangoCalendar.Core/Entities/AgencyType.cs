@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public enum AgencyType
 {
     [Description("Seyahat Acentası")]

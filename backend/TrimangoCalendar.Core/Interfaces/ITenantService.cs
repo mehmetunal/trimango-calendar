@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface ITenantService
 {
     Task<TenantDto> CreateAsync(CreateTenantDto dto);

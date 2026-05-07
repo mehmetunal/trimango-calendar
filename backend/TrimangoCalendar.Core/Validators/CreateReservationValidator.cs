@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Validators;
+
 public class CreateReservationValidator : AbstractValidator<CreateReservationDto>
 {
     public CreateReservationValidator()

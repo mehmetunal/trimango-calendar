@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrimangoCalendar.Core;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -20,6 +21,9 @@ public class PricingController : ControllerBase
     }
     
     [HttpPost("calculate")]
+    /// <summary>
+    /// CalculatePrice methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CalculatePrice([FromBody] PriceCalculationRequest request)
     {
         try
@@ -34,6 +38,9 @@ public class PricingController : ControllerBase
     }
     
     [HttpGet("currencies")]
+    /// <summary>
+    /// GetCurrencies methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetCurrencies()
     {
         var currencies = await _currencyService.GetActiveCurrenciesAsync();
@@ -86,6 +93,9 @@ public class PricingController : ControllerBase
     
     [HttpPost("seasons")]
     [Authorize]
+    /// <summary>
+    /// CreateSeasonRate methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> CreateSeasonRate([FromBody] CreateSeasonRateDto dto)
     {
         try
@@ -100,6 +110,9 @@ public class PricingController : ControllerBase
     }
     
     [HttpGet("seasons/{unitId}")]
+    /// <summary>
+    /// GetSeasonRates methodunu çalıştırır.
+    /// </summary>
     public async Task<IActionResult> GetSeasonRates(Guid unitId)
     {
         var seasons = await _seasonRateService.GetByUnitAsync(unitId);

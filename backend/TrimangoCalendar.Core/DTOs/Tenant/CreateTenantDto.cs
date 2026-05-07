@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class CreateTenantDto
 {
     [Required(ErrorMessage = "Firma adı zorunludur")]

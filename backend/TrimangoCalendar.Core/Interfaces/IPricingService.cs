@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IPricingService
 {
     Task<PriceCalculationResult> CalculatePriceAsync(PriceCalculationRequest request);

@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class SeasonRate
 {
     public Guid Id { get; set; }

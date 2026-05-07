@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class CalendarService : ICalendarService
 {
     private readonly AppDbContext _context;
@@ -9,6 +11,9 @@ public class CalendarService : ICalendarService
         _mapper = mapper;
     }
     
+    /// <summary>
+    /// BlockDatesAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<CalendarBlockDto> BlockDatesAsync(BlockDatesDto dto)
     {
         // Tarih çakışması kontrolü
@@ -38,6 +43,9 @@ public class CalendarService : ICalendarService
         return _mapper.Map<CalendarBlockDto>(block);
     }
     
+    /// <summary>
+    /// GetAgencyCalendarAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<AgencyCalendarDto> GetAgencyCalendarAsync(Guid agencyId, Guid propertyId, DateTime start, DateTime end)
     {
         // Yetki kontrolü
@@ -150,6 +158,9 @@ public class CalendarService : ICalendarService
         return calendar;
     }
     
+    /// <summary>
+    /// CalculateAgencyPrice methodunu çalıştırır.
+    /// </summary>
     private decimal CalculateAgencyPrice(decimal basePrice, AgencyAuthorization auth)
     {
         return auth.PriceDisplay switch
@@ -161,6 +172,9 @@ public class CalendarService : ICalendarService
         };
     }
     
+    /// <summary>
+    /// GetStatusDescription methodunu çalıştırır.
+    /// </summary>
     private string GetStatusDescription(CalendarDayStatus status, CalendarBlock block, Reservation reservation)
     {
         return status switch

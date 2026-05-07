@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IAgencyService
 {
     // Acente CRUD
@@ -20,5 +22,5 @@ public interface IAgencyService
     // Kontenjan yönetimi
     Task UpdateAllotmentAsync(Guid authId, int totalAllotment);
     Task<bool> CheckAllotmentAvailabilityAsync(Guid authId);
+    Task<bool> CanSetPriceAsync(Guid agencyId, Guid unitId);
 }
-

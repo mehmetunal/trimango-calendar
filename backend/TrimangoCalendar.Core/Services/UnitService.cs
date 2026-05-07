@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class UnitService : IUnitService
 {
     private readonly AppDbContext _context;
@@ -9,6 +11,9 @@ public class UnitService : IUnitService
         _mapper = mapper;
     }
     
+    /// <summary>
+    /// CreateAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<UnitDto> CreateAsync(Guid propertyId, CreateUnitDto dto)
     {
         // Property kontrol
@@ -58,6 +63,9 @@ public class UnitService : IUnitService
         return _mapper.Map<UnitDto>(unit);
     }
     
+    /// <summary>
+    /// GetByPropertyAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<List<UnitDto>> GetByPropertyAsync(Guid propertyId)
     {
         var units = await _context.Units
@@ -69,6 +77,9 @@ public class UnitService : IUnitService
         return _mapper.Map<List<UnitDto>>(units);
     }
     
+    /// <summary>
+    /// UpdateBasePriceAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> UpdateBasePriceAsync(Guid id, decimal price, string currencyCode)
     {
         var unit = await _context.Units.FindAsync(id);

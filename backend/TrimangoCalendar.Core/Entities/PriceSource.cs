@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public enum PriceSource
 {
     [Description("Baz Fiyat")]

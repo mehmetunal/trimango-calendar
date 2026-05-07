@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class ReservationFilterDto
 {
     public DateTime? CheckInFrom { get; set; }

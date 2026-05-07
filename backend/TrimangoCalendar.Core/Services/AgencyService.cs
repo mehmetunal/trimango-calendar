@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Services;
+
 public class AgencyService : IAgencyService
 {
     private readonly AppDbContext _context;
@@ -9,6 +11,9 @@ public class AgencyService : IAgencyService
         _mapper = mapper;
     }
     
+    /// <summary>
+    /// GrantAuthorizationAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<AuthorizationDto> GrantAuthorizationAsync(Guid ownerTenantId, GrantAuthorizationDto dto)
     {
         // Mülk sahibinin bu mülke yetkisi var mı?
@@ -70,6 +75,9 @@ public class AgencyService : IAgencyService
         return _mapper.Map<AuthorizationDto>(authorization);
     }
     
+    /// <summary>
+    /// RevokeAuthorizationAsync methodunu çalıştırır.
+    /// </summary>
     public async Task RevokeAuthorizationAsync(Guid authId)
     {
         var auth = await _context.AgencyAuthorizations.FindAsync(authId);
@@ -82,6 +90,9 @@ public class AgencyService : IAgencyService
         await _context.SaveChangesAsync();
     }
     
+    /// <summary>
+    /// GetAgencyPropertiesAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<List<AuthorizedPropertyDto>> GetAgencyPropertiesAsync(Guid agencyId)
     {
         var authorizations = await _context.AgencyAuthorizations
@@ -120,6 +131,9 @@ public class AgencyService : IAgencyService
         }).ToList();
     }
     
+    /// <summary>
+    /// GetAgencyPropertyDetailAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<AuthorizedPropertyDetailDto> GetAgencyPropertyDetailAsync(Guid agencyId, Guid propertyId)
     {
         var auth = await _context.AgencyAuthorizations
@@ -190,6 +204,9 @@ public class AgencyService : IAgencyService
         };
     }
     
+    /// <summary>
+    /// CheckAllotmentAvailabilityAsync methodunu çalıştırır.
+    /// </summary>
     public async Task<bool> CheckAllotmentAvailabilityAsync(Guid authId)
     {
         var auth = await _context.AgencyAuthorizations.FindAsync(authId);

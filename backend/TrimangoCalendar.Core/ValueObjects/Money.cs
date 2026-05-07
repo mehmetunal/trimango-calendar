@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core;
+
 public class Money : ValueObject
 {
     public decimal Amount { get; }

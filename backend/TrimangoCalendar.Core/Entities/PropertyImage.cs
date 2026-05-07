@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Entities;
+
 public class PropertyImage
 {
     public Guid Id { get; set; }

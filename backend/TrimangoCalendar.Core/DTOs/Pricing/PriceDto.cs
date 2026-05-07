@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class PriceDto
 {
     public decimal Amount { get; set; }

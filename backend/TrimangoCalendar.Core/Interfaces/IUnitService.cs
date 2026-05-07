@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IUnitService
 {
     Task<UnitDto> CreateAsync(Guid propertyId, CreateUnitDto dto);

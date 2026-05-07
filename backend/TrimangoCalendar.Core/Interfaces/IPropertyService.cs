@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.Interfaces;
+
 public interface IPropertyService
 {
     Task<PropertyDto> CreateAsync(Guid tenantId, CreatePropertyDto dto);

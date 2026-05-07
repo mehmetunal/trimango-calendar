@@ -1,3 +1,5 @@
+namespace TrimangoCalendar.Core.DTOs;
+
 public class AuthorizedPropertyDetailDto
 {
     public Guid AuthorizationId { get; set; }
