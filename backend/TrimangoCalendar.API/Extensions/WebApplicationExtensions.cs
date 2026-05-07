@@ -38,7 +38,8 @@ public static class WebApplicationExtensions
     /// </summary>
     public static WebApplication ConfigureHttpPipeline(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        var enableSwagger = app.Configuration.GetValue<bool>("EnableSwagger");
+        if (app.Environment.IsDevelopment() || enableSwagger)
         {
             app.UseSwagger();
             app.UseSwaggerUI();
