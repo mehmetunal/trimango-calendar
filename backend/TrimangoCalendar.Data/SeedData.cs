@@ -1,66 +1,117 @@
-// Data/SeedData.cs
-public static class SeedData
+public static async Task SeedCurrencies(AppDbContext context)
 {
-    public static async Task Initialize(IServiceProvider serviceProvider)
+    if (!await context.Currencies.AnyAsync())
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        
-        // Admin tenant'ı oluştur
-        if (!await context.Tenants.AnyAsync())
+        var currencies = new List<Currency>
         {
-            var adminTenant = new Tenant
+            new()
             {
-                Id = Guid.NewGuid(),
-                Name = "Hotel Platform Admin",
-                Subdomain = "admin",
-                Email = "admin@hotelplatform.com",
-                Phone = "05555555555",
-                Plan = "Enterprise",
-                PlanStartDate = DateTime.UtcNow,
-                MaxProperties = int.MaxValue,
+                Code = "TRY",
+                Symbol = "₺",
+                Name = "Türk Lirası",
+                DecimalPlaces = 2,
+                CultureCode = "tr-TR",
+                IsBaseCurrency = true,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
-            };
-            
-            context.Tenants.Add(adminTenant);
-            await context.SaveChangesAsync();
-            
-            // Admin kullanıcı oluştur
-            var adminUser = new ApplicationUser
+            },
+            new()
             {
-                UserName = "admin@hotelplatform.com",
-                Email = "admin@hotelplatform.com",
-                EmailConfirmed = true,
-                FirstName = "Admin",
-                LastName = "User",
-                TenantId = adminTenant.Id
-            };
-            
-            await userManager.CreateAsync(adminUser, "Admin123!");
-            await userManager.AddToRoleAsync(adminUser, "Admin");
-        }
-        
-        // Demo tenant oluştur
-        if (!await context.Tenants.AnyAsync(t => t.Subdomain == "demo"))
-        {
-            var demo = new Tenant
-            {
-                Id = Guid.NewGuid(),
-                Name = "Demo Otel",
-                Subdomain = "demo",
-                Email = "info@demootel.com",
-                Phone = "02125555555",
-                Plan = "Free",
-                PlanStartDate = DateTime.UtcNow,
-                MaxProperties = 5,
+                Code = "USD",
+                Symbol = "$",
+                Name = "Amerikan Doları",
+                DecimalPlaces = 2,
+                CultureCode = "en-US",
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
-            };
-            
-            context.Tenants.Add(demo);
-            await context.SaveChangesAsync();
-        }
+            },
+            new()
+            {
+                Code = "EUR",
+                Symbol = "€",
+                Name = "Euro",
+                DecimalPlaces = 2,
+                CultureCode = "de-DE",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            },
+            new()
+            {
+                Code = "GBP",
+                Symbol = "£",
+                Name = "İngiliz Sterlini",
+                DecimalPlaces = 2,
+                CultureCode = "en-GB",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            }
+        };
+        
+        context.Currencies.AddRange(currencies);
+        await context.SaveChangesAsync();
+    }
+    
+    // Örnek kurlar (manuel)
+    if (!await context.ExchangeRates.AnyAsync())
+    {
+        var today = DateTime.Today;
+        var rates = new List<ExchangeRate>
+        {
+            // USD -> TRY
+            new()
+            {
+                BaseCurrencyCode = "USD", TargetCurrencyCode = "TRY",
+                Rate = 30.50m, BuyRate = 30.45m, SellRate = 30.55m,
+                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
+            },
+            // TRY -> USD
+            new()
+            {
+                BaseCurrencyCode = "TRY", TargetCurrencyCode = "USD",
+                Rate = 1/30.50m, BuyRate = 1/30.55m, SellRate = 1/30.45m,
+                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
+            },
+            // EUR -> TRY
+            new()
+            {
+                BaseCurrencyCode = "EUR", TargetCurrencyCode = "TRY",
+                Rate = 33.20m, BuyRate = 33.15m, SellRate = 33.25m,
+                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
+            },
+            // TRY -> EUR
+            new()
+            {
+                BaseCurrencyCode = "TRY", TargetCurrencyCode = "EUR",
+                Rate = 1/33.20m, BuyRate = 1/33.25m, SellRate = 1/33.15m,
+                Date = today, Source = "Manual", UpdatedAt = DateTime.UtcNow
+            }
+        };
+        
+        context.ExchangeRates.AddRange(rates);
+        await context.SaveChangesAsync();
     }
 }
+Fiyatlandırma modülü tamamlandı! Bu modül şunları içeriyor:
+
+✅ Çoklu para birimi desteği (TRY, USD, EUR, GBP)
+
+✅ TCMB döviz kuru entegrasyonu
+
+✅ Sezonluk fiyatlandırma
+
+✅ Hafta sonu/özel gün fiyatları
+
+✅ Promosyon kodu sistemi
+
+✅ Vergi hesaplama (KDV + Konaklama Vergisi)
+
+✅ Ekstra yatak ücreti
+
+✅ Money Value Object ile tip güvenli para yönetimi
+
+Şimdi sırada MODÜL 4: REZERVASYON SİSTEMİ var. Bu modül, müsaitlik kontrolü, rezervasyon oluşturma ve yönetme işlemlerini içerecek. Devam edelim mi?
+
+devam edelim
+Harika! Rezervasyon sistemi, projenin kalbi diyebiliriz. Bu modülü çok detaylı hazırlayacağım.
+
+📦 MODÜL 4: REZERVASYON SİSTEMİ

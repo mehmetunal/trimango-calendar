@@ -1,0 +1,361 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+6. Frontend .env
+env
+# frontend/.env
+VITE_API_URL=https://localhost:5001/api
+VITE_APP_NAME=TrimangoCalendar
+VITE_APP_VERSION=1.0.0
+7. Frontend index.html
+html
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TrimangoCalendar - Otel ve Kiralama Yönetim Platformu" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>TrimangoCalendar</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+📂 KLASÖR ŞEMASI
+Backend Klasör Yapısı
+text
+backend/
+├── TrimangoCalendar.sln
+├── TrimangoCalendar.API/
+│   ├── Controllers/
+│   │   ├── Api/
+│   │   │   ├── AuthController.cs
+│   │   │   ├── TenantController.cs
+│   │   │   ├── PropertyController.cs
+│   │   │   ├── ReservationController.cs
+│   │   │   ├── PricingController.cs
+│   │   │   ├── AgencyController.cs
+│   │   │   ├── CalendarController.cs
+│   │   │   ├── ReportController.cs
+│   │   │   ├── DashboardController.cs
+│   │   │   └── WidgetController.cs
+│   │   └── Web/
+│   ├── Middleware/
+│   │   └── TenantMiddleware.cs
+│   ├── BackgroundJobs/
+│   │   └── ExchangeRateUpdateJob.cs
+│   ├── Program.cs
+│   ├── appsettings.json
+│   └── appsettings.Development.json
+│
+├── TrimangoCalendar.Core/
+│   ├── Entities/
+│   │   ├── Tenant.cs
+│   │   ├── Property.cs
+│   │   ├── Unit.cs
+│   │   ├── Reservation.cs
+│   │   ├── Guest.cs
+│   │   ├── Agency.cs
+│   │   ├── AgencyAuthorization.cs
+│   │   ├── CalendarBlock.cs
+│   │   ├── SeasonRate.cs
+│   │   ├── Currency.cs
+│   │   ├── ExchangeRate.cs
+│   │   ├── Promotion.cs
+│   │   ├── Notification.cs
+│   │   ├── BookingWidget.cs
+│   │   └── Report.cs
+│   ├── Interfaces/
+│   │   ├── ITenantService.cs
+│   │   ├── IPropertyService.cs
+│   │   ├── IReservationService.cs
+│   │   ├── IPricingService.cs
+│   │   ├── IAgencyService.cs
+│   │   ├── ICalendarService.cs
+│   │   ├── INotificationService.cs
+│   │   ├── IReportService.cs
+│   │   ├── IBookingEngineService.cs
+│   │   └── ICurrencyService.cs
+│   ├── Services/
+│   │   ├── TenantService.cs
+│   │   ├── PropertyService.cs
+│   │   ├── ReservationService.cs
+│   │   ├── PricingService.cs
+│   │   ├── AgencyService.cs
+│   │   ├── CalendarService.cs
+│   │   ├── NotificationService.cs
+│   │   ├── ReportService.cs
+│   │   └── BookingEngineService.cs
+│   ├── DTOs/
+│   │   ├── Tenant/
+│   │   ├── Property/
+│   │   ├── Reservation/
+│   │   ├── Pricing/
+│   │   ├── Agency/
+│   │   ├── Calendar/
+│   │   ├── Report/
+│   │   └── Widget/
+│   ├── ValueObjects/
+│   │   └── Money.cs
+│   └── Enums/
+│       ├── PropertyType.cs
+│       ├── ReservationStatus.cs
+│       └── AgencyType.cs
+│
+├── TrimangoCalendar.Data/
+│   ├── Context/
+│   │   └── TrimangoDbContext.cs
+│   ├── Configurations/
+│   │   ├── TenantConfiguration.cs
+│   │   ├── PropertyConfiguration.cs
+│   │   └── ReservationConfiguration.cs
+│   ├── Repositories/
+│   ├── Migrations/
+│   └── SeedData.cs
+│
+└── TrimangoCalendar.Shared/
+    ├── Extensions/
+    └── Helpers/
+Frontend Klasör Yapısı
+text
+frontend/
+├── index.html
+├── package.json
+├── vite.config.ts
+├── tailwind.config.js
+├── tsconfig.json
+├── tsconfig.node.json
+├── postcss.config.js
+├── .env
+├── .gitignore
+│
+├── public/
+│   ├── vite.svg
+│   └── favicon.ico
+│
+└── src/
+    ├── main.tsx
+    ├── App.tsx
+    ├── vite-env.d.ts
+    │
+    ├── api/
+    │   ├── axios.ts
+    │   ├── auth.api.ts
+    │   ├── tenant.api.ts
+    │   ├── property.api.ts
+    │   ├── reservation.api.ts
+    │   ├── pricing.api.ts
+    │   ├── agency.api.ts
+    │   ├── calendar.api.ts
+    │   ├── report.api.ts
+    │   └── widget.api.ts
+    │
+    ├── components/
+    │   ├── ui/
+    │   │   ├── Button.tsx
+    │   │   ├── Input.tsx
+    │   │   ├── Select.tsx
+    │   │   ├── Modal.tsx
+    │   │   ├── Table.tsx
+    │   │   ├── Card.tsx
+    │   │   ├── Badge.tsx
+    │   │   ├── Tabs.tsx
+    │   │   ├── Pagination.tsx
+    │   │   ├── Loading.tsx
+    │   │   ├── Toast.tsx
+    │   │   └── ConfirmDialog.tsx
+    │   │
+    │   ├── layout/
+    │   │   ├── AdminLayout.tsx
+    │   │   ├── TenantLayout.tsx
+    │   │   └── AgencyLayout.tsx
+    │   │
+    │   └── charts/
+    │       ├── LineChart.tsx
+    │       ├── BarChart.tsx
+    │       └── PieChart.tsx
+    │
+    ├── pages/
+    │   ├── auth/
+    │   │   ├── Login.tsx
+    │   │   ├── Register.tsx
+    │   │   └── ForgotPassword.tsx
+    │   │
+    │   ├── admin/
+    │   │   ├── Dashboard.tsx
+    │   │   ├── Tenants/
+    │   │   └── Agencies/
+    │   │
+    │   ├── tenant/
+    │   │   ├── Dashboard.tsx
+    │   │   ├── Properties/
+    │   │   │   ├── PropertyList.tsx
+    │   │   │   ├── PropertyForm.tsx
+    │   │   │   └── PropertyDetail.tsx
+    │   │   ├── Units/
+    │   │   │   └── UnitManagement.tsx
+    │   │   ├── Reservations/
+    │   │   │   ├── ReservationList.tsx
+    │   │   │   ├── ReservationDetail.tsx
+    │   │   │   └── ReservationCalendar.tsx
+    │   │   ├── Calendar/
+    │   │   │   └── CalendarManagement.tsx
+    │   │   ├── Pricing/
+    │   │   │   └── SeasonRates.tsx
+    │   │   ├── Agencies/
+    │   │   │   └── Authorizations.tsx
+    │   │   ├── Reports/
+    │   │   │   └── ReportsPage.tsx
+    │   │   └── Widgets/
+    │   │       └── WidgetSettings.tsx
+    │   │
+    │   └── agency/
+    │       ├── Dashboard.tsx
+    │       ├── MyProperties.tsx
+    │       ├── Calendar.tsx
+    │       └── Reservations/
+    │           └── CreateReservation.tsx
+    │
+    ├── hooks/
+    │   ├── useAuth.ts
+    │   ├── useDebounce.ts
+    │   ├── usePagination.ts
+    │   └── usePropertyFilter.ts
+    │
+    ├── stores/
+    │   ├── authStore.ts
+    │   └── appStore.ts
+    │
+    ├── types/
+    │   ├── common.ts
+    │   ├── property.ts
+    │   ├── reservation.ts
+    │   ├── agency.ts
+    │   └── pricing.ts
+    │
+    ├── utils/
+    │   ├── format.ts
+    │   ├── validators.ts
+    │   └── constants.ts
+    │
+    └── styles/
+        └── globals.css
+🎯 PROJEYİ ÇALIŞTIRMA
+Backend'i Çalıştırma
+# Terminal 1 - Backend
+cd TrimangoCalendar/backend
+dotnet restore
+dotnet build
+cd TrimangoCalendar.API
+dotnet run
+
+# API şu adreste çalışacak: https://localhost:5001
+# Swagger: https://localhost:5001/swagger
+Frontend'i Çalıştırma
+# Terminal 2 - Frontend
+cd TrimangoCalendar/frontend
+npm install
+npm run dev
+
+# Frontend şu adreste çalışacak: http://localhost:5173
+Veritabanı Migration
+# Backend dizininde
+cd TrimangoCalendar/backend/TrimangoCalendar.Data
+
+# Migration oluştur
+dotnet ef migrations add InitialCreate --startup-project ../TrimangoCalendar.API
+
+# Veritabanını güncelle
+dotnet ef database update --startup-project ../TrimangoCalendar.API
+📝 GITIGNORE DOSYALARI
+Backend .gitignore
+# backend/.gitignore
+bin/
+obj/
+*.user
+*.suo
+*.cache
+appsettings.Development.json
+logs/
+Frontend .gitignore
+# frontend/.gitignore
+node_modules/
+dist/
+.env.local
+.env.*.local
+*.log
+🚀 HIZLI BAŞLANGIÇ (TEK SEFERDE)
+# Ana dizin oluştur
+mkdir TrimangoCalendar
+cd TrimangoCalendar
+
+# Backend oluştur
+mkdir backend
+cd backend
+dotnet new sln -n TrimangoCalendar
+dotnet new webapi -n TrimangoCalendar.API -f net8.0
+dotnet new classlib -n TrimangoCalendar.Core -f net8.0
+dotnet new classlib -n TrimangoCalendar.Data -f net8.0
+dotnet new classlib -n TrimangoCalendar.Shared -f net8.0
+dotnet sln add TrimangoCalendar.API/TrimangoCalendar.API.csproj
+dotnet sln add TrimangoCalendar.Core/TrimangoCalendar.Core.csproj
+dotnet sln add TrimangoCalendar.Data/TrimangoCalendar.Data.csproj
+dotnet sln add TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj
+
+# Proje referansları
+cd TrimangoCalendar.API
+dotnet add reference ../TrimangoCalendar.Core/TrimangoCalendar.Core.csproj
+dotnet add reference ../TrimangoCalendar.Data/TrimangoCalendar.Data.csproj
+dotnet add reference ../TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj
+cd ../TrimangoCalendar.Data
+dotnet add reference ../TrimangoCalendar.Core/TrimangoCalendar.Core.csproj
+dotnet add reference ../TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj
+cd ../TrimangoCalendar.Core
+dotnet add reference ../TrimangoCalendar.Shared/TrimangoCalendar.Shared.csproj
+cd ../..
+
+# Frontend oluştur
+cd frontend
+npm create vite@latest . -- --template react-ts
+npm install
+npm install react-router-dom @tanstack/react-query axios zustand react-hook-form @hookform/resolvers zod date-fns lucide-react recharts react-hot-toast react-day-picker clsx tailwind-merge
+npm install @fullcalendar/react @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction @fullcalendar/list
+npm install -D tailwindcss postcss autoprefixer @types/node
+npx tailwindcss init -p
+
+cd ..
+echo Proje başarıyla oluşturuldu!
+echo.
+echo Backend: cd backend/TrimangoCalendar.API && dotnet run
+echo Frontend: cd frontend && npm run dev
+Proje tamamen hazır! Tüm kodları verdiğim şekilde ilgili dosyalara yerleştirdikten sonra çalıştırabilirsiniz.
+
+Herhangi bir sorunuz olursa sorabilirsiniz. Başarılar! 🚀
