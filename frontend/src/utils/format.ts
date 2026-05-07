@@ -1,3 +1,4 @@
+// src/utils/format.ts
 export function formatCurrency(amount: number, currency: string = 'TRY'): string {
   const formats: Record<string, { locale: string; options: Intl.NumberFormatOptions }> = {
     TRY: { locale: 'tr-TR', options: { style: 'currency', currency: 'TRY' } },

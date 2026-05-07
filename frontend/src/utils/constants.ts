@@ -1,3 +1,4 @@
+// src/utils/constants.ts
 export const PROPERTY_TYPES = [
   { value: 'Hotel', label: 'Otel', icon: '🏨' },
   { value: 'ApartHotel', label: 'Apart Otel', icon: '🏢' },
@@ -57,4 +58,3 @@ export const AMENITIES = [
 ] as const;
 
 export const PAGE_SIZES = [10, 20, 50, 100] as const;
-5. TAM SAYFALAR

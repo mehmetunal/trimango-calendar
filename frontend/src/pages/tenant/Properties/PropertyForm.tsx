@@ -1,9 +1,11 @@
+// src/pages/tenant/Properties/PropertyForm.tsx
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
+import { clsx } from 'clsx';
 import { propertyApi } from '../../../api/property.api';
-import { Button, Input, Select } from '../../../components/ui';
+import { Button, Input, Select, Card, CardHeader, CardBody } from '../../../components/ui';
 import toast from 'react-hot-toast';
 
 const propertySchema = z.object({
@@ -16,6 +18,7 @@ const propertySchema = z.object({
   district: z.string().optional(),
   city: z.string().min(2, 'Şehir zorunludur'),
   country: z.string().default('Türkiye'),
+  postalCode: z.string().optional(),
   checkInTime: z.string().default('14:00'),
   checkOutTime: z.string().default('12:00'),
   amenities: z.array(z.string()).default([]),
@@ -99,7 +102,7 @@ export default function PropertyForm() {
           <CardHeader>
             <h2 className="text-lg font-semibold">Temel Bilgiler</h2>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardBody className="space-y-4">
             <Select
               label="Mülk Tipi"
               options={propertyTypes}
@@ -139,7 +142,7 @@ export default function PropertyForm() {
                 {...register('description')}
               />
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Adres Bilgileri */}
@@ -147,7 +150,7 @@ export default function PropertyForm() {
           <CardHeader>
             <h2 className="text-lg font-semibold">Adres Bilgileri</h2>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardBody className="space-y-4">
             <Input
               label="Adres"
               placeholder="Açık adres"
@@ -179,7 +182,7 @@ export default function PropertyForm() {
                 {...register('postalCode')}
               />
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Konaklama Politikaları */}
@@ -187,7 +190,7 @@ export default function PropertyForm() {
           <CardHeader>
             <h2 className="text-lg font-semibold">Konaklama Politikaları</h2>
           </CardHeader>
-          <CardContent>
+          <CardBody>
             <div className="grid grid-cols-2 gap-4">
               <Input
                 label="Check-in Saati"
@@ -200,7 +203,7 @@ export default function PropertyForm() {
                 {...register('checkOutTime')}
               />
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Özellikler */}
@@ -208,7 +211,7 @@ export default function PropertyForm() {
           <CardHeader>
             <h2 className="text-lg font-semibold">Özellikler ve İmkanlar</h2>
           </CardHeader>
-          <CardContent>
+          <CardBody>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {amenityOptions.map((amenity) => (
                 <label
@@ -230,7 +233,7 @@ export default function PropertyForm() {
                 </label>
               ))}
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Submit */}
@@ -250,21 +253,3 @@ export default function PropertyForm() {
     </div>
   );
 }
-Bu frontend yapısı size tam kapsamlı bir başlangıç sağlar. Özet olarak:
-
-✅ Modern teknolojiler: React 18, TypeScript, Tailwind CSS, React Query
-✅ 3 farklı panel: Admin, Tenant (mülk sahibi), Agency (acente)
-✅ Zengin UI bileşenleri: Button, Modal, Table, Form elemanları
-✅ Responsive tasarım: Mobil uyumlu
-✅ Grafikler ve takvim: Recharts, FullCalendar entegrasyonu
-✅ Form validasyonu: React Hook Form + Zod
-✅ State yönetimi: Zustand (global), React Query (server state)
-✅ Tip güvenliği: Tam TypeScript desteği
-
-Projenin tamamını bu yapı üzerine inşa edebilirsiniz. Herhangi bir sayfanın veya bileşenin daha detaylı kodunu ister misiniz?
-
-evet isterim tam anlamı ile işlevli olsun
-Harika! Size eksiksiz, production-ready kodlar hazırlayacağım. Tüm sayfaları, bileşenleri, hook'ları ve yardımcı fonksiyonları detaylıca yazalım.
-
-📚 TÜM PROJE DOSYALARI
-1. STORE (ZUSTAND) YAPILARI

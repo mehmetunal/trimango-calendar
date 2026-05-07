@@ -1,3 +1,4 @@
+// src/pages/agency/MyProperties.tsx
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -283,4 +284,3 @@ export default function AgencyMyProperties() {
     </div>
   );
 }
-AgencyCalendar.tsx

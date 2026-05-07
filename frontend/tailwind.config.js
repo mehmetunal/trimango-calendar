@@ -27,4 +27,3 @@ export default {
   },
   plugins: [],
 };
-5. TypeScript Config

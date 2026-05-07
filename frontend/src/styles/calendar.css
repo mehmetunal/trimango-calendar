@@ -1,0 +1,214 @@
+/* ========================================== */
+/* TRIMANGOCALENDAR - FULLCALENDAR OVERRIDES */
+/* ========================================== */
+
+/* Ana konteyner */
+.fc {
+  @apply font-sans;
+}
+
+/* Toolbar */
+.fc .fc-toolbar {
+  @apply flex-wrap gap-2 !important;
+}
+
+.fc .fc-toolbar-title {
+  @apply text-lg font-semibold text-gray-900 !important;
+}
+
+/* Butonlar */
+.fc .fc-button {
+  @apply btn btn-sm !important;
+  @apply !shadow-none !border-gray-300 !text-gray-700 !bg-white;
+  text-transform: none !important;
+  font-weight: 500 !important;
+}
+
+.fc .fc-button:hover {
+  @apply !bg-gray-100 !border-gray-400;
+}
+
+.fc .fc-button-primary {
+  @apply !bg-blue-600 !border-blue-600 !text-white !important;
+}
+
+.fc .fc-button-primary:hover {
+  @apply !bg-blue-700 !border-blue-700;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  @apply !bg-blue-800 !border-blue-800;
+}
+
+.fc .fc-button-primary:disabled {
+  @apply !bg-blue-400 !border-blue-400 !opacity-60;
+}
+
+/* Tablo */
+.fc .fc-scrollgrid {
+  @apply !border-gray-200;
+}
+
+.fc th {
+  @apply !border-gray-200 !bg-gray-50 !py-3 !text-xs !font-medium !text-gray-500 !uppercase;
+}
+
+.fc td {
+  @apply !border-gray-200;
+}
+
+/* Header günleri */
+.fc .fc-col-header-cell-cushion {
+  @apply !py-2 !text-gray-500;
+}
+
+/* Gün hücreleri */
+.fc .fc-daygrid-day {
+  @apply !min-h-[120px];
+}
+
+.fc .fc-daygrid-day-number {
+  @apply !text-sm !text-gray-700 !p-2 !font-medium;
+}
+
+.fc .fc-day-today {
+  @apply !bg-blue-50/50;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+  @apply !bg-blue-600 !text-white !w-8 !h-8 !rounded-full !flex !items-center !justify-center !p-0;
+}
+
+.fc .fc-day-other {
+  @apply !bg-gray-50/50;
+}
+
+.fc .fc-day-other .fc-daygrid-day-number {
+  @apply !text-gray-400;
+}
+
+/* Hafta sonu */
+.fc .fc-day-sat,
+.fc .fc-day-sun {
+  @apply !bg-gray-50/30;
+}
+
+/* Event'ler */
+.fc .fc-event {
+  @apply !border-none !rounded-lg !shadow-sm !cursor-pointer !text-xs !font-medium !px-2 !py-1;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fc .fc-event:hover {
+  @apply !shadow-md;
+  transform: translateY(-1px);
+}
+
+.fc .fc-event-main {
+  @apply !truncate;
+}
+
+/* Event renkleri */
+.fc .fc-event-reservation {
+  @apply !bg-blue-500 !text-white;
+}
+
+.fc .fc-event-confirmed {
+  @apply !bg-green-500 !text-white;
+}
+
+.fc .fc-event-checked-in {
+  @apply !bg-indigo-500 !text-white;
+}
+
+.fc .fc-event-checked-out {
+  @apply !bg-gray-500 !text-white;
+}
+
+.fc .fc-event-cancelled {
+  @apply !bg-red-500 !text-white !line-through !opacity-60;
+}
+
+.fc .fc-event-block {
+  @apply !bg-amber-500 !text-white;
+}
+
+.fc .fc-event-maintenance {
+  @apply !bg-orange-500 !text-white;
+}
+
+/* More link */
+.fc .fc-more-link {
+  @apply !text-xs !text-blue-600 !font-medium;
+}
+
+/* List view */
+.fc .fc-list-day-cushion {
+  @apply !bg-gray-50;
+}
+
+.fc .fc-list-event {
+  @apply !cursor-pointer;
+}
+
+.fc .fc-list-event:hover {
+  @apply !bg-gray-50;
+}
+
+.fc .fc-list-event-time {
+  @apply !text-gray-500;
+}
+
+/* Time grid */
+.fc .fc-timegrid-slot {
+  @apply !h-12;
+}
+
+.fc .fc-timegrid-slot-label {
+  @apply !text-xs !text-gray-500;
+}
+
+.fc .fc-timegrid-now-indicator-line {
+  @apply !border-red-500;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+  @apply !border-red-500;
+}
+
+/* Highlight */
+.fc .fc-highlight {
+  @apply !bg-blue-100/50;
+}
+
+/* Popover */
+.fc .fc-popover {
+  @apply !rounded-xl !shadow-xl !border !border-gray-200;
+}
+
+.fc .fc-popover-header {
+  @apply !bg-gray-50 !rounded-t-xl !px-3 !py-2 !text-sm !font-medium;
+}
+
+.fc .fc-popover-body {
+  @apply !p-2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fc .fc-toolbar {
+    @apply !flex-col !items-start;
+  }
+  
+  .fc .fc-toolbar-title {
+    @apply !text-base;
+  }
+  
+  .fc .fc-button {
+    @apply !text-xs !px-2 !py-1;
+  }
+  
+  .fc .fc-daygrid-day {
+    @apply !min-h-[80px];
+  }
+}

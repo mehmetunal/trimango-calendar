@@ -1,5 +1,7 @@
+// src/api/auth.api.ts
 import api from './axios';
 import { useAuthStore } from '../stores/authStore';
+import { loginWithMockUser } from './mockAuth';
 
 interface LoginCredentials {
   email: string;
@@ -31,6 +33,13 @@ interface AuthResponse {
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
+    if (import.meta.env.VITE_USE_MOCK === 'true') {
+      const response = loginWithMockUser(credentials.email, credentials.password);
+      const { user, token, refreshToken } = response;
+      useAuthStore.getState().login(user as any, token, refreshToken);
+      return response;
+    }
+
     const response = await api.post('/auth/login', credentials);
     const { user, token, refreshToken } = response.data;
     useAuthStore.getState().login(user, token, refreshToken);

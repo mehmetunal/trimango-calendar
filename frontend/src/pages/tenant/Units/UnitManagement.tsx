@@ -1,3 +1,4 @@
+// src/pages/tenant/Units/UnitManagement.tsx
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -16,7 +17,7 @@ import {
   X,
 } from 'lucide-react';
 import { propertyApi } from '../../../api/property.api';
-import { Button, Input, Modal, Card, Badge, ConfirmDialog } from '../../../components/ui';
+import { Button, Input, Select, Modal, Card, Badge, ConfirmDialog } from '../../../components/ui';
 import { formatCurrency } from '../../../utils/format';
 import toast from 'react-hot-toast';
 
@@ -475,20 +476,3 @@ export default function UnitManagement() {
     </div>
   );
 }
-Devam ediyorum, sıradaki sayfalar:
-
-AgencyManagement.tsx (Acente Yetkilendirme)
-
-CalendarManagement.tsx (Takvim ve Blokaj)
-
-Reports.tsx (Raporlar)
-
-WidgetSettings.tsx (Booking Widget)
-
-Hangilerini istersiniz, yoksa sırayla devam edeyim mi?
-
-sırası ile devam edelim
-Harika! Sıradaki sayfayla devam edelim.
-
-📄 ACENTE YETKİLENDİRME SAYFASI
-AgencyManagement.tsx

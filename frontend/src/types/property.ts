@@ -1,3 +1,5 @@
+export type PropertyType = string;
+
 export interface Property {
   id: string;
   tenantId: string;
@@ -12,6 +14,7 @@ export interface Property {
   district: string;
   city: string;
   country: string;
+  website?: string;
   postalCode: string;
   latitude: number | null;
   longitude: number | null;
@@ -44,4 +47,3 @@ export interface Unit {
   roomAmenities: string[];
   isActive: boolean;
 }
-

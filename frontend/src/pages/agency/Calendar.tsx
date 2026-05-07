@@ -1,6 +1,8 @@
+// src/pages/agency/Calendar.tsx
 import { useState, useRef, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -21,6 +23,7 @@ import {
 } from 'lucide-react';
 import { calendarApi } from '../../api/calendar.api';
 import { reservationApi } from '../../api/reservation.api';
+import { agencyApi } from '../../api/agency.api';
 import { Button, Modal, Card, Badge } from '../../components/ui';
 import { formatCurrency, formatDate, formatDateTime } from '../../utils/format';
 import { RESERVATION_STATUSES } from '../../utils/constants';
@@ -55,6 +58,18 @@ export default function AgencyCalendar() {
     queryFn: () => agencyApi.getAuthorizationDetail(agencyId!, propertyId!),
     enabled: !!agencyId && !!propertyId,
   });
+
+  const { data: myProperties } = useQuery({
+    queryKey: ['agency', 'properties', agencyId],
+    queryFn: () => agencyApi.getMyProperties(agencyId!),
+    enabled: !!agencyId,
+  });
+
+  useEffect(() => {
+    if (!propertyId && myProperties?.items?.length) {
+      navigate(`/agency/calendar/${myProperties.items[0].propertyId}`, { replace: true });
+    }
+  }, [propertyId, myProperties, navigate]);
 
   // Build events
   const events = useMemo(() => {
@@ -105,7 +120,7 @@ export default function AgencyCalendar() {
   const canCreateReservation = authorization?.canCreateReservation;
   const canViewPrices = authorization?.canViewPrices;
   const priceDisplay = authorization?.priceDisplay;
-  const commissionRate = authorization?.commissionRate || 10;
+  const commissionRate = authorization?.customCommissionRate ?? 10;
 
   const handleDateClick = (info: any) => {
     if (!canCreateReservation) {
@@ -264,7 +279,16 @@ export default function AgencyCalendar() {
             height="auto"
             firstDay={1}
             datesSet={(dateInfo) => {
-              setDateRange({ start: dateInfo.start, end: dateInfo.end });
+              setDateRange((prev) => {
+                const prevStart = prev.start.getTime();
+                const prevEnd = prev.end.getTime();
+                const nextStart = dateInfo.start.getTime();
+                const nextEnd = dateInfo.end.getTime();
+                if (prevStart === nextStart && prevEnd === nextEnd) {
+                  return prev;
+                }
+                return { start: dateInfo.start, end: dateInfo.end };
+              });
               const titleEl = document.getElementById('cal-title');
               if (titleEl) titleEl.textContent = dateInfo.view.title;
             }}
@@ -392,4 +416,3 @@ export default function AgencyCalendar() {
     </div>
   );
 }
-AgencyCreateReservation.tsx

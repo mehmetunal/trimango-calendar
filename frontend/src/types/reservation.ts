@@ -1,3 +1,5 @@
+import { ReservationStatus } from "./common";
+
 export interface Reservation {
   id: string;
   reservationNumber: string;

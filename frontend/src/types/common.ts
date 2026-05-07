@@ -1,3 +1,4 @@
+// src/types/common.ts
 export interface PaginatedResult<T> {
   items: T[];
   totalCount: number;
@@ -25,4 +26,3 @@ export type ReservationStatus =
   | 'Pending' | 'Confirmed' | 'CheckedIn' | 'CheckedOut' | 'Cancelled' | 'NoShow';
 
 export type CurrencyCode = 'TRY' | 'USD' | 'EUR' | 'GBP';
-

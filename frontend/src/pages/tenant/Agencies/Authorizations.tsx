@@ -1,3 +1,4 @@
+// src/pages/tenant/Agencies/Authorizations.tsx
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -52,13 +53,13 @@ interface Authorization {
   propertyId: string;
   propertyName: string;
   propertyType: string;
-  level: 'ViewOnly' | 'PriceAndAvailability' | 'CanReserve' | 'FullAccess';
+  level: string;
   canViewPrices: boolean;
   canSetPrices: boolean;
   canCreateReservation: boolean;
   canModifyReservation: boolean;
   canCancelReservation: boolean;
-  priceDisplay: 'Net' | 'Commission' | 'Markup';
+  priceDisplay: string;
   customCommissionRate: number | null;
   defaultMarkupRate: number | null;
   maxMarkupRate: number | null;
@@ -923,10 +924,3 @@ export default function AgencyManagement() {
     </div>
   );
 }
-Sıradaki sayfaya geçelim: CalendarManagement.tsx (Takvim ve Blokaj Yönetimi). Devam ediyorum!
-
-devam edelim
-Harika! Takvim ve blokaj yönetimi sayfasına geçelim.
-
-📅 TAKVİM VE BLOKAJ YÖNETİM SAYFASI
-CalendarManagement.tsx

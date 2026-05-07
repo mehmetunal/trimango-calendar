@@ -1,0 +1,122 @@
+/* ========================================== */
+/* TRIMANGOCALENDAR - THEME (DARK/LIGHT) */
+/* ========================================== */
+
+/* Light Theme (Varsayılan) */
+.theme-light {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --bg-tertiary: #F3F4F6;
+  --bg-sidebar: #FFFFFF;
+  --bg-header: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-input: #FFFFFF;
+
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+
+  --border-color: #E5E7EB;
+}
+
+/* Dark Theme */
+.theme-dark {
+  --bg-primary: #111827;
+  --bg-secondary: #1F2937;
+  --bg-tertiary: #374151;
+  --bg-sidebar: #1F2937;
+  --bg-header: #1F2937;
+  --bg-card: #1F2937;
+  --bg-input: #374151;
+
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-muted: #9CA3AF;
+
+  --border-color: #374151;
+}
+
+/* Blue Theme */
+.theme-blue {
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-500: #3B82F6;
+  --color-primary-600: #2563EB;
+  --color-primary-700: #1D4ED8;
+}
+
+/* Green Theme */
+.theme-green {
+  --color-primary-50: #ECFDF5;
+  --color-primary-100: #D1FAE5;
+  --color-primary-500: #10B981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+}
+
+/* Purple Theme */
+.theme-purple {
+  --color-primary-50: #F5F3FF;
+  --color-primary-100: #EDE9FE;
+  --color-primary-500: #8B5CF6;
+  --color-primary-600: #7C3AED;
+  --color-primary-700: #6D28D9;
+}
+
+/* Orange Theme */
+.theme-orange {
+  --color-primary-50: #FFF7ED;
+  --color-primary-100: #FFEDD5;
+  --color-primary-500: #F97316;
+  --color-primary-600: #EA580C;
+  --color-primary-700: #C2410C;
+}
+
+/* Tema Geçiş Animasyonu */
+.theme-transition {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Tema Değiştirici Buton */
+.theme-toggle {
+  @apply relative w-14 h-7 rounded-full p-1 cursor-pointer transition-colors duration-300;
+}
+
+.theme-toggle-light {
+  @apply bg-gray-300;
+}
+
+.theme-toggle-dark {
+  @apply bg-blue-600;
+}
+
+.theme-toggle-thumb {
+  @apply absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform duration-300;
+}
+
+.theme-toggle-dark .theme-toggle-thumb {
+  transform: translateX(28px);
+}
+
+.theme-toggle-icon {
+  @apply absolute top-1/2 -translate-y-1/2 text-xs transition-opacity duration-300;
+}
+
+.theme-toggle-sun {
+  @apply right-1.5 opacity-100;
+}
+
+.theme-toggle-moon {
+  @apply left-1.5 opacity-0;
+}
+
+.theme-toggle-dark .theme-toggle-sun {
+  @apply opacity-0;
+}
+
+.theme-toggle-dark .theme-toggle-moon {
+  @apply opacity-100;
+}

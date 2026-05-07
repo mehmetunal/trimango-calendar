@@ -1,3 +1,4 @@
+// src/components/layout/TenantLayout.tsx
 import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -25,7 +26,10 @@ import { useAuthStore } from '../../stores/authStore';
 import { useAppStore } from '../../stores/appStore';
 import { clsx } from 'clsx';
 
-const menuGroups = [
+type MenuItem = { path: string; icon: any; label: string; exact?: boolean };
+type MenuGroup = { title: string; items: MenuItem[] };
+
+const menuGroups: MenuGroup[] = [
   {
     title: 'GENEL',
     items: [
@@ -271,4 +275,3 @@ export default function TenantLayout() {
     </div>
   );
 }
-AdminLayout.tsx

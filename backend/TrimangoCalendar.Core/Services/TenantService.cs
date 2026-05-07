@@ -1,3 +1,4 @@
+// Core/Services/TenantService.cs
 public class TenantService : ITenantService
 {
     private readonly AppDbContext _context;
@@ -151,5 +152,20 @@ public class TenantService : ITenantService
             "Enterprise" => (int.MaxValue, 199),
             _ => (5, 0)
         };
+    }
+
+    public Task<TenantDto> UpdateAsync(Guid id, UpdateTenantDto dto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ToggleActiveAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> GetTenantCount()
+    {
+        throw new NotImplementedException();
     }
 }

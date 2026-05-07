@@ -216,5 +216,35 @@ public class PropertyService : IPropertyService
         _cache.Remove($"properties_tenant_{tenantId}");
         // Diğer ilgili cache'leri temizle
     }
+
+    public Task<PropertyDto> UpdateAsync(Guid id, UpdatePropertyDto dto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<PropertyDto>> GetByTenantAsync(Guid tenantId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ToggleActiveAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<decimal> GetStartingPriceAsync(Guid propertyId, string currencyCode)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> IsSlugAvailable(Guid tenantId, string slug)
+    {
+        throw new NotImplementedException();
+    }
 }
 

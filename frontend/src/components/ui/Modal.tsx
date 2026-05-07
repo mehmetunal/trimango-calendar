@@ -1,3 +1,4 @@
+// src/components/ui/Modal.tsx
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -9,9 +10,26 @@ interface ModalProps {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   footer?: React.ReactNode;
+  closeOnBackdrop?: boolean;
 }
 
-export default function Modal({ isOpen, onClose, title, children, size = 'md', footer }: ModalProps) {
+const sizeClasses: Record<string, string> = {
+  sm: 'max-w-sm',
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+  xl: 'max-w-2xl',
+  full: 'max-w-full h-full',
+};
+
+export default function Modal({ 
+  isOpen, 
+  onClose, 
+  title, 
+  children, 
+  size = 'md', 
+  footer,
+  closeOnBackdrop = true,
+}: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,21 +51,16 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', f
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
-      onClick={(e) => e.target === overlayRef.current && onClose()}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        ref={overlayRef}
+        className="fixed inset-0 bg-black/50"
+        onClick={() => closeOnBackdrop && onClose()}
+      />
       <div
         className={clsx(
-          'bg-white rounded-xl shadow-xl w-full transform transition-all',
-          {
-            'max-w-sm': size === 'sm',
-            'max-w-md': size === 'md',
-            'max-w-lg': size === 'lg',
-            'max-w-2xl': size === 'xl',
-            'max-w-full h-full': size === 'full',
-          }
+          'relative bg-white rounded-xl shadow-xl w-full transform transition-all animate-scale',
+          sizeClasses[size],
         )}
       >
         {title && (
@@ -55,7 +68,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', f
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             <button
               onClick={onClose}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+              className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -67,7 +80,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', f
         </div>
         
         {footer && (
-          <div className="flex justify-end gap-3 px-6 py-4 bg-gray-50 border-t rounded-b-xl">
+          <div className="px-6 py-4 bg-gray-50 border-t rounded-b-xl">
             {footer}
           </div>
         )}

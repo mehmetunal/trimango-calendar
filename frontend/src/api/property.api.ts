@@ -1,3 +1,4 @@
+// src/api/property.api.ts
 import api from './axios';
 import type { Property, Unit } from '../types/property';
 import type { PaginatedResult, ApiResponse } from '../types/common';

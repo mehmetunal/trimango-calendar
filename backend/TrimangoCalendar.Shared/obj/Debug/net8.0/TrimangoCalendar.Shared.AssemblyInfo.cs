@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrimangoCalendar.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d837e10d66bf0ffed972c725e77fa26d4aaa5e9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+88292af3c67c58313fcd5d3a233e5952941c4cd0")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrimangoCalendar.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrimangoCalendar.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

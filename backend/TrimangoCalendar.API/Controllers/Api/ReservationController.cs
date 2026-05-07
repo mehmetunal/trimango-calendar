@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 [ApiController]
 [Route("api/[controller]")]
 public class ReservationController : ControllerBase
@@ -225,39 +228,3 @@ public class ReservationController : ControllerBase
         return Guid.Empty;
     }
 }
-Rezervasyon modülü tamamlandı! Bu modül şunları içeriyor:
-
-✅ Tam rezervasyon CRUD işlemleri
-
-✅ Pessimistic lock ile race condition önleme
-
-✅ Müsaitlik kontrolü ve takvimi
-
-✅ Check-in/Check-out yönetimi
-
-✅ İptal ve iade politikası
-
-✅ Misafir yönetimi
-
-✅ Rezervasyon geçmişi takibi
-
-✅ İstatistikler ve dashboard verileri
-
-Şimdi sırada MODÜL 5: ÖDEME SİSTEMİ var. İyzico ve PayTR entegrasyonlarını içerecek. Devam edelim mi?
-
-devam edelim ama ödemeler bizim üzerimizden olmucak, bizim sadece takvim kapatma açma bana ait bir villayı oteli aşka acentanın görebilmesi için işlem yapabilmesi için yetki verebilmesi gerek bunlarda olacak
-Anladım! Ödeme sizin üzerinizden olmayacak, sadece Channel Manager gibi bir yapı kuruyoruz. Yani:
-
-Mülk sahibi sisteme kaydoluyor
-
-Mülkünü, odalarını tanımlıyor
-
-Acentelere yetki veriyor (hangi mülkleri görebilecekleri, hangi işlemleri yapabilecekleri)
-
-Acenteler kendilerine verilen mülkler için takvim görüp, fiyat girip, rezervasyon yapabiliyor
-
-Mülk sahibi tüm hareketleri görebiliyor
-
-Bu harika bir iş modeli! Hemen buna göre sistemi kuralım.
-
-📦 MODÜL 5: ACENTE YETKİLENDİRME & TAKVİM YÖNETİM SİSTEMİ

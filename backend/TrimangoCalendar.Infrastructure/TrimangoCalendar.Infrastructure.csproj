@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrimangoCalendar.Core\TrimangoCalendar.Core.csproj" />
+    <ProjectReference Include="..\TrimangoCalendar.Data\TrimangoCalendar.Data.csproj" />
+    <ProjectReference Include="..\TrimangoCalendar.Shared\TrimangoCalendar.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

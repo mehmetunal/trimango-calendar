@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 [Route("widget")]
 [AllowAnonymous]
 public class WidgetAssetsController : Controller
@@ -21,4 +24,4 @@ public class WidgetAssetsController : Controller
         return File("~/css/widget.css", "text/css");
     }
 }
-javascript
+

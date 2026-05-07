@@ -1,3 +1,4 @@
+// src/stores/appStore.ts
 import { create } from 'zustand';
 
 interface AppState {

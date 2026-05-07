@@ -1,3 +1,4 @@
+// src/api/reservation.api.ts
 import api from './axios';
 import type { Reservation } from '../types/reservation';
 import type { PaginatedResult } from '../types/common';
@@ -30,6 +31,20 @@ export const reservationApi = {
   create: async (data: any): Promise<Reservation> => {
     const response = await api.post('/reservations', data);
     return response.data;
+  },
+
+  getAgencyReservations: async (agencyId: string, params?: any): Promise<PaginatedResult<Reservation>> => {
+    const response = await api.get('/reservations', { params: { ...params, agencyId } });
+    return response.data;
+  },
+
+  createAgencyReservation: async (agencyId: string, data: any): Promise<Reservation> => {
+    const response = await api.post('/reservations', { ...data, agencyId });
+    return response.data;
+  },
+
+  cancelAgencyReservation: async (agencyId: string, id: string, reason: string): Promise<void> => {
+    await api.post(`/reservations/${id}/cancel`, { reason, agencyId });
   },
 
   checkIn: async (id: string): Promise<Reservation> => {
@@ -81,4 +96,3 @@ export const reservationApi = {
     return response.data.isAvailable;
   },
 };
-3. CUSTOM HOOKS

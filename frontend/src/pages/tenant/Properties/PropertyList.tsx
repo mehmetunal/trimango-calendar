@@ -1,3 +1,4 @@
+// src/pages/tenant/Properties/PropertyList.tsx
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +62,7 @@ export default function PropertyList() {
   const { data, isLoading } = useQuery({
     queryKey: ['properties', queryParams],
     queryFn: () => propertyApi.getAll(queryParams),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   // Delete mutation
@@ -425,4 +426,3 @@ export default function PropertyList() {
     </div>
   );
 }
-UnitManagement.tsx

@@ -1,6 +1,8 @@
+// src/pages/tenant/Dashboard.tsx
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { dashboardApi } from '../../api/dashboard.api';
+import { clsx } from 'clsx';
 import {
   TrendingUp,
   Users,
@@ -12,6 +14,10 @@ import {
 } from 'lucide-react';
 import { LineChart, BarChart } from '../../components/charts';
 import { formatCurrency, formatDate } from '../../utils/format';
+
+function DashboardSkeleton() {
+  return <div className="p-6 text-sm text-gray-500">Yukleniyor...</div>;
+}
 
 export default function TenantDashboard() {
   const [dateRange, setDateRange] = useState({
@@ -208,4 +214,3 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
-Rezervasyon Takvimi

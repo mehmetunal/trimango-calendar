@@ -1,9 +1,10 @@
+// src/pages/auth/Login.tsx
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Mail, LockKeyhole } from 'lucide-react';
 import { authApi } from '../../api/auth.api';
 import { Button, Input } from '../../components/ui';
 import toast from 'react-hot-toast';
@@ -81,7 +82,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 {...register('password')}
                 error={errors.password?.message}
-                leftIcon={<Lock className="w-5 h-5 text-gray-400" />}
+                leftIcon={<LockKeyhole className="w-5 h-5 text-gray-400" />}
                 rightIcon={
                   <button
                     type="button"

@@ -1,3 +1,4 @@
+// src/pages/tenant/Reservations/ReservationCalendar.tsx
 import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import FullCalendar from '@fullcalendar/react';
@@ -5,7 +6,26 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import trLocale from '@fullcalendar/core/locales/tr';
 import { reservationApi } from '../../../api/reservation.api';
-import { Modal } from '../../../components/ui';
+import { Button, Modal } from '../../../components/ui';
+import { formatCurrency, formatDate } from '../../../utils/format';
+
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    Pending: 'bg-yellow-100 text-yellow-800',
+    Confirmed: 'bg-green-100 text-green-800',
+    CheckedIn: 'bg-blue-100 text-blue-800',
+    CheckedOut: 'bg-gray-100 text-gray-800',
+    Cancelled: 'bg-red-100 text-red-800',
+  };
+  const label: Record<string, string> = {
+    Pending: 'Beklemede',
+    Confirmed: 'Onaylandı',
+    CheckedIn: 'Check-in',
+    CheckedOut: 'Check-out',
+    Cancelled: 'İptal',
+  };
+  return <span className={`inline-flex px-2 py-1 text-xs rounded-full ${styles[status] || styles.Pending}`}>{label[status] || status}</span>;
+}
 
 export default function ReservationCalendar() {
   const calendarRef = useRef<FullCalendar>(null);
@@ -159,4 +179,3 @@ function LegendItem({ color, label }: { color: string; label: string }) {
     </div>
   );
 }
-Mülk Formu

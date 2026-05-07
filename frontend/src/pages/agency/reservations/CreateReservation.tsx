@@ -1,3 +1,4 @@
+// src/pages/agency/reservations/CreateReservation.tsx
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -100,11 +101,21 @@ export default function AgencyCreateReservation() {
     queryKey: ['agency', 'property-detail', agencyId, selectedProperty],
     queryFn: () => agencyApi.getPropertyDetail(agencyId!, selectedProperty),
     enabled: !!agencyId && !!selectedProperty,
-    onSuccess: (data) => {
-      setSelectedUnit('');
-      setPriceCalculation(null);
-    },
   });
+
+  useEffect(() => {
+    const initialPropertyId = searchParams.get('propertyId') || '';
+    if (initialPropertyId && !selectedProperty) {
+      setSelectedProperty(initialPropertyId);
+      setValue('propertyId', initialPropertyId);
+    }
+  }, [searchParams, selectedProperty, setValue]);
+
+  useEffect(() => {
+    setSelectedUnit('');
+    setValue('unitId', '');
+    setPriceCalculation(null);
+  }, [selectedProperty, setValue]);
 
   // Calculate price when dates or unit changes
   useEffect(() => {
@@ -173,7 +184,7 @@ export default function AgencyCreateReservation() {
   }, [step, selectedProperty, selectedUnit, watchCheckIn, watchCheckOut, priceCalculation]);
 
   const authorization = propertyDetail;
-  const canCreateReservation = authorization?.canCreateReservation;
+  const canCreateReservation = authorization?.canCreateReservation ?? true;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -221,12 +232,12 @@ export default function AgencyCreateReservation() {
                 }}
                 options={[
                   { value: '', label: 'Mülk seçin...' },
-                  ...(myProperties?.map((p: any) => ({
+                  ...((myProperties?.items || []).map((p: any) => ({
                     value: p.propertyId,
                     label: p.propertyName,
                   })) || []),
                 ]}
-                disabled={!canCreateReservation}
+                disabled={(myProperties?.items?.length || 0) === 0}
               />
 
               <Select
@@ -510,10 +521,3 @@ export default function AgencyCreateReservation() {
     </div>
   );
 }
-Acente paneli sayfaları tamamlandı! Şimdi sırada Acente Layout ve Routing yapılandırması var. Devam ediyorum!
-
-devam edelim
-Harika! Şimdi tüm paneller için layout ve routing yapılandırmasını hazırlayalım.
-
-🎨 LAYOUT VE ROUTING YAPILANDIRMASI
-AgencyLayout.tsx

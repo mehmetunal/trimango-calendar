@@ -20,5 +20,3 @@ export default defineConfig({
     },
   },
 });
-4. Tailwind Config
-javascript

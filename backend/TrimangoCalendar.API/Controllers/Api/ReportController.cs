@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -56,27 +59,3 @@ public class ReportController : ControllerBase
         return (Guid)HttpContext.Items["TenantId"];
     }
 }
-Bildirim ve raporlama modülü tamamlandı! Bu modül şunları içeriyor:
-
-✅ Çok kanallı bildirim sistemi (Email, SMS, InApp, Push)
-
-✅ Şablon tabanlı bildirimler
-
-✅ Bildirim tercihleri yönetimi
-
-✅ Dashboard (doluluk, gelir, check-in/out)
-
-✅ Doluluk raporu (günlük, haftalık, aylık)
-
-✅ Gelir raporu (mülk, acente, para birimi bazlı)
-
-✅ Grafik verileri
-
-✅ Excel export altyapısı
-
-Şimdi sırada son modül olan MODÜL 7: MİSAFİR PORTALI & BOOKING ENGINE var. Misafirlerin online rezervasyon yapabileceği widget ve sayfaları içerecek. Devam edelim mi?
-
-devam edelim
-Harika! Son modüle geldik. Misafirlerin online rezervasyon yapabileceği booking engine ve misafir portalını hazırlayalım.
-
-📦 MODÜL 7: BOOKING ENGINE & MİSAFİR PORTALI

@@ -1,0 +1,168 @@
+/* ========================================== */
+/* TRIMANGOCALENDAR - PRINT STYLES */
+/* ========================================== */
+
+@media print {
+  /* Genel */
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  /* Gizle */
+  .no-print,
+  .sidebar,
+  .header,
+  .btn,
+  button,
+  .pagination,
+  .filter-bar,
+  .search-input,
+  nav {
+    display: none !important;
+  }
+
+  /* Göster */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Layout */
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .card {
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+
+  /* Tablolar */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+  }
+
+  th {
+    background: #f5f5f5 !important;
+    font-weight: bold !important;
+  }
+
+  /* Linkler */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+
+  /* Sayfa sonu */
+  h2, h3 {
+    break-after: avoid;
+  }
+
+  .keep-together {
+    break-inside: avoid;
+  }
+
+  .page-break {
+    break-before: page;
+  }
+
+  /* Rezervasyon fişi */
+  .receipt {
+    max-width: 80mm;
+    margin: 0 auto;
+    font-size: 10pt;
+  }
+
+  .receipt-header {
+    text-align: center;
+    margin-bottom: 10mm;
+  }
+
+  .receipt-table {
+    width: 100%;
+    margin: 5mm 0;
+  }
+
+  .receipt-total {
+    text-align: right;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 5mm;
+    padding-top: 2mm;
+    border-top: 1px dashed #000;
+  }
+}
+
+/* PDF Export için özel stiller */
+.pdf-export {
+  font-family: 'Inter', sans-serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.pdf-export h1 {
+  font-size: 24pt;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.pdf-export h2 {
+  font-size: 16pt;
+  color: #333;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #2563EB;
+  padding-bottom: 8px;
+}
+
+.pdf-export table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.pdf-export th {
+  background: #2563EB;
+  color: white;
+  font-weight: 600;
+  padding: 10px;
+  text-align: left;
+}
+
+.pdf-export td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.pdf-export .total-row {
+  font-weight: bold;
+  font-size: 14pt;
+  border-top: 2px solid #333;
+}
+
+.pdf-export .footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 9pt;
+  color: #999;
+}

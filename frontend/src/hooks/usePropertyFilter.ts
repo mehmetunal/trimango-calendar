@@ -1,3 +1,4 @@
+// src/hooks/usePropertyFilter.ts
 import { useState, useCallback } from 'react';
 import { useDebounce } from './useDebounce';
 
@@ -50,4 +51,3 @@ export function usePropertyFilter() {
       filters.amenities.length > 0,
   };
 }
-4. UTILITY FONKSİYONLARI

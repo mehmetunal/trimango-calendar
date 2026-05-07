@@ -1,4 +1,6 @@
+// src/components/ui/Table.tsx
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import { clsx } from 'clsx';
 
 interface Column<T> {
   key: string;
@@ -96,4 +98,3 @@ export default function Table<T extends { id: string }>({
     </div>
   );
 }
-3. ANA LAYOUT BİLEŞENLERİ

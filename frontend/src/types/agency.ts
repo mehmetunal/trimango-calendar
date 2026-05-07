@@ -19,4 +19,3 @@ export interface AgencyAuthorization {
   isActive: boolean;
   grantedAt: string;
 }
-2. TEMEL UI BİLEŞENLERİ

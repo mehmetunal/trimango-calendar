@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 [ApiController]
 [Route("api/[controller]")]
 public class AgencyController : ControllerBase
@@ -190,27 +193,3 @@ public class AgencyController : ControllerBase
         return Guid.Parse(User.FindFirst("AgencyId")?.Value ?? throw new UnauthorizedAccessException());
     }
 }
-Harika! Acente yetkilendirme ve takvim sistemi tamamlandı. Bu modül şunları içeriyor:
-
-✅ Acente CRUD ve yönetimi
-
-✅ Mülk sahibi tarafından acentelere yetki verme
-
-✅ Detaylı yetkilendirme seviyeleri (görüntüleme, fiyat, rezervasyon)
-
-✅ Fiyat görüntüleme tipleri (Net, Komisyonlu, Markup)
-
-✅ Kontenjan yönetimi
-
-✅ Takvim bazlı blokaj (bakım, kapalı sezon)
-
-✅ Acente takvimi (müsaitlik, fiyatlar, blokajlar)
-
-✅ Acente fiyat belirleme (markup)
-
-Şimdi sırada MODÜL 6: BİLDİRİM ve RAPORLAMA SİSTEMİ var. Devam edelim mi?
-
-devam edelim
-Harika! Bildirim ve raporlama sistemi, projenin vazgeçilmez parçaları. Bu modülü de eksiksiz hazırlayalım.
-
-📦 MODÜL 6: BİLDİRİM & RAPORLAMA SİSTEMİ

@@ -1,3 +1,4 @@
+// src/pages/tenant/Reservations/ReservationList.tsx
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -52,7 +53,7 @@ export default function ReservationList() {
   const { data, isLoading } = useQuery({
     queryKey: ['reservations', queryParams],
     queryFn: () => reservationApi.getAll(queryParams),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   // Mutations
@@ -462,30 +463,13 @@ export default function ReservationList() {
     </div>
   );
 }
-Bu, frontend'in sadece bir kısmı. Size gereken tüm diğer sayfaları da aynı detayda hazırlayabilirim:
 
-PropertyList.tsx - Mülk listesi ve filtreleme
 
-PropertyForm.tsx - Mülk ekleme/düzenleme formu
+function formatPhoneNumber(phone?: string) {
+  return phone || '-';
+}
 
-UnitManagement.tsx - Birim yönetimi
-
-SeasonRates.tsx - Sezon fiyatlandırması
-
-AgencyManagement.tsx - Acente yetkilendirme
-
-CalendarPage.tsx - Takvim ve blokaj yönetimi
-
-Reports.tsx - Raporlar sayfası
-
-WidgetSettings.tsx - Booking widget ayarları
-
-AgencyPanel.tsx - Acente paneli sayfaları
-
-Hangi sayfaları detaylandırmamı istersiniz? Veya tüm sayfaları sırayla yazmaya devam edeyim mi?
-
-devam edelim
-Harika! Tüm sayfaları sırayla detaylandırmaya devam edelim. Her bir sayfayı production-ready olarak hazırlayacağım.
-
-📄 MÜLK YÖNETİM SAYFALARI
-PropertyList.tsx
+function StatusBadge({ status }: { status: string }) {
+  const map: Record<string, string> = { Pending: 'Beklemede', Confirmed: 'Onaylandı', CheckedIn: 'Check-in', CheckedOut: 'Check-out', Cancelled: 'İptal' };
+  return <span className="inline-flex px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">{map[status] || status}</span>;
+}

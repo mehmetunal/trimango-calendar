@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Node
+**/node_modules/
+frontend/dist/
+npm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log

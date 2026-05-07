@@ -2,8 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <!-- ========================================== -->
+  <!-- PROJE REFERANSLARI -->
+  <!-- ========================================== -->
+  <!-- Shared projesi başka projeye referans vermez, en alt katmandır -->
+  
+  <!-- ========================================== -->
+  <!-- NUGET PAKETLERİ -->
+  <!-- ========================================== -->
+  <ItemGroup>
+    <!-- Utilities -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    
+    <!-- Cryptography -->
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+  </ItemGroup>
 
 </Project>

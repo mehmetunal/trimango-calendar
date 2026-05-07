@@ -1,3 +1,4 @@
+// src/pages/agency/Dashboard.tsx
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -73,7 +74,7 @@ export default function AgencyDashboard() {
       },
       {
         title: 'Toplam Gelir',
-        value: formatCurrency(dashboard.totalRevenue || 0, dashboard.currencyCode || 'TRY'),
+        value: formatCurrency(((dashboard as any).totalRevenue ?? dashboard.monthlyRevenue ?? 0), dashboard.currencyCode || 'TRY'),
         icon: DollarSign,
         color: 'green',
         change: dashboard.revenueChange || 0,
@@ -87,7 +88,7 @@ export default function AgencyDashboard() {
       },
       {
         title: 'Yetkili Mülk',
-        value: myProperties?.length || 0,
+        value: myProperties?.items?.length || 0,
         icon: Building2,
         color: 'orange',
       },
@@ -157,9 +158,9 @@ export default function AgencyDashboard() {
           </Button>
         </div>
         <div className="p-4">
-          {myProperties && myProperties.length > 0 ? (
+          {myProperties && (myProperties.items?.length || 0) > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {myProperties.slice(0, 6).map((property: any) => (
+              {(myProperties.items || []).slice(0, 6).map((property: any) => (
                 <div
                   key={property.propertyId}
                   onClick={() => navigate(`/agency/properties/${property.propertyId}`)}
@@ -289,4 +290,3 @@ export default function AgencyDashboard() {
     </div>
   );
 }
-AgencyMyProperties.tsx

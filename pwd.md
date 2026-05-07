@@ -19128,7 +19128,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Database
-builder.Services.AddDbContext<TrimangoDbContext>(options =>
+builder.Services.AddDbContext<AppDbConext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Redis Cache
@@ -19239,7 +19239,7 @@ app.MapControllers();
 // Seed Data
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<TrimangoDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbConext>();
     await TrimangoCalendar.Data.SeedData.InitializeAsync(scope.ServiceProvider);
 }
 
@@ -19550,7 +19550,7 @@ backend/
 │
 ├── TrimangoCalendar.Data/
 │   ├── Context/
-│   │   └── TrimangoDbContext.cs
+│   │   └── AppDbConext.cs
 │   ├── Configurations/
 │   │   ├── TenantConfiguration.cs
 │   │   ├── PropertyConfiguration.cs
